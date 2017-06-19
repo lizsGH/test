@@ -61,11 +61,12 @@ class TuopuController extends BaseController
 
                 if($db->query($sql)){
                     $aData['success']  = true;
-                    $aData['msg']      = '配置成功！';
+                    $aData['msg']      = Yii::t('app', '配置成功！');
+
 
                 }else{
                     $aData['success']  = false;
-                    $aData['msg']      = '配置失败！';
+                    $aData['msg']      = Yii::t('app', '配置失败！');
 
                 }
 
@@ -90,11 +91,11 @@ class TuopuController extends BaseController
 
                 if ($db->query($sql)) {
                     $aData['success'] = true;
-                    $aData['msg'] = '配置成功！';
+                    $aData['msg'] = Yii::t('app', '配置成功！');
 
                 } else {
                     $aData['success'] = false;
-                    $aData['msg'] = '配置失败！';
+                    $aData['msg'] = Yii::t('app', '配置失败！');
 
                 }
 
@@ -191,7 +192,7 @@ class TuopuController extends BaseController
             //var_dump($a_bm);exit;
             foreach ($a_bm as $v){
 
-                $a_bm = "'资产管理-".filterStr($v['name'])."'";
+                $a_bm = Yii::t('app', '资产管理') . "-".filterStr($v['name'])."'";
                 $sql_taskid = "select uuid from bd_host_task_manage where name = ".$a_bm.'order by uuid desc';//取最新的任务
                 $a_tid = $db->fetch_first($sql_taskid);//看是否存在这个任务
                 if(!empty($a_tid)){
@@ -216,8 +217,6 @@ class TuopuController extends BaseController
                         $db->query($sql_up);
 
                     }
-
-
 
                 }
 
@@ -276,7 +275,7 @@ class TuopuController extends BaseController
 
             $tp_data = explode(',',$sPost['tporder']);
             $yz = true;
-            $yz_data = '输入格式不正确！请按正确格式输入！';
+            $yz_data = Yii::t('app', '输入格式不正确！请按正确格式输入！');
             foreach ($tp_data as $k=>$v){
                 $tp_tmp = explode('-',$v);
                 if(strlen($tp_tmp)>2){
@@ -396,7 +395,7 @@ class TuopuController extends BaseController
             foreach ($data_wd_ff as $v){
 
                 if($v==null){
-                    $v = '未知网段';
+                    $v = Yii::t('app', '未知网段');
                 }
 
                 $data_cc[$v] = $v;
@@ -427,7 +426,7 @@ class TuopuController extends BaseController
                     if($v['ipv4_segment'] != null){
                         array_push($data_ff[$v['ipv4_segment']],$v);
                     }else{
-                        array_push($data_ff['未知网段'],$v);
+                        array_push($data_ff[Yii::t('app', '未知网段')],$v);
                     }
 
                 }
@@ -449,7 +448,7 @@ class TuopuController extends BaseController
         $sPost = $_POST;
         $tp_data = explode(',',filterStr($sPost['h_target']));
         $yz = true;
-        $yz_data = '输入格式不正确！请按正确格式输入！';
+        $yz_data = Yii::t('app', '输入格式不正确！请按正确格式输入！');
         foreach ($tp_data as $k=>$v){
             $tp_tmp = explode('-',$v);
             if(strlen($tp_tmp)>2){
@@ -571,7 +570,7 @@ class TuopuController extends BaseController
 
         foreach ($data_wd_ff as $v){
             if($v==null){
-                $v = '未知网段';
+                $v = Yii::t('app', '未知网段');
             }
             $data_cc[$v] = $v;
             $data_ff[$v] = array();
@@ -602,7 +601,7 @@ class TuopuController extends BaseController
                 if($v['ipv4_segment'] != null){
                     array_push($data_ff[$v['ipv4_segment']],$v);
                 }else{
-                    array_push($data_ff['未知网段'],$v);
+                    array_push($data_ff[Yii::t('app', '未知网段')],$v);
                 }
 
             }
@@ -660,5 +659,3 @@ class TuopuController extends BaseController
 
     }
 }
-
-?>

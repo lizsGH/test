@@ -133,7 +133,7 @@ class WebvulController extends BaseController
         $rData = array(
             "open" => true,
             "id" => 0,
-            "name" => '所有漏洞',
+            "name" => Yii::t('app', '所有漏洞'),
             "parent_id" => '',
             "pId" => ''
         );
@@ -444,7 +444,7 @@ class WebvulController extends BaseController
         $rData = array(
             "open" => true,
             "id" => 0,
-            "name" => '所有漏洞',
+            "name" => Yii::t('app', '所有漏洞'),
             "parent_id" => '',
             "pId" => ''
         );
@@ -455,5 +455,3 @@ class WebvulController extends BaseController
 
 
 }
-
-?>

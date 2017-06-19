@@ -195,7 +195,7 @@ class ZcglController extends BaseController
                 //exit;
             } else {
                 $aJson['success'] = false;
-                $aJson['bmdata'] = '没有相关部门扫描';
+                $aJson['bmdata'] = Yii::t('app', '没有相关部门扫描');
             }
             //所有资产风险
             //$sql_zcfx = "select MAX(num) as num,ip,part_id,h,m,l,i,t,end_time,id FROM `history_all_assets` GROUP BY ip";
@@ -220,7 +220,7 @@ class ZcglController extends BaseController
                 $aJson['zcdata'] = $arr_zcfx;
             } else {
                 $aJson['success'] = false;
-                $aJson['zcdata'] = '没有相关资产扫描';
+                $aJson['zcdata'] = Yii::t('app', '没有相关资产扫描');
             }
             //var_dump($aJson);exit;
             echo json_encode($aJson);
@@ -248,7 +248,7 @@ class ZcglController extends BaseController
                 //exit;
             } else {
                 $aJson['success'] = false;
-                $aJson['bmdata'] = '没有相关部门扫描';
+                $aJson['bmdata'] = Yii::t('app', '没有相关部门扫描');
             }
 
             //所有资产风险
@@ -273,7 +273,7 @@ class ZcglController extends BaseController
                 $aJson['zcdata'] = $arr_zcfx;
             } else {
                 $aJson['success'] = false;
-                $aJson['zcdata'] = '没有相关资产扫描';
+                $aJson['zcdata'] = Yii::t('app', '没有相关资产扫描');
             }
             //var_dump($aJson);exit;
             echo json_encode($aJson);
@@ -304,7 +304,7 @@ class ZcglController extends BaseController
                 $aJson['zcdata'] = $arr_d;
             } else {
                 $aJson['success'] = false;
-                $aJson['zcdata'] = '没有相关资产扫描';
+                $aJson['zcdata'] = Yii::t('app', '没有相关资产扫描');
             }
             //2.风险数目区域
             //$pid = intval($sPost['part_id']);
@@ -332,7 +332,7 @@ class ZcglController extends BaseController
                 $aJson['zcsmdata'] = $arr_d;
             } else {
                 $aJson['success'] = false;
-                $aJson['zcsmdata'] = '没有相关风险结果';
+                $aJson['zcsmdata'] = Yii::t('app', '没有相关风险结果');
             }
             echo json_encode($aJson);
             exit;
@@ -355,7 +355,7 @@ class ZcglController extends BaseController
             $tt = [];
             //var_dump($arr_bm);
             foreach ($arr_bm as $v) {
-                $v['name'] = '资产管理-' . $v['name'];
+                $v['name'] = Yii::t('app', '资产管理') . '-' . $v['name'];
                 //$arr_bm[$k] = $v;
                 array_push($tt, "'" . $v['name'] . "'");
             }
@@ -400,26 +400,26 @@ class ZcglController extends BaseController
                         exit;
                     } else {
                         $aJson['success'] = false;
-                        $aJson['data'] = '没有相关扫描';
+                        $aJson['data'] = Yii::t('app', '没有相关扫描');
                         echo json_encode($aJson);
                         exit;
                     }
 
                 } else {
                     $aJson['success'] = false;
-                    $aJson['data'] = '没有相关扫描';
+                    $aJson['data'] = Yii::t('app', '没有相关扫描');
                     echo json_encode($aJson);
                     exit;
                 }
             } else {
                 $aJson['success'] = true;
-                $aJson['data'] = '没有添加相关任务';
+                $aJson['data'] = Yii::t('app', '没有添加相关任务');
                 echo json_encode($aJson);
                 exit;
             }
         }
         if ($zclevel == 2) {//这时传过来的$zcbm直接就是部门名称
-            $a_bm = "'资产管理-" . $zcbm . "'";
+            $a_bm = "'" . Yii::t('app', '资产管理') . "-" . $zcbm . "'";
             $sql_taskid = "select uuid from bd_host_task_manage where name = " . $a_bm . 'order by id desc';//取最新的任务
             $a_tid = $db->fetch_first($sql_taskid);//看是否存在这个任务
             if (!empty($a_tid)) {
@@ -438,14 +438,14 @@ class ZcglController extends BaseController
                     exit;
                 } else {
                     $aJson['success'] = false;
-                    $aJson['data'] = '没有相关扫描';
+                    $aJson['data'] = Yii::t('app', '没有相关扫描');
                     echo json_encode($aJson);
                     exit;
                 }
 
             } else {
                 $aJson['success'] = false;
-                $aJson['data'] = '没有添加相关任务';
+                $aJson['data'] = Yii::t('app', '没有添加相关任务');
                 echo json_encode($aJson);
                 exit;
             }
@@ -457,7 +457,7 @@ class ZcglController extends BaseController
             } else {
                 $sql_bm = "select name from bd_asset_depart_info where id = " . $zcbm;
                 $a_bm = $db->result_first($sql_bm);
-                $a_bm = "'资产管理-" . $a_bm . "'";
+                $a_bm = "'" . Yii::t('app', '资产管理') . "-" . $a_bm . "'";
             }
 
             $sql_taskid = "select id from task_manage where task_name = " . $a_bm;
@@ -508,7 +508,7 @@ class ZcglController extends BaseController
                 exit;
             } else {
                 $aJson['success'] = false;
-                $aJson['data'] = '没有相关扫描';
+                $aJson['data'] = Yii::t('app', '没有相关扫描');
                 echo json_encode($aJson);
                 exit;
             }
@@ -782,7 +782,7 @@ class ZcglController extends BaseController
 
         //var_dump($rows2);
         $success = true;
-        $msg = '操作成功';
+        $msg = Yii::t('app', '操作成功');
         $data['rows'] = $rows;
         //$data['rows2'] = $rows2;
         $data['success'] = $success;
@@ -806,7 +806,7 @@ class ZcglController extends BaseController
                 $nobumen = array(
                     "open" => false,
                     "id" => 1,
-                    "name" => '未登记资产',
+                    "name" => Yii::t('app', '未登记资产'),
                     "parent_id" => 0,
                     "pId" => 0,
                     "icon" => $bd
@@ -877,7 +877,7 @@ class ZcglController extends BaseController
         $rData = array(
             "open" => true,
             "id" => 0,
-            "name" => '资产树',
+            "name" => Yii::t('app', '资产树'),
             "parent_id" => '',
             "pId" => ''
         );
@@ -908,7 +908,7 @@ class ZcglController extends BaseController
             $iTotal = $db->result_first("SELECT COUNT(`name`) FROM bd_asset_depart_info where name='" . $sRows['name'] . "' And id !=" . $id);
             if (!empty($iTotal)) {
                 $data['success'] = false;
-                $data['msg'] = $sRows['name'] . '已存在，请更换';
+                $data['msg'] = $sRows['name'] . Yii::t('app', '已存在，请更换');
                 echo json_encode($data);
                 exit;
             }
@@ -923,9 +923,9 @@ class ZcglController extends BaseController
             $sql = "UPDATE bd_asset_depart_info SET " . $sFieldValue . " WHERE id=" . $id;
             if ($db->query($sql)) {
                 $success = true;
-                $msg = "修改成功";
-                $hdata['sDes'] = '修改部门(' . $sRows['name'] . ')';
-                $hdata['sRs'] = "成功";
+                $msg = Yii::t('app', "修改成功");
+                $hdata['sDes'] = Yii::t('app', '修改部门') . '(' . $sRows['name'] . ')';
+                $hdata['sRs'] = Yii::t('app', "成功");
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
                 $data['success'] = $success;
@@ -934,9 +934,9 @@ class ZcglController extends BaseController
                 exit;
             } else {
                 $success = false;
-                $msg = "编辑失败";
-                $hdata['sDes'] = '编辑任务(' . $sRows['name'] . ')';
-                $hdata['sRs'] = '失败';
+                $msg = Yii::t('app', "编辑失败");
+                $hdata['sDes'] = Yii::t('app', '编辑任务') . '(' . $sRows['name'] . ')';
+                $hdata['sRs'] = Yii::t('app', '失败');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
             }
@@ -944,7 +944,7 @@ class ZcglController extends BaseController
             $iTotal = $db->result_first("SELECT COUNT(`name`) FROM bd_asset_depart_info where name='" . $sRows['name'] . "'");
             if (!empty($iTotal)) {
                 $data['success'] = false;
-                $data['msg'] = $sRows['name'] . '已存在，请更换';
+                $data['msg'] = $sRows['name'] . Yii::t('app', '已存在，请更换');
                 echo json_encode($data);
                 exit;
             }
@@ -965,9 +965,9 @@ class ZcglController extends BaseController
 
                 if ($insert_id) {
                     $success = true;
-                    $msg = "新增成功";
-                    $hdata['sDes'] = '新增部门(' . $sRows['name'] . ')';
-                    $hdata['sRs'] = "成功";
+                    $msg = Yii::t('app', "新增成功");
+                    $hdata['sDes'] = Yii::t('app', '新增部门') . '(' . $sRows['name'] . ')';
+                    $hdata['sRs'] = Yii::t('app', "成功");
                     $hdata['sAct'] = $act . '/' . $show;
                     saveOperationLog($hdata);
                     $data['success'] = $success;
@@ -976,9 +976,9 @@ class ZcglController extends BaseController
                     exit;
                 } else {
                     $success = false;
-                    $msg = "新增失败";
-                    $hdata['sDes'] = '新增部门(' . $sRows['name'] . ')';
-                    $hdata['sRs'] = "失败";
+                    $msg = Yii::t('app', "新增失败");
+                    $hdata['sDes'] = Yii::t('app', '新增部门') . '(' . $sRows['name'] . ')';
+                    $hdata['sRs'] = Yii::t('app', "失败");
                     $hdata['sAct'] = $act . '/' . $show;
                     saveOperationLog($hdata);
                     $data['success'] = $success;
@@ -989,9 +989,9 @@ class ZcglController extends BaseController
 
             } else {
                 $success = false;
-                $msg = "新增失败";
-                $hdata['sDes'] = '新增部门(' . $sRows['name'] . ')';
-                $hdata['sRs'] = "成功";
+                $msg = Yii::t('app', "新增失败");
+                $hdata['sDes'] = Yii::t('app', '新增部门') . '(' . $sRows['name'] . ')';
+                $hdata['sRs'] = Yii::t('app', "成功");
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
                 $data['success'] = $success;
@@ -1014,7 +1014,7 @@ class ZcglController extends BaseController
         if (!empty($sPost['TAR_M_MAC'])) {
             if (!preg_match("/[0-9a-f][0-9a-f][:-]" . "[0-9a-f][0-9a-f][:-]" . "[0-9a-f][0-9a-f][:-]" . "[0-9a-f][0-9a-f][:-]" . "[0-9a-f][0-9a-f][:-]" . "[0-9a-f][0-9a-f]/i", $sPost['TAR_M_MAC'])) {
                 $data['success'] = false;
-                $data['msg'] = 'MAC地址格式错误！';
+                $data['msg'] = Yii::t('app', 'MAC地址格式错误！');
                 echo json_encode($data);
                 exit;
             }
@@ -1120,7 +1120,7 @@ class ZcglController extends BaseController
             $iTotal = $db->result_first("SELECT COUNT(`name`) FROM bd_asset_device_info where name='" . $sRows['name'] . "' And id !=" . $id);
             if (!empty($iTotal)) {
                 $data['success'] = false;
-                $data['msg'] = $sRows['name'] . '已存在，请更换';
+                $data['msg'] = $sRows['name'] . Yii::t('app', '已存在，请更换');
                 echo json_encode($data);
                 exit;
             }
@@ -1138,9 +1138,9 @@ class ZcglController extends BaseController
 
             if ($res>=0) {
                 $success = true;
-                $msg = "修改成功";
-                $hdata['sDes'] = '修改资产(' . $sRows['name'] . ')';
-                $hdata['sRs'] = "成功";
+                $msg = Yii::t('app', "修改成功");
+                $hdata['sDes'] = Yii::t('app', '修改资产') . '(' . $sRows['name'] . ')';
+                $hdata['sRs'] = Yii::t('app', "成功");
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
                 file_put_contents('/home/bluedon/bdscan/bdasset/discovery/AddNewDev.ini', 'TRUE');
@@ -1150,9 +1150,9 @@ class ZcglController extends BaseController
                 exit;
             } else {
                 $success = false;
-                $msg = "编辑失败";
-                $hdata['sDes'] = '编辑资产(' . $sRows['name'] . ')';
-                $hdata['sRs'] = '失败';
+                $msg = Yii::t('app', "编辑失败");
+                $hdata['sDes'] = Yii::t('app', '编辑资产') . '(' . $sRows['name'] . ')';
+                $hdata['sRs'] = Yii::t('app', '失败');
                 $hdata['sAct'] = $act . '/' . $show;
                 $data['success'] = $success;
                 $data['msg'] = $msg;
@@ -1164,7 +1164,7 @@ class ZcglController extends BaseController
             $iTotal = $db->result_first("SELECT COUNT(`name`) FROM bd_asset_device_info where name='" . $sRows['name'] . "'");
             if (!empty($iTotal)) {
                 $data['success'] = false;
-                $data['msg'] = $sRows['name'] . '已存在，请更换';
+                $data['msg'] = $sRows['name'] . Yii::t('app', '已存在，请更换');
                 echo json_encode($data);
                 exit;
             }
@@ -1184,9 +1184,9 @@ class ZcglController extends BaseController
 
                 if ($insert_id) {
                     $success = true;
-                    $msg = "新增成功";
-                    $hdata['sDes'] = '新增资产(' . $sRows['name'] . ')';
-                    $hdata['sRs'] = "成功";
+                    $msg = Yii::t('app', "新增成功");
+                    $hdata['sDes'] = Yii::t('app', '新增资产') . '(' . $sRows['name'] . ')';
+                    $hdata['sRs'] = Yii::t('app', "成功");
                     $hdata['sAct'] = $act . '/' . $show;
                     saveOperationLog($hdata);
                     file_put_contents('/home/bluedon/bdscan/bdasset/discovery/AddNewDev.ini', 'TRUE');
@@ -1196,9 +1196,9 @@ class ZcglController extends BaseController
                     exit;
                 } else {
                     $success = false;
-                    $msg = "新增失败";
-                    $hdata['sDes'] = '新增资产(' . $sRows['name'] . ')';
-                    $hdata['sRs'] = "失败";
+                    $msg = Yii::t('app', "新增失败");
+                    $hdata['sDes'] = Yii::t('app', '新增资产') . '(' . $sRows['name'] . ')';
+                    $hdata['sRs'] = Yii::t('app', "失败");
                     $hdata['sAct'] = $act . '/' . $show;
                     saveOperationLog($hdata);
                     $data['success'] = $success;
@@ -1209,9 +1209,9 @@ class ZcglController extends BaseController
 
             } else {
                 $success = false;
-                $msg = "新增失败";
-                $hdata['sDes'] = '新增资产(' . $sRows['name'] . ')';
-                $hdata['sRs'] = "成功";
+                $msg = Yii::t('app', "新增失败");
+                $hdata['sDes'] = Yii::t('app', '新增资产') . '(' . $sRows['name'] . ')';
+                $hdata['sRs'] = Yii::t('app', "成功");
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
                 $data['success'] = $success;
@@ -1229,7 +1229,7 @@ class ZcglController extends BaseController
         $hPost = $_REQUEST;
         $aJson = array();
         $aJson ['success'] = false;
-        $aJson ['msg'] = '连接失败';
+        $aJson ['msg'] = Yii::t('app', '连接失败');
         if (!empty($hPost)) {
             $ret = BDRpc::call("pool_device_test", array(
                 "device_type" => $hPost['device_type'],
@@ -1255,13 +1255,13 @@ class ZcglController extends BaseController
 
             if (isset($ret['result']) && ($ret['result'] == "0")) {
                 $aJson ['success'] = false;
-                $aJson ['msg'] = '连接失败';
+                $aJson ['msg'] = Yii::t('app', '连接失败');
             } elseif (isset($ret['result']) && ($ret['result'] == "1")) {
                 $aJson ['success'] = true;
-                $aJson ['msg'] = '连接成功';
+                $aJson ['msg'] = Yii::t('app', '连接成功');
             } else {
                 $aJson ['success'] = false;
-                $aJson ['msg'] = '连接出错';
+                $aJson ['msg'] = Yii::t('app', '连接出错');
             }
         }
         echo json_encode($aJson);
@@ -1296,13 +1296,13 @@ class ZcglController extends BaseController
             $hadsms = GetHadsms();//返回task_manage表中正在执行的任务个数
             if ($allowtotal - $hadsms - 1 < 0) {
                 $data['success'] = false;
-                $data['msg'] = '同时扫描任务数不能超过' . $allowtotal . '个 ';
+                $data['msg'] = Yii::t('app', '同时扫描任务数不能超过') . $allowtotal . Yii::t('app', '个 ');
                 return json_encode($data);
                 exit;
             }
         }
         $data['success'] = true;
-        $data['msg'] = '可以扫描新任务';
+        $data['msg'] = Yii::t('app', '可以扫描新任务');
         return json_encode($data);
         exit;
     }
@@ -1319,7 +1319,7 @@ class ZcglController extends BaseController
             //var_dump($ttt);exit;
             $k_bumen = filterStr($_POST['k_bumen']);
             $ipv4 = filterStr($_POST['ipv4']);
-            $ip = "'资产管理-" . $k_bumen . "' " . $ipv4;
+            $ip = "'" . Yii::t('app', '资产管理') . "-" . $k_bumen . "' " . $ipv4;
         } else {
             $rows = array();
             $where = 'WHERE 1=1';
@@ -1335,13 +1335,13 @@ class ZcglController extends BaseController
 
             if (!empty($isExist)) {
                 $data['success'] = false;
-                $data['msg'] = '添加失败,该任务已经存在！';
+                $data['msg'] = Yii::t('app', '添加失败,该任务已经存在！');
                 echo json_encode($data);
                 exit;
             }
             if ($allcheck == 1) {
                 //全选要区分是'资产管理'的还是部门的id
-                if ($tjsm == '资产管理') {
+                if ($tjsm == Yii::t('app', '资产管理')) {
                     $res_id = $db->fetch_all("select id from bd_asset_device_info where 1=1");
                     $f_id = array_column($res_id, 'id');
                 } else {
@@ -1367,7 +1367,7 @@ class ZcglController extends BaseController
             }
             if (empty($f_ids)) {
                 $data['success'] = false;
-                $data['msg'] = '添加失败,该部门没资产！';
+                $data['msg'] = Yii::t('app', '添加失败,该部门没资产！');
                 echo json_encode($data);
                 exit;
             }
@@ -1440,9 +1440,9 @@ class ZcglController extends BaseController
         if ($db->query($sql)) {
 
             $success = true;
-            $msg = "添加成功";
-            $hdata['sDes'] = '新增主机扫描任务(' . $ipStr[0] . ')';
-            $hdata['sRs'] = "成功";
+            $msg = Yii::t('app', "添加成功");
+            $hdata['sDes'] = Yii::t('app', '新增主机扫描任务') . '(' . $ipStr[0] . ')';
+            $hdata['sRs'] = Yii::t('app', "成功");
             $hdata['sAct'] = $ipStr[3] . '/' . $ipStr[4];
             $hdata['username'] = $ipStr[2];
             $hdata['onlineIP'] = $ipStr[5];
@@ -1454,9 +1454,9 @@ class ZcglController extends BaseController
 
         } else {
             $success = false;
-            $msg = "添加失败";
-            $hdata['sDes'] = '新增主机扫描任务(' . $ipStr[0] . ')';
-            $hdata['sRs'] = "失败";
+            $msg = Yii::t('app', "添加失败");
+            $hdata['sDes'] = Yii::t('app', '新增主机扫描任务') . '(' . $ipStr[0] . ')';
+            $hdata['sRs'] = Yii::t('app', "失败");
             $hdata['sAct'] = $ipStr[3] . '/' . $ipStr[4];
             $hdata['username'] = $ipStr[2];
             $hdata['onlineIP'] = $ipStr[5];

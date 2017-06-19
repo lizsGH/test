@@ -37,7 +37,7 @@ class WeakpwdparamController extends BaseController
         $aData['iContent'] = $sPost['iContent'];
         //验证导入文件内容的格式
         if (preg_match("/[\x{4e00}-\x{9fa5}]+/u", $aData['iContent'])) {
-            $aJson['msg'] = "文件内容不允许使用中文";
+            $aJson['msg'] = Yii::t('app', "文件内容不允许使用中文");
             $aJson ['success'] = false;
             echo json_encode($aJson);
             exit;
@@ -56,7 +56,7 @@ class WeakpwdparamController extends BaseController
                 } else if ($aData['iDictionary'] == 'ibm_db2') {//冒号分成的3部分，均不能为空
                     $iAcc = explode(':', $iCon[$i]);
                     if (count($iAcc) != 3 || empty($iAcc[0]) || empty($iAcc[1]) || empty($iAcc[2])) {
-                        $aJson['msg'] = "第 " . ($i + 1) . " 行格式错误";
+                        $aJson['msg'] = Yii::t('app', "第 ") . ($i + 1) . Yii::t('app', " 行格式错误");
                         $aJson ['success'] = false;
                         $aJson ['iCon'] = $iCon;
                         echo json_encode($aJson);
@@ -67,7 +67,7 @@ class WeakpwdparamController extends BaseController
                 } else {
                     $iAcc = explode(':', $iCon[$i]);
                     if (count($iAcc) != 2) {
-                        $aJson['msg'] = "第 " . ($i + 1) . " 行格式错误";
+                        $aJson['msg'] = Yii::t('app', "第 ") . ($i + 1) . Yii::t('app', " 行格式错误");
                         $aJson ['success'] = false;
                         $aJson ['iCon'] = $iCon;
                         echo json_encode($aJson);
@@ -84,15 +84,15 @@ class WeakpwdparamController extends BaseController
         $sFile = DIR_ROOT . "../config/weakpwdparam/" . $aData['iDictionary'] . ".config";
         $nFile = "/home/bluedon/bdscan/bdweakscan/bdweakscanparam/".$aData['iDictionary'].".config";
         if (file_put_contents($sFile, $sString) && file_put_contents($nFile, $sString)) {
-            $aJson['msg'] = "操作成功";
+            $aJson['msg'] = Yii::t('app', "操作成功");
             $aJson ['success'] = true;
-            $hdata['sDes'] = '更新弱口令参数';
+            $hdata['sDes'] = Yii::t('app', '更新弱口令参数');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
             exit;
         } else {
-            $aJson['msg'] = "操作失败";
+            $aJson['msg'] = Yii::t('app', "操作失败");
             $aJson ['success'] = false;
             echo json_encode($aJson);
             exit;
@@ -113,7 +113,7 @@ class WeakpwdparamController extends BaseController
         //验证导入文件内容的格式
         $c = file_get_contents($_FILES["fileField"]["tmp_name"]);//var_dump($c);die;
         if (preg_match("/[\x{4e00}-\x{9fa5}]+/u", $c)) {
-            $aJson['msg'] = "导入文件内容不允许使用中文";
+            $aJson['msg'] = Yii::t('app', "导入文件内容不允许使用中文");
             $aJson ['success'] = false;
             echo json_encode($aJson);
             exit;
@@ -126,7 +126,7 @@ class WeakpwdparamController extends BaseController
                     $iAcc = explode(':', $iCon[$i]);
                    // var_dump(count($iAcc));
                     if (count($iAcc) !== 2) {
-                        $aJson['msg'] = "导入文件第 " . ($i + 1) . " 行格式错误";
+                        $aJson['msg'] = Yii::t('app', '导入文件') . Yii::t('app', "第 ") . ($i + 1) . Yii::t('app', " 行格式错误");
                         $aJson ['success'] = false;
                         $aJson ['iCon'] = $iCon;
                         echo json_encode($aJson);
@@ -148,34 +148,34 @@ class WeakpwdparamController extends BaseController
                 if ($encodeType == "UTF-8") {   //判断文件的编码格式,若为UTF-8
                     $ok = @move_uploaded_file($_FILES["fileField"]["tmp_name"], $sFile);
                     if ($ok === FALSE) {      //上传不成功
-                        $aJson['msg'] = '上传失败';
+                        $aJson['msg'] = Yii::t('app', '上传失败');
                         $aJson ['success'] = false;
                         echo json_encode($aJson);
                         exit;
                     } else {          //上传成功
-                        $aJson['msg'] = "上传成功";
+                        $aJson['msg'] = Yii::t('app', "上传成功");
                         $aJson ['success'] = true;
-                        $hdata['sDes'] = '导入弱口令字典';
+                        $hdata['sDes'] = Yii::t('app', '导入弱口令字典');
                         $hdata['sAct'] = $act . '/' . $show;
                         saveOperationLog($hdata);
                         echo json_encode($aJson);
                         exit;
                     }
                 } else {      //编码格式不为UTF-8
-                    $aJson['msg'] = '请上传UTF-8编码格式的文件 ';
+                    $aJson['msg'] = Yii::t('app', '请上传UTF-8编码格式的文件');
                     $aJson ['success'] = false;
                     echo json_encode($aJson);
                     exit;
                 }
             } else {
-                $aJson['msg'] = '请选择文件后缀名为config的文件 ';
+                $aJson['msg'] = Yii::t('app', '请选择文件后缀名为config的文件');
                 $aJson ['success'] = false;
                 echo json_encode($aJson);
                 exit;
             }
 
         } else {          //没有选择文件
-            $aJson['msg'] = '请选择文件 ';
+            $aJson['msg'] = Yii::t('app', '请选择文件');
             $aJson ['success'] = false;
             echo json_encode($aJson);
             exit;
@@ -226,16 +226,16 @@ class WeakpwdparamController extends BaseController
                 if (file_put_contents($sFile, $iContent)) {
 
                 } else {
-                    $aJson['msg'] = $filename . "恢复失败";
+                    $aJson['msg'] = $filename . Yii::t('app', "恢复失败");
                     $aJson ['success'] = false;
                     echo json_encode($aJson);
                     exit;
                 }
             }
         }
-        $aJson['msg'] = "操作成功";
+        $aJson['msg'] = Yii::t('app', "操作成功");
         $aJson ['success'] = true;
-        $hdata['sDes'] = '恢复默认字典';
+        $hdata['sDes'] = Yii::t('app', '恢复默认字典');
         $hdata['sAct'] = $act . '/' . $show;
         saveOperationLog($hdata);
         echo json_encode($aJson);
@@ -254,13 +254,13 @@ class WeakpwdparamController extends BaseController
         if (file_exists(DIR_ROOT . "../config/weakpwdparam/" . $sDefaultFile)) {
             $aJson['msg'] = $sDefault;
             $aJson ['success'] = true;
-            $hdata['sDes'] = '恢复默认字典';
+            $hdata['sDes'] = Yii::t('app', '恢复默认字典');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
             exit;
         } else {
-            $aJson['msg'] = '操作失败';
+            $aJson['msg'] = Yii::t('app', '操作失败');
             $aJson ['success'] = false;
             echo json_encode($aJson);
             exit;
@@ -305,4 +305,3 @@ class WeakpwdparamController extends BaseController
         }
     }
 }
-?>

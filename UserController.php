@@ -95,7 +95,7 @@ class UserController extends BaseController
                 'role_id' =>$v['role_id'],
                 'role_name' =>$v['role_name'],
                 'status'=>$v['status'],
-                'iStatus' =>$v['status'] =1? "正常":"禁止",
+                'iStatus' =>$v['status'] =1? Yii::t('app', "正常"): Yii::t('app', "禁止"),
                 'bVisible'=>$v['bVisible'],
                 'iSuid' =>$_SESSION['userid'],
             );
@@ -123,9 +123,9 @@ class UserController extends BaseController
 
         if($id ==30 || $id ==31 || $id ==32 || $id==2){
             $data['success'] = false;
-            $data['msg'] = $username.'内置用户不能编辑';
-            $hdata['sDes'] = '编辑内置用户';
-            $hdata['srs'] ='失败';
+            $data['msg'] = $username.Yii::t('app', '内置用户不能编辑');
+            $hdata['sDes'] = Yii::t('app', '编辑内置用户');
+            $hdata['srs'] = Yii::t('app', '失败');
             $hdata['sAct'] = $act.'/'.$show;
             saveOperationLog($hdata);
             echo json_encode($data);
@@ -169,7 +169,7 @@ class UserController extends BaseController
                 $iTotal = $db->result_first("SELECT COUNT(`username`) FROM ".getTable('user')." where username='".$username."'");
                 if(!empty($iTotal)){
                     $data['success'] = false;
-                    $data['msg'] = $username.'已存在，请更换';
+                    $data['msg'] = $username.Yii::t('app', '已存在，请更换');
                     echo json_encode($data);
                     exit;
                 }
@@ -180,24 +180,24 @@ class UserController extends BaseController
                     $sqlroleuser = "insert into ".getTable('roleuser')." (id,role_id,user_id) values('','".$role."','".$rsUid['id']."')";
                     $db->query($sqlroleuser);
                     $success = true;
-                    $msg = "操作成功";
-                    $hdata['sDes'] = '新增用户';
-                    $hdata['sRs'] ='成功';
+                    $msg = Yii::t('app', "操作成功");
+                    $hdata['sDes'] = Yii::t('app', '新增用户');
+                    $hdata['sRs'] = Yii::t('app', '成功');
                     $hdata['sAct'] = $act.'/'.$show;
                     saveOperationLog($hdata);
                 }else{
                     $success = false;
-                    $msg = "操作失败";
-                    $hdata['sDes'] = '新增用户';
-                    $hdata['srs'] ='失败';
+                    $msg = Yii::t('app', "操作失败");
+                    $hdata['sDes'] = Yii::t('app', '新增用户');
+                    $hdata['srs'] = Yii::t('app', '失败');
                     $hdata['sAct'] = $act.'/'.$show;
                     saveOperationLog($hdata);
                 }
             }else{
                 $success = false;
-                $msg = "无权限";
-                $hdata['sDes'] = '新增用户';
-                $hdata['srs'] ='失败';
+                $msg = Yii::t('app', "无权限");
+                $hdata['sDes'] = Yii::t('app', '新增用户');
+                $hdata['srs'] = Yii::t('app', '失败');
                 $hdata['sAct'] = $act.'/'.$show;
                 saveOperationLog($hdata);
             }
@@ -221,9 +221,9 @@ class UserController extends BaseController
         foreach($idArr as $k =>$v){
             if($v == 30 || $v == 31 ||$v ==32 || $v==2){
                 $success = false;
-                $msg = "删除用户中含有内置用户，删除失败。";
-                $hdata['sDes'] = '删除用户中含有内置用户';
-                $hdata['sRs'] ='失败';
+                $msg = Yii::t('app', "删除用户中含有内置用户，删除失败。");
+                $hdata['sDes'] = Yii::t('app', '删除用户中含有内置用户');
+                $hdata['sRs'] = Yii::t('app', '失败');
                 $hdata['sAct'] = $act.'/'.$show;
                 saveOperationLog($hdata);
                 $data['success'] = $success;
@@ -238,14 +238,14 @@ class UserController extends BaseController
                 $deltask= "delete from task_manage where id in (".$id.") ";
                 $db->query($deltask);
                 $success = true;
-                $msg = "操作成功";
-                $hdata['sDes'] = '删除用户';
-                $hdata['sRs'] ='成功';
+                $msg = Yii::t('app', "操作成功");
+                $hdata['sDes'] = Yii::t('app', '删除用户');
+                $hdata['sRs'] = Yii::t('app', '成功');
                 $hdata['sAct'] = $act.'/'.$show;
                 saveOperationLog($hdata);
             }else{
                 $success = false;
-                $msg = "操作失败";
+                $msg = Yii::t('app', "操作失败");
             }
             $data['success'] = $success;
             $data['msg'] = $msg;
@@ -253,9 +253,9 @@ class UserController extends BaseController
             exit;
         }else{
             $success = false;
-            $msg = "内置用户不能删除";
-            $hdata['sDes'] = '删除内置用户';
-            $hdata['sRs'] ='失败';
+            $msg = Yii::t('app', "内置用户不能删除");
+            $hdata['sDes'] = Yii::t('app', '删除内置用户');
+            $hdata['sRs'] = Yii::t('app', '失败');
             $hdata['sAct'] = $act.'/'.$show;
             saveOperationLog($hdata);
             $data['success'] = $success;
@@ -283,11 +283,11 @@ class UserController extends BaseController
             $password = trim($sPost['resetpassword']);
             if(empty($userid)){
                 $ajson['success'] = false;
-                $ajson['msg'] = "请选择用户！";
+                $ajson['msg'] = Yii::t('app', "请选择用户！");
             }else{
                 if($password == 'Bluedon2100'){
                     $ajson['success'] = false;
-                    $ajson['msg'] = "不允许使用初始密码！";
+                    $ajson['msg'] = Yii::t('app', "不允许使用初始密码！");
                 }else{
                     $sFile = DIR_ROOT . "config/data/system/pswstrategy.config";
                     $cPw = file_get_contents($sFile);
@@ -296,13 +296,13 @@ class UserController extends BaseController
                         if(!empty($cPw['pLength'])){
                             if(strlen($password)<$cPw['pLength']){
                                 $ajson['success'] = false;
-                                $ajson['msg'] = "密码长度不能小于".$cPw['pLength'];
+                                $ajson['msg'] = Yii::t('app', "密码长度不能小于").$cPw['pLength'];
                                 echo json_encode($ajson);
                                 exit;
                             }
                             if(strlen($password)>20){
                                 $ajson['success'] = false;
-                                $ajson['msg'] = "密码长度不能大于20个字符";
+                                $ajson['msg'] = Yii::t('app', "密码长度不能大于20个字符");
                                 echo json_encode($ajson);
                                 exit;
                             }
@@ -316,7 +316,7 @@ class UserController extends BaseController
                                 }
                                 if(!preg_match('/(?!^\d+$)(?!^[a-zA-Z]+$)[0-9a-zA-Z]{'.$cPw['pLength'].',20}/',$password)){
                                     $ajson['success'] = false;
-                                    $ajson['msg'] = "密码必须是字母和数字组合";
+                                    $ajson['msg'] = Yii::t('app', "密码必须是字母和数字组合");
                                     echo json_encode($ajson);
                                     exit;
                                 }
@@ -327,7 +327,7 @@ class UserController extends BaseController
                                 }
                                 if(!preg_match('/(?=.*[\d]+)(?=.*[a-zA-Z]+)(?=.*[^a-zA-Z0-9]+).{'.$cPw['pLength'].',20}/',$password)){
                                     $ajson['success'] = false;
-                                    $ajson['msg'] = "密码必须是字母数字和特殊字符组合";
+                                    $ajson['msg'] = Yii::t('app', "密码必须是字母数字和特殊字符组合");
                                     echo json_encode($ajson);
                                     exit;
                                 }
@@ -341,15 +341,15 @@ class UserController extends BaseController
                     $upsql = "UPDATE ".getTable('user')." set password = '".$pwdnew."',update_pwd_time='".time()."' where id =".$userid;
                     if($db->query($upsql)){
                         $ajson['success'] = true;
-                        $ajson['msg'] = "操作成功！";
-                        $hdata['sDes'] = '重置'.$name.'密码';
-                        $hdata['sRs'] ='成功';
+                        $ajson['msg'] = Yii::t('app', '操作成功') . "！";
+                        $hdata['sDes'] = Yii::t('app', '重置').$name.Yii::t('app', '密码');
+                        $hdata['sRs'] = Yii::t('app', '成功');
                         $hdata['sAct'] = $act.'/'.$show;
                         saveOperationLog($hdata);
                         $username = filterStr($_SESSION['username']);
                         if(!empty($username)){
-                            $hdata2['sDes'] = '退出系统';
-                            $hdata2['sRs'] ='成功';
+                            $hdata2['sDes'] = Yii::t('app', '退出系统');
+                            $hdata2['sRs'] = Yii::t('app', '成功');
                             $hdata2['username'] = $username;
                             $hdata2['sAct'] = $act.'/'.$show;
                             saveOperationLog($hdata2);
@@ -358,12 +358,12 @@ class UserController extends BaseController
                         session_unset();
                         session_destroy();
                     }else{
-                        $hdata['sDes'] = $name.'重置密码';
-                        $hdata['sRs'] ='失败';
+                        $hdata['sDes'] = $name.Yii::t('app', '重置密码');
+                        $hdata['sRs'] = Yii::t('app', '失败');
                         $hdata['sAct'] = $act.'/'.$show;
                         saveOperationLog($hdata);
                         $ajson['success'] = false;
-                        $ajson['msg'] = "操作失败！";
+                        $ajson['msg'] = Yii::t('app', '操作失败') . "！";
                     }
                 }
             }
@@ -403,7 +403,7 @@ class UserController extends BaseController
             $pwdold = md5(md5($oldpwd).$name);
             if($newpwd == 'Bluedon2100'){
                 $ajson['success'] = false;
-                $ajson['msg'] = "不允许使用初始密码！";
+                $ajson['msg'] = Yii::t('app', "不允许使用初始密码！");
             }else{
                 if($res['password'] == $pwdold){
                     $sFile = DIR_ROOT . "config/data/system/pswstrategy.config";
@@ -413,13 +413,13 @@ class UserController extends BaseController
                         if(!empty($cPw['pLength'])){
                             if(strlen($newpwd)<$cPw['pLength']){
                                 $ajson['success'] = false;
-                                $ajson['msg'] = "密码长度不能小于".$cPw['pLength'];
+                                $ajson['msg'] = Yii::t('app', "密码长度不能小于").$cPw['pLength'];
                                 echo json_encode($ajson);
                                 exit;
                             }
                             if(strlen($newpwd)>20){
                                 $ajson['success'] = false;
-                                $ajson['msg'] = "密码长度不能大于20个字符";
+                                $ajson['msg'] = Yii::t('app', "密码长度不能大于20个字符");
                                 echo json_encode($ajson);
                                 exit;
                             }
@@ -431,7 +431,7 @@ class UserController extends BaseController
                                 }
                                 if(!preg_match('/(?!^\d+$)(?!^[a-zA-Z]+$)[0-9a-zA-Z]{'.$cPw['pLength'].',20}/',$newpwd)){
                                     $ajson['success'] = false;
-                                    $ajson['msg'] = "密码必须是字母和数字组合";
+                                    $ajson['msg'] = Yii::t('app', "密码必须是字母和数字组合");
                                     echo json_encode($ajson);
                                     exit;
                                 }
@@ -442,7 +442,7 @@ class UserController extends BaseController
                                 }
                                 if(!preg_match('/(?=.*[\d]+)(?=.*[a-zA-Z]+)(?=.*[^a-zA-Z0-9]+).{'.$cPw['pLength'].',20}/',$newpwd)){
                                     $ajson['success'] = false;
-                                    $ajson['msg'] = "密码必须是字母数字和特殊字符组合";
+                                    $ajson['msg'] = Yii::t('app', "密码必须是字母数字和特殊字符组合");
                                     echo json_encode($ajson);
                                     exit;
                                 }
@@ -453,15 +453,15 @@ class UserController extends BaseController
                     $upsql = "UPDATE ".getTable('user')." set password = '".$pwdnew."',update_pwd_time='".time()."' where id =".$userid;
                     if($db->query($upsql)){
                         $ajson['success'] = true;
-                        $ajson['msg'] = "操作成功！";
-                        $hdata['sDes'] = '修改'.$name.'密码成功';
-                        $hdata['sRs'] ='成功';
+                        $ajson['msg'] = Yii::t('app', '操作成功') . "！";
+                        $hdata['sDes'] = Yii::t('app', '修改').$name.Yii::t('app', '密码成功');
+                        $hdata['sRs'] = Yii::t('app', '成功');
                         $hdata['sAct'] = $act.'/'.$show;
                         saveOperationLog($hdata);
                         $username = filterStr($_SESSION['username']);
                         if(!empty($username)){
-                            $hdata2['sDes'] = '退出系统';
-                            $hdata2['sRs'] ='成功';
+                            $hdata2['sDes'] = Yii::t('app', '退出系统');
+                            $hdata2['sRs'] = Yii::t('app', '成功');
                             $hdata2['username'] = $username;
                             $hdata2['sAct'] = $act.'/'.$show;
                             saveOperationLog($hdata2);
@@ -470,18 +470,18 @@ class UserController extends BaseController
                         session_unset();
                         session_destroy();
                     }else{
-                        $hdata['sDes'] = '修改'.$name.'密码';
-                        $hdata['sRs'] ='失败';
+                        $hdata['sDes'] = Yii::t('app', '修改').$name.Yii::t('app', '密码');
+                        $hdata['sRs'] = Yii::t('app', '失败');
                         $hdata['sAct'] = $act.'/'.$show;
                         saveOperationLog($hdata);
                         $ajson['success'] = false;
-                        $ajson['msg'] = "操作失败！";
+                        $ajson['msg'] = Yii::t('app', '操作失败') . "！";
                     }
                 }else{
                     $ajson['success'] = false;
-                    $ajson['msg'] = "输入的旧密码错误！";
-                    $hdata['sDes'] = '修改'.$name.'密码';
-                    $hdata['sRs'] ='失败';
+                    $ajson['msg'] = Yii::t('app', "输入的旧密码错误！");
+                    $hdata['sDes'] = Yii::t('app', '修改').$name.Yii::t('app', '密码');
+                    $hdata['sRs'] = Yii::t('app', '失败');
                     $hdata['sAct'] = $act.'/'.$show;
                     saveOperationLog($hdata);
                 }
@@ -503,7 +503,7 @@ class UserController extends BaseController
             $newpwd = trim($sPost['sPasswordnNew']);
             if($oldpwd == $newpwd){
                 $ajson['success'] = false;
-                $ajson['msg'] = "新旧密码不能相同！";
+                $ajson['msg'] = Yii::t('app', "新旧密码不能相同！");
                 echo json_encode($ajson);
                 exit;
             }
@@ -512,7 +512,7 @@ class UserController extends BaseController
             $pwdold = md5(md5($oldpwd).$name);
             if($newpwd == 'Bluedon2100'){
                 $ajson['success'] = false;
-                $ajson['msg'] = "不允许使用初始密码！";
+                $ajson['msg'] = Yii::t('app', "不允许使用初始密码！");
             }else{
                 if($res['password'] == $pwdold){
                     $sFile = DIR_ROOT . "config/data/system/pswstrategy.config";
@@ -522,13 +522,13 @@ class UserController extends BaseController
                         if(!empty($cPw['pLength'])){
                             if(strlen($newpwd)<$cPw['pLength']){
                                 $ajson['success'] = false;
-                                $ajson['msg'] = "密码长度不能小于".$cPw['pLength'];
+                                $ajson['msg'] = Yii::t('app', "密码长度不能小于").$cPw['pLength'];
                                 echo json_encode($ajson);
                                 exit;
                             }
                             if(strlen($newpwd)>20){
                                 $ajson['success'] = false;
-                                $ajson['msg'] = "密码长度不能大于20个字符";
+                                $ajson['msg'] = Yii::t('app', "密码长度不能大于20个字符");
                                 echo json_encode($ajson);
                                 exit;
                             }
@@ -540,7 +540,7 @@ class UserController extends BaseController
                                 }
                                 if(!preg_match('/(?!^\d+$)(?!^[a-zA-Z]+$)[0-9a-zA-Z]{'.$cPw['pLength'].',20}/',$newpwd)){
                                     $ajson['success'] = false;
-                                    $ajson['msg'] = "密码必须是字母和数字组合";
+                                    $ajson['msg'] = Yii::t('app', "密码必须是字母和数字组合");
                                     echo json_encode($ajson);
                                     exit;
                                 }
@@ -551,7 +551,7 @@ class UserController extends BaseController
                                 }
                                 if(!preg_match('/(?=.*[\d]+)(?=.*[a-zA-Z]+)(?=.*[^a-zA-Z0-9]+).{'.$cPw['pLength'].',20}/',$newpwd)){
                                     $ajson['success'] = false;
-                                    $ajson['msg'] = "密码必须是字母数字和特殊字符组合";
+                                    $ajson['msg'] = Yii::t('app', "密码必须是字母数字和特殊字符组合");
                                     echo json_encode($ajson);
                                     exit;
                                 }
@@ -562,24 +562,24 @@ class UserController extends BaseController
                     $upsql = "UPDATE ".getTable('user')." set password = '".$pwdnew."',update_pwd_time='".time()."' where id =".$userid;
                     if($db->query($upsql)){
                         $ajson['success'] = true;
-                        $ajson['msg'] = "操作成功！";
-                        $hdata['sDes'] = '修改'.$name.'密码成功';
-                        $hdata['sRs'] ='成功';
+                        $ajson['msg'] = Yii::t('app', '操作成功') . "！";
+                        $hdata['sDes'] = Yii::t('app', '修改').$name.Yii::t('app', '密码成功');
+                        $hdata['sRs'] = Yii::t('app', '成功');
                         $hdata['sAct'] = $act.'/'.$show;
                         saveOperationLog($hdata);
                     }else{
-                        $hdata['sDes'] = '修改'.$name.'密码';
-                        $hdata['sRs'] ='失败';
+                        $hdata['sDes'] = Yii::t('app', '修改').$name.Yii::t('app', '密码');
+                        $hdata['sRs'] = Yii::t('app', '失败');
                         $hdata['sAct'] = $act.'/'.$show;
                         saveOperationLog($hdata);
                         $ajson['success'] = false;
-                        $ajson['msg'] = "操作失败！";
+                        $ajson['msg'] = Yii::t('app', '操作失败') . "！";
                     }
                 }else{
                     $ajson['success'] = false;
-                    $ajson['msg'] = "输入的旧密码错误！";
-                    $hdata['sDes'] = '修改'.$name.'密码';
-                    $hdata['sRs'] ='失败';
+                    $ajson['msg'] = Yii::t('app', "输入的旧密码错误！");
+                    $hdata['sDes'] = Yii::t('app', '修改').$name.Yii::t('app', '密码');
+                    $hdata['sRs'] = Yii::t('app', '失败');
                     $hdata['sAct'] = $act.'/'.$show;
                     saveOperationLog($hdata);
                 }

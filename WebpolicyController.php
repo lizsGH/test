@@ -101,7 +101,7 @@ class WebpolicyController extends BaseController
         $vul_ids = filterStr($sPost['vul_ids']);     // for host_policy_ref
         if (empty($vul_ids)) {
             $data['success'] = false;
-            $data['msg'] = '请选择漏洞';
+            $data['msg'] = Yii::t('app', '请选择漏洞');
             echo json_encode($data);
             exit;
         }
@@ -133,7 +133,7 @@ class WebpolicyController extends BaseController
             $iTotal = $db->result_first("SELECT COUNT(`name`) FROM bd_web_policy where name='" . $name . "' And id !=" . $id);
             if (!empty($iTotal)) {
                 $data['success'] = false;
-                $data['msg'] = $name . '已存在，请更换';
+                $data['msg'] = $name . Yii::t('app', '已存在，请更换');
                 echo json_encode($data);
                 exit;
             }
@@ -219,27 +219,27 @@ class WebpolicyController extends BaseController
                 }
 
                 $success = true;
-                $msg = "操作成功";
-                $hdata['sDes'] = '编辑WEB应用扫描策略[' . $name . ']';
-                $hdata['sRs'] = '成功';
+                $msg = Yii::t('app', "操作成功");
+                $hdata['sDes'] = Yii::t('app', '编辑WEB应用扫描策略') . '[' . $name . ']';
+                $hdata['sRs'] = Yii::t('app', '成功');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
             } else {
                 $success = false;
-                $msg = "操作失败";
+                $msg = Yii::t('app', "操作失败");
             }
         } else {//新增
             $existTotal = $db->result_first("SELECT COUNT(`id`) FROM bd_web_policy ");
             if ($existTotal >= 1024) {
                 $data['success'] = false;
-                $data['msg'] = 'web配置已经达到或者超过1024条，不能继续添加';
+                $data['msg'] = Yii::t('app', 'web配置已经达到或者超过1024条，不能继续添加');
                 echo json_encode($data);
                 exit;
             }
             $iTotal = $db->result_first("SELECT COUNT(`name`) FROM bd_web_policy where name='" . $name . "'");
             if (!empty($iTotal)) {
                 $data['success'] = false;
-                $data['msg'] = $name . '已存在，请更换';
+                $data['msg'] = $name . Yii::t('app', '已存在，请更换');
                 echo json_encode($data);
                 exit;
             }
@@ -327,14 +327,14 @@ class WebpolicyController extends BaseController
                 }
 
                 $success = true;
-                $msg = "操作成功";
-                $hdata['sDes'] = '新增WEB应用扫描策略[' . $name . ']';
-                $hdata['sRs'] = '成功';
+                $msg = Yii::t('app', "操作成功");
+                $hdata['sDes'] = Yii::t('app', '新增WEB应用扫描策略') . '[' . $name . ']';
+                $hdata['sRs'] = Yii::t('app', '成功');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
             } else {
                 $success = false;
-                $msg = "操作失败";
+                $msg = Yii::t('app', "操作失败");
             }
         }
         $data['success'] = $success;
@@ -398,23 +398,23 @@ class WebpolicyController extends BaseController
             $dquery = "DELETE FROM bd_web_policy_selectors where policy_id in (" . $ids . ") ";
             $db->query($dquery);
             $success = true;
-            $msg = "操作成功";
+            $msg = Yii::t('app', "操作成功");
             foreach ($names as $key => $val) {
-                $hdata['sDes'] = '删除WEB扫描策略(' . $val['name'] . ')';
-                $hdata['sRs'] = '成功';
+                $hdata['sDes'] = Yii::t('app', '删除WEB扫描策略') . '(' . $val['name'] . ')';
+                $hdata['sRs'] = Yii::t('app', '成功');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
             }
 
         } else {
             foreach ($names as $key => $val) {
-                $hdata['sDes'] = '删除WEB扫描策略(' . $val['name'] . ')';
-                $hdata['sRs'] = '失败';
+                $hdata['sDes'] = Yii::t('app', '删除WEB扫描策略') . '(' . $val['name'] . ')';
+                $hdata['sRs'] = Yii::t('app', '失败');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
             }
             $success = false;
-            $msg = "操作失败";
+            $msg = Yii::t('app', "操作失败");
         }
 
         $data['success'] = $success;
@@ -445,4 +445,3 @@ class WebpolicyController extends BaseController
 
 }
 
-?>

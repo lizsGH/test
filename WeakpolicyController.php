@@ -103,15 +103,15 @@ class WeakpolicyController extends BaseController
         $all = 0;
         if (empty($vuls)) {
             $data['success'] = false;
-            $data['msg'] = '请选择漏洞';
+            $data['msg'] = Yii::t('app', '请选择漏洞');
             echo json_encode($data);
             exit;
         }
 
        // $vul_ids = str_replace("|", ",", $vuls);
        // var_dump($ports);die;
-        $ports = str_replace("弱密码", "", strtolower($ports));
-        $ports = str_replace("windows远程协助", "rdp", ($ports));
+        $ports = str_replace(Yii::t('app', "弱密码"), "", strtolower($ports));
+        $ports = str_replace(Yii::t('app', "windows远程协助"), "rdp", ($ports));
         //var_dump($ports);die;
         if ($id) {//编辑
 
@@ -127,21 +127,21 @@ class WeakpolicyController extends BaseController
             $iTotal = $db->result_first("SELECT COUNT(`name`) num FROM bd_weakpwd_policy where name='$name' and id!= $id");
             if (!empty($iTotal)) {
                 $data['success'] = false;
-                $data['msg'] = $name . '已存在，请更换';
+                $data['msg'] = $name . Yii::t('app', '已存在，请更换');
                 echo json_encode($data);
                 exit;
             }
                 $query = "update bd_weakpwd_policy set name='" . $name . "',vuls='" . $vuls . "',portlist='" . $ports . "' where id=$id";
                 if ($db->query($query)) {
                     $success = true;
-                    $msg = "操作成功";
-                    $hdata['sDes'] = '编辑弱密码策略(' . $name . ')';
-                    $hdata['sRs'] = '成功';
+                    $msg = Yii::t('app', "操作成功");
+                    $hdata['sDes'] = Yii::t('app', '编辑弱密码策略') . '(' . $name . ')';
+                    $hdata['sRs'] = Yii::t('app', '成功');
                     $hdata['sAct'] = $act . '/' . $show;
                     saveOperationLog($hdata);
                 } else {
                     $success = false;
-                    $msg = "操作失败";
+                    $msg = Yii::t('app', "操作失败");
                 }
 //            } else {
 //                $success = false;
@@ -152,9 +152,9 @@ class WeakpolicyController extends BaseController
             $iTotal = $db->result_first("SELECT COUNT(`name`) num FROM bd_weakpwd_policy where name='$name'"  );
             if (!empty($iTotal)) {
                 $data['success'] = false;
-                $data['msg'] = $name . '已存在，请更换';
-                $hdata['sDes'] = '新增弱密码策略(' . $name . ')';
-                $hdata['sRs'] = '失败，名称(' . $name . ')已存在';
+                $data['msg'] = $name . Yii::t('app', '已存在，请更换');
+                $hdata['sDes'] = Yii::t('app', '新增弱密码策略') . '(' . $name . ')';
+                $hdata['sRs'] = Yii::t('app', '失败，名称(') . $name . Yii::t('app', ')已存在');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
                 echo json_encode($data);
@@ -164,18 +164,18 @@ class WeakpolicyController extends BaseController
                  $query = "insert into bd_weakpwd_policy (name,vuls,user_id,portlist) values('$name','$vuls','{$_SESSION['userid']}','$ports' )";
                  if ($db->query($query)) {
                     $success = true;
-                    $msg = "操作成功";
-                    $hdata['sDes'] = '新增弱密码策略(' . $name . ')';
-                    $hdata['sRs'] = '成功';
+                    $msg = Yii::t('app', "操作成功");
+                    $hdata['sDes'] = Yii::t('app', '新增弱密码策略') . '(' . $name . ')';
+                    $hdata['sRs'] = Yii::t('app', '成功');
                     $hdata['sAct'] = $act . '/' . $show;
                     saveOperationLog($hdata);
                 } else {
                     $success = false;
-                    $msg = "操作失败";
+                    $msg = Yii::t('app', "操作失败");
                 }
             } else {
                 $success = false;
-                $msg = "后台创建弱密码策略失败";
+                $msg = Yii::t('app', "后台创建弱密码策略失败");
             }
         }
         $data['success'] = $success;
@@ -198,10 +198,10 @@ class WeakpolicyController extends BaseController
 
         if ($db->query($query)) {
             $success = true;
-            $msg = "操作成功";
+            $msg = Yii::t('app', "操作成功");
         } else {
             $success = false;
-            $msg = "操作失败";
+            $msg = Yii::t('app', "操作失败");
         }
 
         $data['success'] = $success;
@@ -211,7 +211,3 @@ class WeakpolicyController extends BaseController
     }
 
 }
-
-
-
-?>
