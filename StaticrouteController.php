@@ -81,7 +81,7 @@ class StaticrouteController extends BaseController
         $sPost = $_POST;
         if (!empty($sPost['ipv6dest']) && !filter_ip($sPost['ipv6dest'])) {
             $success = false;
-            $msg = "ipv6地址格式错误";
+            $msg = Yii::t('app', "ipv6地址格式错误");
             $data['success'] = $success;
             $data['msg'] = $msg;
             echo json_encode($data);
@@ -91,7 +91,7 @@ class StaticrouteController extends BaseController
             $sPost['ipv6prefix'] = intval($sPost['ipv6prefix']);
             if ($sPost['ipv6prefix'] > 127 || $sPost['ipv6prefix'] < 1) {
                 $success = false;
-                $msg = "前缀（ipv6）必须在1~127的范围内";
+                $msg = Yii::t('app', "前缀（ipv6）必须在1~127的范围内");
                 $data['success'] = $success;
                 $data['msg'] = $msg;
                 echo json_encode($data);
@@ -100,7 +100,7 @@ class StaticrouteController extends BaseController
         }
         if (!empty($sPost['ipv6gateway']) && !filter_ip($sPost['ipv6gateway'])) {
             $success = false;
-            $msg = "网关（ipv6）格式错误";
+            $msg = Yii::t('app', "网关（ipv6）格式错误");
             $data['success'] = $success;
             $data['msg'] = $msg;
             echo json_encode($data);
@@ -161,9 +161,9 @@ class StaticrouteController extends BaseController
            // var_dump($num);die;
             if ($num > 0) {
                 $success = false;
-                $msg = "已经有相同的静态路由";
-                $hdata['sDes'] = '编辑静态路由';
-                $hdata['sRs'] = '失败';
+                $msg = Yii::t('app', "已经有相同的静态路由");
+                $hdata['sDes'] = Yii::t('app', '编辑静态路由');
+                $hdata['sRs'] = Yii::t('app', '失败');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
                 $data['success'] = $success;
@@ -244,7 +244,7 @@ class StaticrouteController extends BaseController
                             shellResult($dShell);
 
                             $success = false;
-                            $msg = "已存在默认路由";
+                            $msg = Yii::t('app', "已存在默认路由");
                             $data['success'] = $success;
                             $data['msg'] = $msg;
                             echo json_encode($data);
@@ -284,7 +284,7 @@ class StaticrouteController extends BaseController
                                 if ($db->query($query)) {
                                     $this->writeRoute();
                                     $success = true;
-                                    $msg = "操作成功";
+                                    $msg = Yii::t('app', "操作成功");
                                     $data['success'] = $success;
                                     $data['msg'] = $msg;
                                     echo json_encode($data);
@@ -299,7 +299,7 @@ class StaticrouteController extends BaseController
                                 shellResult($dShell);
 
                                 $success = false;
-                                $msg = "添加失败";
+                                $msg = Yii::t('app', "添加失败");
                                 $data['success'] = $success;
                                 $data['msg'] = $msg;
                                 echo json_encode($data);
@@ -343,7 +343,7 @@ class StaticrouteController extends BaseController
                             if ($db->query($query)) {
                                 $this->writeRoute();
                                 $success = true;
-                                $msg = "操作成功";
+                                $msg = Yii::t('app', "操作成功");
                                 $data['success'] = $success;
                                 $data['msg'] = $msg;
                                 echo json_encode($data);
@@ -358,7 +358,7 @@ class StaticrouteController extends BaseController
                             shellResult($dShell);
 
                             $success = false;
-                            $msg = "添加失败";
+                            $msg = Yii::t('app', "添加失败");
                             $data['success'] = $success;
                             $data['msg'] = $msg;
                             echo json_encode($data);
@@ -406,7 +406,7 @@ class StaticrouteController extends BaseController
                         if ($db->query($query)) {
                             $this->writeRoute();
                             $success = true;
-                            $msg = "操作成功";
+                            $msg = Yii::t('app', "操作成功");
                             $data['success'] = $success;
                             $data['msg'] = $msg;
                             echo json_encode($data);
@@ -421,7 +421,7 @@ class StaticrouteController extends BaseController
                         shellResult($dShell);
 
                         $success = false;
-                        $msg = "编辑路由失败";
+                        $msg = Yii::t('app', "编辑路由失败");
                         $data['success'] = $success;
                         $data['msg'] = $msg;
                         echo json_encode($data);
@@ -442,8 +442,8 @@ class StaticrouteController extends BaseController
             $num = $db->result_first($tSql);
             if ($num > 0) {
                 $success = false;
-                $msg = "已经有相同的静态路由";
-                $hdata['sDes'] = '新增静态路由失败';
+                $msg = Yii::t('app', "已经有相同的静态路由");
+                $hdata['sDes'] = Yii::t('app', '新增静态路由失败');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
                 $data['success'] = $success;
@@ -461,7 +461,7 @@ class StaticrouteController extends BaseController
                     if (!empty($buffer))//返回提示信息（已存在默认路由）；
                     {
                         $success = false;
-                        $msg = "已存在默认路由";
+                        $msg = Yii::t('app', "已存在默认路由");
                         $data['success'] = $success;
                         $data['msg'] = $msg;
                         echo json_encode($data);
@@ -496,7 +496,7 @@ class StaticrouteController extends BaseController
                             $query = "insert into " . getTable('staticroute2') . " (id ,nic,dest,mask,gateway,ipv6dest,ipv6prefix,ipv6gateway) values('','" . $nic . "','" . $dest . "','" . $mask . "','" . $gateway . "','" . $ipv6dest . "','" . $ipv6prefix . "','" . $ipv6gateway . "')";
                             if ($db->query($query)) {
                                 $success = true;
-                                $msg = "操作成功";
+                                $msg = Yii::t('app', "操作成功");
                                 $data['success'] = $success;
                                 $data['msg'] = $msg;
                                 echo json_encode($data);
@@ -504,7 +504,7 @@ class StaticrouteController extends BaseController
                             }
                         } else {
                             $success = false;
-                            $msg = "添加默认路由失败";
+                            $msg = Yii::t('app', "添加默认路由失败");
                             $data['success'] = $success;
                             $data['msg'] = $msg;
                             echo json_encode($data);
@@ -542,7 +542,7 @@ class StaticrouteController extends BaseController
                         $query = "insert into " . getTable('staticroute2') . " (id ,nic,dest,mask,gateway,ipv6dest,ipv6prefix,ipv6gateway) values('','" . $nic . "','" . $dest . "','" . $mask . "','" . $gateway . "','" . $ipv6dest . "','" . $ipv6prefix . "','" . $ipv6gateway . "')";
                         if ($db->query($query)) {
                             $success = true;
-                            $msg = "操作成功";
+                            $msg = Yii::t('app', "操作成功");
                             $data['success'] = $success;
                             $data['msg'] = $msg;
                             echo json_encode($data);
@@ -550,7 +550,7 @@ class StaticrouteController extends BaseController
                         }
                     } else {
                         $success = false;
-                        $msg = "新增默认路由失败";
+                        $msg = Yii::t('app', "新增默认路由失败");
                         $data['success'] = $success;
                         $data['msg'] = $msg;
                         echo json_encode($data);
@@ -595,7 +595,7 @@ class StaticrouteController extends BaseController
                     if ($db->query($query)) {
 
                         $success = true;
-                        $msg = "操作成功";
+                        $msg = Yii::t('app', "操作成功");
                         $data['success'] = $success;
                         $data['msg'] = $msg;
                         echo json_encode($data);
@@ -603,7 +603,7 @@ class StaticrouteController extends BaseController
                     }
                 } else {
                     $success = false;
-                    $msg = "新增静态路由失败";
+                    $msg = Yii::t('app', "新增静态路由失败");
                     $data['success'] = $success;
                     $data['msg'] = $msg;
                     echo json_encode($data);
@@ -654,25 +654,25 @@ class StaticrouteController extends BaseController
             if($db->execute($query) > 0){
                 $this->writeRoute();
                 $success = true;
-                $msg = "操作成功";
-                $hdata['sDes'] = '删除静态路由';
-                $hdata['sRs'] = '成功';
+                $msg = Yii::t('app', "操作成功");
+                $hdata['sDes'] = Yii::t('app', '删除静态路由');
+                $hdata['sRs'] = Yii::t('app', '成功');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
             }else{
                 $success = false;
-                $msg = "操作失败";
-                $hdata['sDes'] = '删除静态路由';
-                $hdata['sRs'] = '失败';
+                $msg = Yii::t('app', "操作失败");
+                $hdata['sDes'] = Yii::t('app', '删除静态路由');
+                $hdata['sRs'] = Yii::t('app', '失败');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
             }
 
         }else{
             $success = false;
-            $msg = "操作失败";
-            $hdata['sDes'] = '删除静态路由';
-            $hdata['sRs'] = '失败';
+            $msg = Yii::t('app', "操作失败");
+            $hdata['sDes'] = Yii::t('app', '删除静态路由');
+            $hdata['sRs'] = Yii::t('app', '失败');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
         }
@@ -720,4 +720,3 @@ class StaticrouteController extends BaseController
         return true;
     }
 }
-?>

@@ -157,7 +157,7 @@ function actionIndex()
                 }
             }
             if($v['status'] == 1){
-                $tData[$k]['logs'] = '符合规范';
+                $tData[$k]['logs'] = Yii::t('app', '符合规范');
             }
             $tData[$k]['solution'] = htmlspecialchars($v['solution']);
         }
@@ -228,7 +228,7 @@ function actionExpreport()
             $aJson['path'] = '/tmp/'.$tarname;
             $aJson['report_type'] = 'html';
         }else{
-            $aJson['msg'] = '导出失败！';
+            $aJson['msg'] = Yii::t('app', '导出失败') . '！';
         }
     }
     $aJson['success'] = $success;
@@ -265,10 +265,10 @@ public function actionCompliance(){
             }
         }
     }
-    array_push($data['data'],array('value'=>intval($com),'name'=>'合规检查项数'));
-    array_push($data['data'],array('value'=>intval($uncom),'name'=>'不合规检查项数'));
+    array_push($data['data'],array('value'=>intval($com),'name'=>Yii::t('app', '合规检查项数')));
+    array_push($data['data'],array('value'=>intval($uncom),'name'=>Yii::t('app', '不合规检查项数')));
     $aJson['series'][] =  $data;
-    $aJson['legend']['data'] =  array('合规检查项数','不合规检查项数');
+    $aJson['legend']['data'] =  array(Yii::t('app', '合规检查项数'),Yii::t('app', '不合规检查项数'));
 //        $aJson['xAxis']['type'] = 'category';
 //        $aJson['xAxis']['data'] =  array('高','中','低');
     echo json_encode($aJson);
@@ -298,11 +298,11 @@ function actionRiskpieData(){
             }
         }
     }
-    array_push($data['data'],array('value'=>intval($high),'name'=>'高风险'));
-    array_push($data['data'],array('value'=>intval($mid),'name'=>'中风险'));
-    array_push($data['data'],array('value'=>intval($low),'name'=>'低风险'));
+    array_push($data['data'],array('value'=>intval($high),'name'=>Yii::t('app', '高风险')));
+    array_push($data['data'],array('value'=>intval($mid),'name'=>Yii::t('app', '中风险')));
+    array_push($data['data'],array('value'=>intval($low),'name'=>Yii::t('app', '低风险')));
     $aJson['series'][] =  $data;
-    $aJson['legend']['data'] =  array('高风险','中风险','低风险');
+    $aJson['legend']['data'] =  array(Yii::t('app', '高风险'),Yii::t('app', '中风险'),Yii::t('app', '低风险'));
 //        $aJson['xAxis']['type'] = 'category';
 
     echo json_encode($aJson);
@@ -332,11 +332,11 @@ function actionRiskbarData(){
             }
         }
     }
-    array_push($data['data'],array('value'=>intval($high),'name'=>'高风险'));
-    array_push($data['data'],array('value'=>intval($mid),'name'=>'中风险'));
-    array_push($data['data'],array('value'=>intval($low),'name'=>'低风险'));
+    array_push($data['data'],array('value'=>intval($high),'name'=>Yii::t('app', '高风险')));
+    array_push($data['data'],array('value'=>intval($mid),'name'=>Yii::t('app', '中风险')));
+    array_push($data['data'],array('value'=>intval($low),'name'=>Yii::t('app', '低风险')));
     $aJson['series'][] =  $data;
-    $aJson['xAxis']['data'] =  array('高风险','中风险','低风险');
+    $aJson['xAxis']['data'] =  array(Yii::t('app', '高风险'),Yii::t('app', '中风险'),Yii::t('app', '低风险'));
 //        $aJson['xAxis']['type'] = 'category';
 //        $aJson['xAxis']['data'] =  array('高','中','低');
     echo json_encode($aJson);
@@ -425,9 +425,9 @@ function actionRuleTypeRiskData(){
             }
         }
     }
-    array_push($data,array('data'=>$highrisk,'name'=>'高风险'));
-    array_push($data,array('data'=>$midrisk,'name'=>'中风险'));
-    array_push($data,array('data'=>$lowrisk,'name'=>'低风险'));
+    array_push($data,array('data'=>$highrisk,'name'=>Yii::t('app', '高风险')));
+    array_push($data,array('data'=>$midrisk,'name'=> Yii::t('app', '中风险')));
+    array_push($data,array('data'=>$lowrisk,'name'=> Yii::t('app', '低风险')));
 
     $aJson['series'] =  $data;
 //		$aJson['xAxis']['data'] =  array('高风险','中风险','低风险');
@@ -521,9 +521,9 @@ function actionDevTypeRiskData(){
             }
         }
     }
-    array_push($data,array('data'=>$highrisk,'name'=>'高风险'));
-    array_push($data,array('data'=>$midrisk,'name'=>'中风险'));
-    array_push($data,array('data'=>$lowrisk,'name'=>'低风险'));
+    array_push($data,array('data'=>$highrisk,'name'=>Yii::t('app', '高风险')));
+    array_push($data,array('data'=>$midrisk,'name'=> Yii::t('app', '中风险')));
+    array_push($data,array('data'=>$lowrisk,'name'=> Yii::t('app', '低风险')));
 
     $aJson['series'] =  $data;
 //		$aJson['xAxis']['data'] =  array('高风险','中风险','低风险');

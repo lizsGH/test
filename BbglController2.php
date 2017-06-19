@@ -30,7 +30,6 @@ class BbglController extends BaseController {
         $new_content=$new_image_content=$new_word_content='';
         if($post == 1){
             $data  = array('success'=>false, 'message'=>'操作失败', 'down'=>'');
-            //$tasks  = intval($_POST['tasks']);//这里$_POST['tasks']是个数组
             $template_conf = array(
                 //'name': '模板名',
                 'overview' => Yii::t('app', '综述'),
@@ -39,35 +38,36 @@ class BbglController extends BaseController {
                 'risk_type' => Yii::t('app', '风险类型分布'),
                 'risk_host' => Yii::t('app', '所有主机（IP）风险分布'),
                 'vul_host' => Yii::t('app', '主机漏洞列表'),
-                'vul_host_system'=> Yii::t('app', '系统漏洞'),
-                'vul_host_server'=> Yii::t('app', '服务漏洞'),
-                'vul_host_application'=> '应用漏洞',
-                'vul_host_device'=> '网络设备漏洞',
-                'vul_host_database'=> '数据库漏洞',
-                'vul_host_virtual'=>'虚拟化平台漏洞',
-                'risk_web'=> 'WEB漏洞列表',
-                'vul_web_syscmd'=> '系统命令执行',
-                'vul_web_sql'=> 'SQL注入',
-                'vul_web_code'=> '代码远程执行',
-                'vul_web_file'=> '远程文件包含',
-                'vul_web_http'=> 'HTTP参数污染',
-                'vul_web_ldap'=> 'LDAP注入',
-                'vul_web_script'=> '跨站脚本攻击',
-                'vul_web_content'=> '内容欺骗',
-                'vul_web_upload'=>'文件上传',
-                'vul_web_deny'=> '拒绝服务',
-                'vul_web_info'=>  '信息泄露',
-                'vul_web_dir'=> '目录遍历',
-                'vul_web_log'=> '日志文件扫描',
-                'vul_web_server'=> '软件服务检测',
-                'vul_web_read'=> '任意文件读取',
-                'vul_web_database'=> '数据库发现',
-                'vul_web_backdoor'=> '后门发现',
-                'vul_web_auth'=> '验证绕过',
-                'vul_web_config'=> '配置不当',
-                'vul_web_other'=> '其它',
-                'risk_pwd'=> '弱密码漏洞列表'
-            );
+                'vul_host_system' => Yii::t('app', '系统漏洞'),
+                'vul_host_server' => Yii::t('app', '服务漏洞'),
+                'vul_host_application' => Yii::t('app', '应用漏洞'),
+                'vul_host_device' => Yii::t('app', '网络设备漏洞'),
+                'vul_host_database' => Yii::t('app', '数据库漏洞'),
+                'vul_host_virtual' => Yii::t('app', '虚拟化平台漏洞'),
+                'risk_web' => Yii::t('app', 'WEB漏洞列表'),
+                'vul_web_syscmd' => Yii::t('app', '系统命令执行'),
+                'vul_web_sql' => Yii::t('app', 'SQL注入'),
+                'vul_web_code' => Yii::t('app', '代码远程执行'),
+                'vul_web_file' => Yii::t('app', '远程文件包含'),
+                'vul_web_http' => Yii::t('app', 'HTTP参数污染'),
+                'vul_web_ldap'  => Yii::t('app', 'LDAP注入'),
+                'vul_web_script' => Yii::t('app', '跨站脚本攻击'),
+                'vul_web_content' => Yii::t('app', '内容欺骗'),
+                'vul_web_upload' => Yii::t('app', '文件上传'),
+                'vul_web_deny' => Yii::t('app', '拒绝服务'),
+                'vul_web_info' => Yii::t('app', '信息泄露'),
+                'vul_web_dir' => Yii::t('app', '目录遍历'),
+                'vul_web_log' => Yii::t('app', '日志文件扫描'),
+                'vul_web_server' => Yii::t('app', '软件服务检测'),
+                'vul_web_read' => Yii::t('app', '任意文件读取'),
+                'vul_web_database' => Yii::t('app', '数据库发现'),
+                'vul_web_backdoor' => Yii::t('app', '后门发现'),
+                'vul_web_auth' => Yii::t('app', '验证绕过'),
+                'vul_web_config' => Yii::t('app', '配置不当'),
+                'vul_web_other' => Yii::t('app', '其它'),
+                'risk_pwd' => Yii::t('app', '弱密码漏洞列表'),
+            );           //$tasks  = intval($_POST['tasks']);//这里$_POST['tasks']是个数组
+
             $t_host_list = array(
                 'vul_host'=>'vul_host',
                 'vul_host_system'=> 'vul_host_system',
@@ -125,13 +125,13 @@ class BbglController extends BaseController {
             }
 
             if(empty($_POST['tasks'])){
-                $data['message'] = '请选择任务.';
+                $data['message'] = Yii::t('app', '请选择任务.');
                 echo json_encode($data);
                 exit;
             }
 
             if($bbname == ''){
-                $data['message'] = '请填写报表名称.';
+                $data['message'] = Yii::t('app', '请填写报表名称.');
                 echo json_encode($data);
                 exit;
             }
@@ -167,19 +167,19 @@ class BbglController extends BaseController {
                     $targets = $rows['target'];
                    // var_dump($num);die;
                     $content = str_replace('{$weak_num}', $total, $content);
-                    $content = str_replace('{$type}', '弱密码', $content);
+                    $content = str_replace('{$type}', Yii::t('app', '弱密码'), $content);
                     $h_sum=$m_sum=$l_sum=0;
                     foreach ($rows as $v){
                         if($v['level']=='H'){
-                            $level='高危';
+                            $level = Yii::t('app', '高危');
                             $h_sum++;
                         }
                         if($v['level']=='M'){
-                            $level='中危';
+                            $level = Yii::t('app', '中危');
                             $m_sum++;
                         }
                         if($v['level']=='L'){
-                            $level='低危';
+                            $level = Yii::t('app', '低危');
                             $l_sum++;
                         }
                     }
@@ -219,14 +219,14 @@ class BbglController extends BaseController {
                     $styleTemp = '';
 
                     if ($mmjl == 0) {
-                        $rmhmtl .= '<p class="y-report-ui-element-content '.$classTemp.'">本次扫描没有发现该风险。</p>';
-                        $rmwhmtl .= '<p style="line-height:20px;text-indent:4em;width:100%;'.$styleTemp.'">本次扫描没有发现该风险。</p>';
+                        $rmhmtl .= '<p class="y-report-ui-element-content '.$classTemp.'">' . Yii::t('app', '本次扫描没有发现该风险。') . '</p>';
+                        $rmwhmtl .= '<p style="line-height:20px;text-indent:4em;width:100%;'.$styleTemp.'">' . Yii::t('app', '本次扫描没有发现该风险。') . '</p>';
                     } else {
-                        $rmhmtl .= '<p class="y-report-ui-element-content '.$classTemp.'">本次扫描共发现弱密码<span class="y-report-ui-text-normal-b"> ' . $mmjl . ' </span>个。影响主机<span class="y-report-ui-text-level-info-b"> ' . count($rmmip) . ' </span>个。</p>';
-                        $rmhmtl .= '<div class="'.$classTemp.'"><table cellpadding="0" class="y-report-ui-comp-data-grid" special="objectType#expandableGrid" cellspacing="0"><tbody><tr><th width="20%" class="y-report-ui-comp-data-grid-th">IP</th><th width="30%" class="y-report-ui-comp-data-grid-th y-report-ui-comp-data-grid-td-text-align-left">用户名</th><th width="30%" class="y-report-ui-comp-data-grid-th">密码</th><th width="20%" class="y-report-ui-comp-data-grid-th">弱密码类型</th></tr>';
+                        $rmhmtl .= '<p class="y-report-ui-element-content '.$classTemp.'">' . Yii::t('app', '本次扫描共发现弱密码') . '<span class="y-report-ui-text-normal-b"> ' . $mmjl . ' </span>' . Yii::t('app', '个。') . Yii::t('app', '影响主机') . '<span class="y-report-ui-text-level-info-b"> ' . count($rmmip) . ' </span>' . Yii::t('app', '个。') . '</p>';
+                        $rmhmtl .= '<div class="'.$classTemp.'"><table cellpadding="0" class="y-report-ui-comp-data-grid" special="objectType#expandableGrid" cellspacing="0"><tbody><tr><th width="20%" class="y-report-ui-comp-data-grid-th">IP</th><th width="30%" class="y-report-ui-comp-data-grid-th y-report-ui-comp-data-grid-td-text-align-left">' . Yii::t('app', '用户名') . '</th><th width="30%" class="y-report-ui-comp-data-grid-th">' . Yii::t('app', '密码') . '</th><th width="20%" class="y-report-ui-comp-data-grid-th">' . Yii::t('app', '弱密码类型') . '</th></tr>';
 
-                        $rmwhmtl .= '<p class="y-report-ui-element-content '.$classTemp.'">本次扫描共发现弱密码<span class="y-report-ui-text-normal-b"> ' . $mmjl . ' </span>个。影响主机<span class="y-report-ui-text-level-info-b"> ' . count($rmmip) . ' </span>个。</p>';
-                        $rmwhmtl .= '<table cellpadding="0" style="'.$styleTemp.';font-size:12px;width:100%;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px" cellspacing="0"><tbody><tr><td width="20%" style="height:25px;color:#FFF;background-color:#6296D3;font-weight:bold;padding:2px">IP</td><td width="30%" style="height:25px;color:#FFF;background-color:#6296D3;font-weight:bold;padding:2px">用户名</td><td width="30%" style="height:25px;color:#FFF;background-color:#6296D3;font-weight:bold;padding:2px">密码</td><td width="20%" style="height:25px;color:#FFF;background-color:#6296D3;font-weight:bold;padding:2px">弱密码类型</td></tr>';
+                        $rmwhmtl .= '<p class="y-report-ui-element-content '.$classTemp.'">' . Yii::t('app', '本次扫描共发现弱密码') . '<span class="y-report-ui-text-normal-b"> ' . $mmjl . ' </span>' . Yii::t('app', '个。') . Yii::t('app', '影响主机') . '<span class="y-report-ui-text-level-info-b"> ' . count($rmmip) . ' </span>' . Yii::t('app', '个。') . '</p>';
+                        $rmwhmtl .= '<table cellpadding="0" style="'.$styleTemp.';font-size:12px;width:100%;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px" cellspacing="0"><tbody><tr><td width="20%" style="height:25px;color:#FFF;background-color:#6296D3;font-weight:bold;padding:2px">IP</td><td width="30%" style="height:25px;color:#FFF;background-color:#6296D3;font-weight:bold;padding:2px">' . Yii::t('app', '用户名') . '</td><td width="30%" style="height:25px;color:#FFF;background-color:#6296D3;font-weight:bold;padding:2px">' . Yii::t('app', '密码') . '</td><td width="20%" style="height:25px;color:#FFF;background-color:#6296D3;font-weight:bold;padding:2px">' . Yii::t('app', '弱密码类型') . '</td></tr>';
                         foreach ($mmlist as $m => $n) {
                             $rmhmtl .= '<span id="record-show"><tr class="y-report-ui-comp-data-grid-tr-' . ($m % 2) . '"><td class="y-report-ui-comp-data-grid-td-text-align-left" id="rmm-ip">' .'<a href="javascript:" >'. $n['ip'] . '</a>' . '</td><td class="y-report-ui-comp-data-grid-td-text-align-left" id="rmm-user">' . $n['username'] . '</td><td id="rmm-password">' . $n['password'] . '</td><td class="y-report-ui-comp-data-grid-td-text-align-left" id="rmm-type">' . $n['vul_name'] . '</td></tr>';
                             $rmwhmtl .= '<tr style="height:25px;text-align:center;background-color:' . $kcolor[($m % 2)] . '"><td>' . $n['ip'] . '</td><td style="padding-right:1em !important;padding-left:1em !important;text-align:left">' . $n['username'] . '</td><td>' . $n['password'] . '</td><td>' . $n['vul_name'] . '</td></tr></span>';
@@ -260,7 +260,7 @@ class BbglController extends BaseController {
                     if($domainnum == 0){
                         $content = str_replace('{$domainnum}', '', $content);
                     }else{
-                        $content = str_replace('{$domainnum}', '域名 '.$domainnum.' 个，', $content);
+                        $content = str_replace('{$domainnum}', Yii::t('app', '域名') .$domainnum. Yii::t('app', '个，'), $content);
                     }
                     /*web高风险总数*/
                     $web_sum = $db->result_first("SELECT COUNT(1) AS wnum FROM $tablescan WHERE vul_level!=''");
@@ -288,13 +288,13 @@ class BbglController extends BaseController {
                         $whnum = $whnum > 0 ? $whnum : 0;
                         //var_dump($whnum);
                         if ($whnum == 0) {
-                            $wdhmtl .= '<p class="y-report-ui-element-content '.$classTemp.'">本次扫描没有发现该风险。</p>';
-                            $wdwhmtl .= '<p style="line-height:20px;text-indent:4em;width:100%;'.$styleTemp.'">本次扫描没有发现该风险。</p>';
+                            $wdhmtl .= '<p class="y-report-ui-element-content '.$classTemp.'">' . Yii::t('app', '本次扫描没有发现该风险。') . '</p>';
+                            $wdwhmtl .= '<p style="line-height:20px;text-indent:4em;width:100%;'.$styleTemp.'">' . Yii::t('app', '本次扫描没有发现该风险。') . '</p>';
                         } else {
-                            $wdhmtl .= '<p class="y-report-ui-element-content '.$classTemp.'">本次扫描共发现该风险<span class="y-report-ui-text-normal-b"> ' . $whnum . ' </span>个。</p>';
-                            $wdhmtl .= '<div class="'.$classTemp.'"><table cellpadding="0" class="y-report-ui-comp-data-grid" special="objectType#expandableGrid" cellspacing="0"><tbody><tr><th width="10%" class="y-report-ui-comp-data-grid-th">风险评级</th><th width="70%" class="y-report-ui-comp-data-grid-th y-report-ui-comp-data-grid-td-text-align-left">风险名称</th><th width="10%" class="y-report-ui-comp-data-grid-th">影响URL数</th><th width="10%" class="y-report-ui-comp-data-grid-th">更多信息</th></tr>';
+                            $wdhmtl .= '<p class="y-report-ui-element-content '.$classTemp.'">' . Yii::t('app', '本次扫描共发现该风险') . '<span class="y-report-ui-text-normal-b"> ' . $whnum . ' </span>' . Yii::t('app', '个。') . '</p>';
+                            $wdhmtl .= '<div class="'.$classTemp.'"><table cellpadding="0" class="y-report-ui-comp-data-grid" special="objectType#expandableGrid" cellspacing="0"><tbody><tr><th width="10%" class="y-report-ui-comp-data-grid-th">' . Yii::t('app', '风险评级') . '</th><th width="70%" class="y-report-ui-comp-data-grid-th y-report-ui-comp-data-grid-td-text-align-left">' . Yii::t('app', '风险名称') . '</th><th width="10%" class="y-report-ui-comp-data-grid-th">' . Yii::t('app', '影响URL数') . '</th><th width="10%" class="y-report-ui-comp-data-grid-th">' . Yii::t('app', '更多信息') . '</th></tr>';
 
-                            $wdwhmtl .= '<p style="line-height:20px;text-indent:4em;width:100%;'.$styleTemp.'">本次扫描共发现该风险<span style="color:#000000;font-weight:bold"> ' . $whnum . ' </span>个。</p>';
+                            $wdwhmtl .= '<p style="line-height:20px;text-indent:4em;width:100%;'.$styleTemp.'">' . Yii::t('app', '本次扫描共发现该风险') . '<span style="color:#000000;font-weight:bold"> ' . $whnum . ' </span>' . Yii::t('app', '个。') . '</p>';
                             $wdwhmtl .= '<table cellpadding="0" style="'.$styleTemp.';font-size:12px;width:100%;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px" cellspacing="0"><tbody>';
                             $sql = "SELECT sc.url,sc.vul_type,sc.vul_id,sc.vul_level,sc.vul_name,sc.description,sc.solution,count(1) as urlsum FROM $tablescan sc, bd_web_vul_lib wlist WHERE sc.vul_id=wlist.vul_id AND wlist.family_id={$w['id']} GROUP BY sc.vul_id ORDER BY sc.vul_level DESC";
                             $wmyrows = $db->fetch_all($sql);
@@ -304,22 +304,22 @@ class BbglController extends BaseController {
                                 $rcss = $web_css["{$v['vul_level']}"];
                                 $rcor = $web_color["{$v['vul_level']}"];
                                 $wdhmtl .= '<tr><td colspan="4"><span id="recordweb-show"><table cellpadding="0" class="y-report-ui-comp-data-grid" special="objectType#expandableGrid" cellspacing="0"><tbody>';
-                                $wdhmtl .= '<tr class="y-report-ui-comp-data-grid-tr-' . ($k % 2) . '"><td class="y-report-ui-text-level-' . $rcss . '-b" id="webfxjb">' . $jieb . '</td><td class="y-report-ui-comp-data-grid-td-text-align-left" id="webfxname">' . $v['vul_name'] . '</td><td id="weburlnum">' . $v['urlsum'] . '</td><td special="openDetail" class="y-report-ui-element-more-info-link">展开详情</td></tr>';
+                                $wdhmtl .= '<tr class="y-report-ui-comp-data-grid-tr-' . ($k % 2) . '"><td class="y-report-ui-text-level-' . $rcss . '-b" id="webfxjb">' . $jieb . '</td><td class="y-report-ui-comp-data-grid-td-text-align-left" id="webfxname">' . $v['vul_name'] . '</td><td id="weburlnum">' . $v['urlsum'] . '</td><td special="openDetail" class="y-report-ui-element-more-info-link">' . Yii::t('app', '展开详情') . '</td></tr>';
                                 $wdwhmtl .= '<tr><td colspan="2" style=" border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px"><div><div><div style="background-color:#91C5F6; vertical-align:middle; height:20px; line-height: 20px; width: 100%"> [ <span style="color:' . $rcor . '">' . $jieb . '</span> ] ' . $v['vul_name'] . '</div><div style="clear:both"></div></div>';
                                 $wdwhmtl .= '<div><div><div style="position:relative;">';
                                 $wdwhmtl .= '<table cellpadding="0" style="font-size:12px;width:100%;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px" cellspacing="0"><tbody>';
-                                $wdwhmtl .= '<tr><td style="width:140px; padding:3px; border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">影响URL数</td><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">' . $v['urlsum'] . '</td></tr>';
+                                $wdwhmtl .= '<tr><td style="width:140px; padding:3px; border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">' . Yii::t('app', '影响URL数') . '</td><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">' . $v['urlsum'] . '</td></tr>';
 
-                                $wdhmtl .= '<tr style="display:none"><td colspan="4" style="opacity:0;-ms-filter:\'progid:DXImageTransform.Microsoft.Alpha(Opacity=0)\';filter:alpha(opacity=0);-webkit-opacity:0;-moz-opacity:0;-khtml-opacity:0"><div class="y-report-ui-object-expandable-grid-detail-panel"><div class="y-report-ui-object-expandable-grid-detail-panel-header-frame"><div class="y-report-ui-object-expandable-grid-detail-panel-header-title"> [ <span class="y-report-ui-text-level-' . $rcss . '-b">' . $jieb . '</span> ] ' . $v['vul_name'] . '</div><div class="y-report-ui-object-expandable-grid-detail-panel-header-close" special="closeDetail">关闭</div><div style="clear:both"></div></div><div class="y-report-ui-object-expandable-grid-detail-panel-content-frame"><div class="y-report-ui-object-tab-panel-frame" special="objectType#tabPanel"><div style="position:relative;" class="y-report-ui-object-tab-panel-header-frame"><div style="float:left;" class="y-report-ui-object-host-vuln-list-tab-header y-report-ui-object-tab-panel-header-button-toggled">URL列表（共' . $v['urlsum'] . '项）</div><div style="float:left;" class="y-report-ui-object-host-vuln-list-tab-header y-report-ui-object-tab-panel-header-button">风险描述</div><div style="float:left;" class="y-report-ui-object-host-vuln-list-tab-header y-report-ui-object-tab-panel-header-button">解决方案</div><div style="clear:both"></div></div><div class="y-report-ui-object-tab-panel-content-frame"><div style="float:left" class="y-report-ui-object-tab-panel-content-element"><div class="y-report-ui-object-accordion-list-frame" special="objectType#accordionList">';
-                                $wdwhmtl .= '<tr><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">URL列表（共' . $v['urlsum'] . '项）</td><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">';
+                                $wdhmtl .= '<tr style="display:none"><td colspan="4" style="opacity:0;-ms-filter:\'progid:DXImageTransform.Microsoft.Alpha(Opacity=0)\';filter:alpha(opacity=0);-webkit-opacity:0;-moz-opacity:0;-khtml-opacity:0"><div class="y-report-ui-object-expandable-grid-detail-panel"><div class="y-report-ui-object-expandable-grid-detail-panel-header-frame"><div class="y-report-ui-object-expandable-grid-detail-panel-header-title"> [ <span class="y-report-ui-text-level-' . $rcss . '-b">' . $jieb . '</span> ] ' . $v['vul_name'] . '</div><div class="y-report-ui-object-expandable-grid-detail-panel-header-close" special="closeDetail">' . Yii::t('app', '关闭') . '</div><div style="clear:both"></div></div><div class="y-report-ui-object-expandable-grid-detail-panel-content-frame"><div class="y-report-ui-object-tab-panel-frame" special="objectType#tabPanel"><div style="position:relative;" class="y-report-ui-object-tab-panel-header-frame"><div style="float:left;" class="y-report-ui-object-host-vuln-list-tab-header y-report-ui-object-tab-panel-header-button-toggled">' . Yii::t('app', 'URL列表（共') . $v['urlsum'] . Yii::t('app', '项）') . '</div><div style="float:left;" class="y-report-ui-object-host-vuln-list-tab-header y-report-ui-object-tab-panel-header-button">' . Yii::t('app', '风险描述') . '</div><div style="float:left;" class="y-report-ui-object-host-vuln-list-tab-header y-report-ui-object-tab-panel-header-button">' . Yii::t('app', '解决方案') . '</div><div style="clear:both"></div></div><div class="y-report-ui-object-tab-panel-content-frame"><div style="float:left" class="y-report-ui-object-tab-panel-content-element"><div class="y-report-ui-object-accordion-list-frame" special="objectType#accordionList">';
+                                $wdwhmtl .= '<tr><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">' . Yii::t('app', 'URL列表（共') . $v['urlsum'] . Yii::t('app', '项）') . '</td><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">';
                                 $urllist = $db->fetch_all("SELECT url FROM $tablescan WHERE vul_id='{$v['vul_id']}'");
                                 foreach ($urllist as $l => $u) {
                                     $wdhmtl .= '<div class="y-report-ui-object-accordion-list-item-frame" id="web_urllist"><div class="y-report-ui-object-accordion-list-item-header">' . $u['url'] . '</div></div>';
                                     $wdwhmtl .= $u['url'] . '<br />';
                                 }
                                 $wdwhmtl .= '</td></tr>';
-                                $wdwhmtl .= '<tr><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">风险描述</td><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">' . $v['description'] . '</td></tr>';
-                                $wdwhmtl .= '<tr><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">解决方案</td><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">' . $v['solution'] . '</td></tr>';
+                                $wdwhmtl .= '<tr><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">' . Yii::t('app', '风险描述') . '</td><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">' . $v['description'] . '</td></tr>';
+                                $wdwhmtl .= '<tr><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">' . Yii::t('app', '解决方案') . '</td><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">' . $v['solution'] . '</td></tr>';
                                 $wdwhmtl .= '</tbody></table>';
                                 $wdwhmtl .= '</div></div></div>';
                                 $wdwhmtl .= '</td></tr>';
@@ -347,7 +347,7 @@ class BbglController extends BaseController {
                     /*统计主机个数*/
                     $hostnum=\Yii::$app->db->createCommand("select count(DISTINCT ip) from bd_host_result_$tasks")->queryColumn()[0];
                     
-                    $content = str_replace('{$hostnum}', '主机 '.$hostnum.' 个，', $content);
+                    $content = str_replace('{$hostnum}', Yii::t('app', '主机') . $hostnum. Yii::t('app', '个，'), $content);
 
                     /*主机风险总数*/
                     $zj = $db->result_first("SELECT COUNT(1) AS mnum FROM $tablevul WHERE vul_level!=''");
@@ -418,7 +418,8 @@ class BbglController extends BaseController {
                         $tum = $tum > 0 ? $tum : 0;
                         $ldinum[] = $tum;
                     }
-                    $data7 = '{name:"高风险",value:[' . join(',', $ldhnum) . '],color:"#ffa500"},{name:"中风险",value:[' . join(',', $ldmnum) . '],color:"#f737ec"},{name:"低风险",value:[' . join(',', $ldlnum) . '],color:"#6060fe"}';
+                    // $data7 = '{name:"高风险",value:[' . join(',', $ldhnum) . '],color:"#ffa500"},{name:"中风险",value:[' . join(',', $ldmnum) . '],color:"#f737ec"},{name:"低风险",value:[' . join(',', $ldlnum) . '],color:"#6060fe"}';
+                    $data7 = '{name:"' . Yii::t('app', '高风险') . '",value:[' . join(',', $ldhnum) . '],color:"#ffa500"},{name:"' . Yii::t('app', '中风险') . '",value:[' . join(',', $ldmnum) . '],color:"#f737ec"},{name:"' . Yii::t('app', '低风险') . '",value:[' . join(',', $ldlnum) . '],color:"#6060fe"}';
                     $content = str_replace('{$dataip}', join(',', $topid), $content);
                     $content = str_replace('{$data7}', $data7, $content);
                     $imageCon = str_replace('{$dataip}', join(',', $topid), $imageCon);
@@ -452,13 +453,14 @@ class BbglController extends BaseController {
                         $iums = $iums > 0 ? $iums : 0;
                         $zfxs = $cums + $hums + $mums + $lums + $iums;
                         if ($zfxs == 0) {
-                            $html .= '<p class="y-report-ui-element-content  '.$classTemp.'">本次扫描没有发现该风险。</p>';
-                            $whtml .= '<p style="line-height:20px;text-indent:4em;width:100%;'.$styleTemp.'">本次扫描没有发现该风险。</p>';
+                            $html .= '<p class="y-report-ui-element-content  '.$classTemp.'">' . Yii::t('app', '本次扫描没有发现该风险。') . '</p>';
+                            $whtml .= '<p style="line-height:20px;text-indent:4em;width:100%;'.$styleTemp.'">' . Yii::t('app', '本次扫描没有发现该风险。') . '</p>';
                         } else {
-                            $html .= '<p class="y-report-ui-element-content '.$classTemp.'">本次扫描共发现该风险<span class="y-report-ui-text-normal-b"> ' . ($cums + $hums + $mums + $lums + $iums) . ' </span>个。</p>';
-                            $html .= '<div class="'.$classTemp.'"><table cellpadding="0" class="y-report-ui-comp-data-grid" special="objectType#expandableGrid" cellspacing="0"><tbody><tr><th width="10%" class="y-report-ui-comp-data-grid-th">风险评级</th><th width="70%" class="y-report-ui-comp-data-grid-th y-report-ui-comp-data-grid-td-text-align-left">风险名称</th><th width="10%" class="y-report-ui-comp-data-grid-th">影响主机数</th><th width="10%" class="y-report-ui-comp-data-grid-th">更多信息</th></tr>';
+                            $html .= '<p class="y-report-ui-element-content '.$classTemp.'">' . Yii::t('app', '本次扫描共发现该风险') . '<span class="y-report-ui-text-normal-b"> ' . ($cums + $hums + $mums + $lums + $iums) . ' </span>' . Yii::t('app', '个。') . '</p>';
+                            // $html .= '<div class="'.$classTemp.'"><table cellpadding="0" class="y-report-ui-comp-data-grid" special="objectType#expandableGrid" cellspacing="0"><tbody><tr><th width="10%" class="y-report-ui-comp-data-grid-th">风险评级</th><th width="70%" class="y-report-ui-comp-data-grid-th y-report-ui-comp-data-grid-td-text-align-left">风险名称</th><th width="10%" class="y-report-ui-comp-data-grid-th">影响主机数</th><th width="10%" class="y-report-ui-comp-data-grid-th">更多信息</th></tr>';
+                            $html .= '<div class="'.$classTemp.'"><table cellpadding="0" class="y-report-ui-comp-data-grid" special="objectType#expandableGrid" cellspacing="0"><tbody><tr><th width="10%" class="y-report-ui-comp-data-grid-th">' . Yii::t('app', '风险评级') . '</th><th width="70%" class="y-report-ui-comp-data-grid-th y-report-ui-comp-data-grid-td-text-align-left">' . Yii::t('app', '风险名称') . '</th><th width="10%" class="y-report-ui-comp-data-grid-th">' . Yii::t('app', '影响主机数') . '</th><th width="10%" class="y-report-ui-comp-data-grid-th">' . Yii::t('app', '更多信息') . '</th></tr>';
 
-                            $whtml .= '<p style="line-height:20px;text-indent:4em;width:100%;'.$styleTemp.'">本次扫描共发现该风险<span style="color:#000000;font-weight:bold"> ' . ($cums + $hums + $mums + $lums + $iums) . ' </span>个。</p>';
+                            $whtml .= '<p style="line-height:20px;text-indent:4em;width:100%;'.$styleTemp.'">' . Yii::t('app', '本次扫描共发现该风险') . '<span style="color:#000000;font-weight:bold"> ' . ($cums + $hums + $mums + $lums + $iums) . ' </span>' . Yii::t('app', '个。') . '</p>';
 
 //                            $whtml .= '<table cellpadding="0" style="'.$styleTemp.';font-size:12px;width:100%;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px" cellspacing="0"><tbody>';
 //                            $sql = "SELECT vul.solution, vul.ip,vul.vul_id,vul.vul_level,vul.port_proto,vinfo.cve,vinfo.cnvd,vinfo.cnnvd,vinfo.vul_name_cn,vinfo.desc_cn,vinfo.ref_cn,count(1) as ipsum FROM $tablevul vul,  bd_host_vul_lib vinfo WHERE vul.vul_level!='' AND vul.vul_id=hfr.vul_id AND vul.vul_id=vinfo.vul_id AND vinfo.family_id IN (SELECT id FROM host_family_list WHERE parent_id={$f['id']}) group by vul_id order by vul_level_num ASC";
@@ -519,7 +521,7 @@ class BbglController extends BaseController {
                 $content = str_replace('{$reportid}', "BD-REPORT-" . $tasks, $content);
                 $content = str_replace('{$tasksname}', $main_tasks['name'], $content);
                 $content = str_replace('{$task_id}', $val, $content); //修改任务id
-                $content = str_replace('{$bbname}', '蓝盾安全扫描系统', $content);
+                $content = str_replace('{$bbname}', Yii::t('app', '蓝盾安全扫描系统'), $content);
 
                 $content = str_replace('{$piezjld}', $zj, $content);
                 $content = str_replace('{$webldsum}', $web_sum, $content);
@@ -537,7 +539,7 @@ class BbglController extends BaseController {
 
             }
 //            var_dump($content);die;
-            $name=$bbname.'的安全评估';
+            $name=$bbname. Yii::t('app', '的安全评估');
             $now=date('YmdHis',time());
             if($rt=='html') {
                 file_put_contents($dir . '/'.$bbname.'-'.$now . ".html", $content, LOCK_EX);
@@ -552,7 +554,7 @@ class BbglController extends BaseController {
                 unlink(REPORT_DIR . "./now/common.js");
                 unlink(REPORT_DIR . "./now/jquery-1.9.1.min.js");
                 unlink(REPORT_DIR . "./now/bluechar.js");
-                $data['down'] = "<a href=\"/report/now/" . $bbname.'-'.$now.'-html' . ".zip\" id=\"downAll\" target=\"_self\"" . "><span>下载{$name}</span></a>";
+                $data['down'] = "<a href=\"/report/now/" . $bbname.'-'.$now.'-html' . ".zip\" id=\"downAll\" target=\"_self\"" . "><span>" . Yii::t('app', '下载') . $name . "</span></a>";
             }elseif($rt=='pdf'){
                 file_put_contents($dir . '/'.$bbname.'-'.$now . ".html", $new_content, LOCK_EX);
                 $html_filename=$bbname.'-'.$now.'.html';
@@ -569,19 +571,19 @@ class BbglController extends BaseController {
                 unlink(REPORT_DIR . "./now/common.js");
                 unlink(REPORT_DIR . "./now/jquery-1.9.1.min.js");
                 unlink(REPORT_DIR . "./now/bluechar.js");
-                $data['down'] = "<a href=\"/report/now/" . $bbname.'-'.$now .'-pdf'. ".zip\" id=\"downAll\" target=\"_self\"" . "><span>下载{$name}</span></a>";
+                $data['down'] = "<a href=\"/report/now/" . $bbname.'-'.$now .'-pdf'. ".zip\" id=\"downAll\" target=\"_self\"" . "><span>" . Yii::t('app', '下载') . $name . "</span></a>";
 
             }
 
             $db->query("INSERT INTO " . getTable('reportsmanage') . " (`name`,`type`,`desc`,`time`,`path`,`timetype`,`format`) VALUES ('$name','1','$desc','$timestamp','$path','1','$rt')");
 
             $data['success'] = true;
-            $data['message'] = '操作成功';
+            $data['message'] = Yii::t('app', '操作成功');
             if($kidbb == 1 && $hostnum >1){
                 $data['mom'] = $mom;
             }
-            $hdata['sDes'] = '导出报表';
-            $hdata['sRs'] ='导出成功';
+            $hdata['sDes'] = Yii::t('app', '导出报表');
+            $hdata['sRs'] = Yii::t('app', '导出成功');
             $hdata['sAct'] = $act.'/'.$show;
             saveOperationLog($hdata);
             echo json_encode($data);

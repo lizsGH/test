@@ -61,19 +61,19 @@ class ServerconfigController extends BaseController
 
         $sFile = DIR_ROOT . "../config/data/system/ftp.config";
         if (file_put_contents($sFile, serialize($aData))) {
-            $aJson['msg'] = "操作成功";
+            $aJson['msg'] = Yii::t('app', '操作成功');
             $aJson ['success'] = true;
-            $hdata['sDes'] = 'ftp配置';
-            $hdata['sRs'] = '成功';
+            $hdata['sDes'] = Yii::t('app', 'ftp配置');
+            $hdata['sRs'] = Yii::t('app', '成功');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
             exit;
         } else {
-            $aJson['msg'] = "操作失败";
+            $aJson['msg'] = Yii::t('app', "操作失败");
             $aJson ['success'] = false;
-            $hdata['sDes'] = 'ftp配置';
-            $hdata['sRs'] = '失败';
+            $hdata['sDes'] = Yii::t('app', 'ftp配置');
+            $hdata['sRs'] = Yii::t('app', '失败');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
@@ -122,19 +122,19 @@ class ServerconfigController extends BaseController
                 shellResult("kill -9 vpn.sh");
                 shellResult("/home/bluedon/openvas/bdscan/netserver/vpn.sh &");
             }*/
-            $aJson['msg'] = "操作成功";
+            $aJson['msg'] = Yii::t('app', '操作成功');
             $aJson ['success'] = true;
-            $hdata['sDes'] = 'pptp配置';
-            $hdata['sRs'] = '成功';
+            $hdata['sDes'] = Yii::t('app', 'pptp配置');
+            $hdata['sRs'] = Yii::t('app', '成功');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
             exit;
         } else {
-            $aJson['msg'] = "操作失败";
+            $aJson['msg'] = Yii::t('app', "操作失败");
             $aJson ['success'] = false;
-            $hdata['sDes'] = 'pptp配置';
-            $hdata['sRs'] = '失败';
+            $hdata['sDes'] = Yii::t('app', 'pptp配置');
+            $hdata['sRs'] = Yii::t('app', '失败');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
@@ -158,19 +158,19 @@ class ServerconfigController extends BaseController
             //exec("/home/bluedon/openvas/bdscan/netserver/syslogctl");
             exec("/home/bluedon/bdscan/bdnetserver/bdsyslog/bdsyslog");
 
-            $aJson['msg'] = "操作成功";
+            $aJson['msg'] = Yii::t('app', '操作成功');
             $aJson ['success'] = true;
-            $hdata['sDes'] = 'SYSLOG配置';
-            $hdata['sRs'] = '成功';
+            $hdata['sDes'] = Yii::t('app', 'SYSLOG配置');
+            $hdata['sRs'] = Yii::t('app', '成功');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
             exit;
         } else {
-            $aJson['msg'] = "操作失败";
+            $aJson['msg'] = Yii::t('app', "操作失败");
             $aJson ['success'] = false;
-            $hdata['sDes'] = 'SYSLOG配置';
-            $hdata['sRs'] = '失败';
+            $hdata['sDes'] = Yii::t('app', 'SYSLOG配置');
+            $hdata['sRs'] = Yii::t('app', '失败');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
@@ -206,19 +206,19 @@ class ServerconfigController extends BaseController
         $sFile = DIR_ROOT . "../config/data/system/stmp.config";
         if (file_put_contents($sFile, serialize($aData))) {
             exec("/home/bluedon/openvas/bdscan/setmsmtp  $email $password");
-            $aJson['msg'] = "操作成功";
+            $aJson['msg'] = Yii::t('app', '操作成功');
             $aJson ['success'] = true;
-            $hdata['sDes'] = '邮件服务器设置';
-            $hdata['sRs'] = '成功';
+            $hdata['sDes'] = Yii::t('app', '邮件服务器设置');
+            $hdata['sRs'] = Yii::t('app', '成功');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
             exit;
         } else {
-            $aJson['msg'] = "操作失败";
+            $aJson['msg'] = Yii::t('app', "操作失败");
             $aJson ['success'] = false;
-            $hdata['sDes'] = '邮件服务器设置';
-            $hdata['sRs'] = '失败';
+            $hdata['sDes'] = Yii::t('app', '邮件服务器设置');
+            $hdata['sRs'] = Yii::t('app', '失败');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
@@ -233,12 +233,12 @@ class ServerconfigController extends BaseController
     {
         $ftpconf = file_get_contents(DIR_ROOT . "../config/data/system/ftp.config");
         if (!empty(unserialize($ftpconf)['lService'])) {
-            $aJson['msg'] = "操作成功";
+            $aJson['msg'] = Yii::t('app', '操作成功');
             $aJson ['success'] = true;
             echo json_encode($aJson);
             exit;
         } else {
-            $aJson['msg'] = "操作失败";
+            $aJson['msg'] = Yii::t('app', "操作失败");
             $aJson ['success'] = false;
             echo json_encode($aJson);
             exit;
@@ -252,12 +252,12 @@ class ServerconfigController extends BaseController
     {
         $pptp = file_get_contents(DIR_ROOT . "../config/data/system/pptp.config");
         if (!empty(unserialize($pptp)['lService'])) {
-            $aJson['msg'] = "操作成功";
+            $aJson['msg'] = Yii::t('app', '操作成功');
             $aJson ['success'] = true;
             echo json_encode($aJson);
             exit;
         } else {
-            $aJson['msg'] = "操作失败";
+            $aJson['msg'] = Yii::t('app', "操作失败");
             $aJson ['success'] = false;
             echo json_encode($aJson);
             exit;
@@ -274,11 +274,10 @@ class ServerconfigController extends BaseController
         $pptp = unserialize($pptp);
         $vpnStatus = isset($pptp['lStatus']) ? $pptp['lStatus']:0;
         if($vpnStatus == 0){
-            $status = '已断开';
+            $status = Yii::t('app', '已断开');
         }else if($vpnStatus == 1){
-            $status = '已连接! &nbsp;&nbsp; ip地址：'.$pptp['lIp'];
+            $status = Yii::t('app', '已连接') . '! &nbsp;&nbsp; ' . Yii::t('app', 'ip地址') . '：'.$pptp['lIp'];
         }
         echo $status;
     }
 }
-?>

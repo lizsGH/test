@@ -166,9 +166,9 @@ class HostpolicyController extends BaseController
             $iTotal = $db->result_first("SELECT COUNT(`name`) FROM bd_host_policy where name='" . $name . "' And id <>" . $id);
             if (!empty($iTotal)) {
                 $data['success'] = false;
-                $data['msg'] = $name . '已存在，请更换';
-                $hdata['sDes'] = '编辑主机扫描策略(' . $name . ')';
-                $hdata['sRs'] = '名称已存在';
+                $data['msg'] = $name . Yii::t('app', '已存在，请更换');
+                $hdata['sDes'] = Yii::t('app', '编辑主机扫描策略') . '(' . $name . ')';
+                $hdata['sRs'] = Yii::t('app', '名称已存在');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
                 echo json_encode($data);
@@ -190,9 +190,9 @@ class HostpolicyController extends BaseController
             if($_POST['name'] != $name){
                 if(!$db->execute("update bd_host_policy set name='" . $name . "' where id=$id")){
                     $success = false;
-                    $msg = "操作失败";
-                    $hdata['sDes'] = '编辑主机扫描策略（' . $name . '）';
-                    $hdata['sRs'] = '失败';
+                    $msg = Yii::t('app', "操作失败");
+                    $hdata['sDes'] = Yii::t('app', '编辑主机扫描策略') . '（' . $name . '）';
+                    $hdata['sRs'] = Yii::t('app', '失败');
                     $hdata['sAct'] = $act . '/' . $show;
                     saveOperationLog($hdata);
                 }
@@ -208,9 +208,9 @@ class HostpolicyController extends BaseController
                 $query1 = "insert into bd_host_policy_selectors (policy_id,family_id,vul_id) select " . $id . ", `family_id`,`vul_id` FROM bd_host_vul_lib where vul_id in (" . $vul_ids_str . " )";
                 if($db->query($query1)){
                     $success = true;
-                    $msg = "操作成功";
-                    $hdata['sDes'] = '编辑主机扫描策略（' . $name . '）';
-                    $hdata['sRs'] = '成功';
+                    $msg = Yii::t('app', "操作成功");
+                    $hdata['sDes'] = Yii::t('app', '编辑主机扫描策略') . '（' . $name . '）';
+                    $hdata['sRs'] = Yii::t('app', '成功');
                     $hdata['sAct'] = $act . '/' . $show;
                     saveOperationLog($hdata);
                     $sFile = DIR_ROOT . "data/hostpolicy/hostpolicy_edit.config";
@@ -220,9 +220,9 @@ class HostpolicyController extends BaseController
                     }
                 }else{
                     $success = false;
-                    $msg = "操作失败";
-                    $hdata['sDes'] = '编辑主机扫描策略（' . $name . '）';
-                    $hdata['sRs'] = '失败';
+                    $msg = Yii::t('app', "操作失败");
+                    $hdata['sDes'] = Yii::t('app', '编辑主机扫描策略'). '（' . $name . '）';
+                    $hdata['sRs'] = Yii::t('app', '失败');
                     $hdata['sAct'] = $act . '/' . $show;
                     saveOperationLog($hdata);
                 }
@@ -232,9 +232,9 @@ class HostpolicyController extends BaseController
             $iTotal = $db->result_first("SELECT COUNT(`name`) FROM bd_host_policy where name='" . $name . "'");
             if (!empty($iTotal)) {
                 $data['success'] = false;
-                $data['msg'] = $name . '已存在，请更换';
-                $hdata['sDes'] = '添加主机扫描策略（' . $name . '）';
-                $hdata['sRs'] = '失败，名称（' . $name . '）已存在';
+                $data['msg'] = $name . Yii::t('app', '已存在，请更换');
+                $hdata['sDes'] = Yii::t('app', '添加主机扫描策略') . '（' . $name . '）';
+                $hdata['sRs'] = Yii::t('app', '失败，名称（') . $name . '）' . Yii::t('app', '已存在');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
                 echo json_encode($data);
@@ -273,24 +273,24 @@ class HostpolicyController extends BaseController
                     }
                     //vas_bd_configauth($accrsmb,$accrkerberos,$accrtype);
                     $success = true;
-                    $msg = "操作成功";
-                    $hdata['sDes'] = '新增主机扫描策略（' . $name . '）';
-                    $hdata['sRs'] = '成功';
+                    $msg = Yii::t('app', "操作成功");
+                    $hdata['sDes'] = Yii::t('app', '新增主机扫描策略'). '（' . $name . '）';
+                    $hdata['sRs'] = Yii::t('app', '成功');
                     $hdata['sAct'] = $act . '/' . $show;
                     saveOperationLog($hdata);
                 } else {
                     $success = false;
-                    $msg = "操作失败";
-                    $hdata['sDes'] = '添加主机扫描策略（' . $name . '）';
-                    $hdata['sRs'] = '失败';
+                    $msg = Yii::t('app', "操作失败");
+                    $hdata['sDes'] = Yii::t('app', '添加主机扫描策略') . '（' . $name . '）';
+                    $hdata['sRs'] = Yii::t('app', '失败');
                     $hdata['sAct'] = $act . '/' . $show;
                     saveOperationLog($hdata);
                 }
             } else {
                 $success = false;
-                $msg = "后台创建主机扫描策略失败";
-                $hdata['sDes'] = '添加主机扫描策略';
-                $hdata['sRs'] = '失败';
+                $msg = Yii::t('app', "后台创建主机扫描策略失败");
+                $hdata['sDes'] = Yii::t('app', '添加主机扫描策略');
+                $hdata['sRs'] = Yii::t('app', '失败');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
             }
@@ -338,24 +338,24 @@ class HostpolicyController extends BaseController
                 $delShell = "/bin/touch /tmp/del_bd_host_policy";
                 shellResult($delShell);
                 $success = true;
-                $msg = "操作成功";
+                $msg = Yii::t('app', "操作成功");
                 foreach ($names as $key => $val) {
-                    $hdata['sDes'] = '删除主机扫描策略(' . $val['name'] . ')';
-                    $hdata['sRs'] = '成功';
+                    $hdata['sDes'] = Yii::t('app', '删除主机扫描策略') . '(' . $val['name'] . ')';
+                    $hdata['sRs'] = Yii::t('app', '成功');
                     $hdata['sAct'] = $act . '/' . $show;
                     saveOperationLog($hdata);
                 }
             } else {
                 $success = false;
-                $msg = "操作失败";
-                $hdata['sDes'] = '删除主机扫描策略';
-                $hdata['sRs'] = '失败';
+                $msg = Yii::t('app', "操作失败");
+                $hdata['sDes'] = Yii::t('app', '删除主机扫描策略');
+                $hdata['sRs'] = Yii::t('app', '失败');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
             }
         } else {
             $success = false;
-            $msg = "后台删除主机扫描策略失败";
+            $msg = Yii::t('app', "后台删除主机扫描策略失败");
 
         }
         $data['success'] = $success;
@@ -412,7 +412,7 @@ class HostpolicyController extends BaseController
         $sPost = $_POST;
         if (isset($_POST['st-all'])) {
             $userid = intval($_SESSION['userid']);
-            $name = "快扫主机策略";
+            $name = Yii::t('app', "快扫主机策略");
             $all = 0;
             $a_aboutoids = $a_aboutvulids = array();
 
@@ -474,24 +474,24 @@ class HostpolicyController extends BaseController
                         }
                         vas_bd_configauth($accrsmb, $accrkerberos, $accrtype);
                         $success = true;
-                        $msg = "预设快扫主机策略成功";
-                        $hdata['sDes'] = '编辑快扫主机策略';
-                        $hdata['sRs'] = '成功';
+                        $msg = Yii::t('app', "预设快扫主机策略成功");
+                        $hdata['sDes'] = Yii::t('app', '编辑快扫主机策略');
+                        $hdata['sRs'] = Yii::t('app', '成功');
                         $hdata['sAct'] = $act . '/' . $show;
                         saveOperationLog($hdata);
                     } else {
                         $success = false;
-                        $msg = "预设快扫主机策略失败";
-                        $hdata['sDes'] = '编辑快扫主机策略';
-                        $hdata['sRs'] = '失败';
+                        $msg = Yii::t('app', "预设快扫主机策略失败");
+                        $hdata['sDes'] = Yii::t('app', '编辑快扫主机策略');
+                        $hdata['sRs'] = Yii::t('app', '失败');
                         $hdata['sAct'] = $act . '/' . $show;
                         saveOperationLog($hdata);
                     }
                 } else {
                     $success = false;
-                    $msg = "后台编辑快扫主机策略失败";
-                    $hdata['sDes'] = '后台编辑快扫主机策略';
-                    $hdata['sRs'] = '失败';
+                    $msg = Yii::t('app', "后台编辑快扫主机策略失败");
+                    $hdata['sDes'] = Yii::t('app', '后台编辑快扫主机策略');
+                    $hdata['sRs'] = Yii::t('app', '失败');
                     $hdata['sAct'] = $act . '/' . $show;
                     saveOperationLog($hdata);
                 }
@@ -516,24 +516,24 @@ class HostpolicyController extends BaseController
                         }
                         vas_bd_configauth($accrsmb, $accrkerberos, $accrtype);
                         $success = true;
-                        $msg = "预设快扫主机策略成功";
-                        $hdata['sDes'] = '新增快扫主机策略';
-                        $hdata['sRs'] = '成功';
+                        $msg = Yii::t('app', "预设快扫主机策略成功");
+                        $hdata['sDes'] = Yii::t('app', '新增快扫主机策略');
+                        $hdata['sRs'] = Yii::t('app', '成功');
                         $hdata['sAct'] = $act . '/' . $show;
                         saveOperationLog($hdata);
                     } else {
                         $success = false;
-                        $msg = "预设快扫主机策略失败";
-                        $hdata['sDes'] = '新增快扫主机策略';
-                        $hdata['sRs'] = '失败';
+                        $msg = Yii::t('app', "预设快扫主机策略失败");
+                        $hdata['sDes'] = Yii::t('app', '新增快扫主机策略');
+                        $hdata['sRs'] = Yii::t('app', '失败');
                         $hdata['sAct'] = $act . '/' . $show;
                         saveOperationLog($hdata);
                     }
                 } else {
                     $success = false;
-                    $msg = "后台创建快扫主机策略失败";
-                    $hdata['sDes'] = '后台创建快扫主机策略';
-                    $hdata['sRs'] = '失败';
+                    $msg = Yii::t('app', "后台创建快扫主机策略失败");
+                    $hdata['sDes'] = Yii::t('app', '后台创建快扫主机策略');
+                    $hdata['sRs'] = Yii::t('app', '失败');
                     $hdata['sAct'] = $act . '/' . $show;
                     saveOperationLog($hdata);
                 }
@@ -542,7 +542,7 @@ class HostpolicyController extends BaseController
             echo $msg;
             exit;
         } else {
-            $aData['title'] = "设置快扫主机策略";
+            $aData['title'] = Yii::t('app', "设置快扫主机策略");
             template2($act . '/defaultAllPolicy', $aData);
         }
 
@@ -560,7 +560,7 @@ class HostpolicyController extends BaseController
         $sPost = $_POST;
         if (isset($_POST['st-all'])) {
             $userid = intval($_SESSION['userid']);
-            $name = "全部主机策略";
+            $name = Yii::t('app', "全部主机策略");
             $all = 1;
             $a_aboutoids = $a_aboutvulids = array();
             //2015-6-7 新添加
@@ -621,24 +621,24 @@ class HostpolicyController extends BaseController
                         }
                         vas_bd_configauth($accrsmb, $accrkerberos, $accrtype);
                         $success = true;
-                        $msg = "预设全部主机策略成功";
-                        $hdata['sDes'] = '编辑全部主机策略';
-                        $hdata['sRs'] = '成功';
+                        $msg = Yii::t('app', "预设全部主机策略成功");
+                        $hdata['sDes'] = Yii::t('app', '编辑全部主机策略');
+                        $hdata['sRs'] = Yii::t('app', '成功');
                         $hdata['sAct'] = $act . '/' . $show;
                         saveOperationLog($hdata);
                     } else {
                         $success = false;
-                        $msg = "预设全部主机策略失败";
-                        $hdata['sDes'] = '编辑全部主机策略';
-                        $hdata['sRs'] = '失败';
+                        $msg = Yii::t('app', "预设全部主机策略失败");
+                        $hdata['sDes'] = Yii::t('app', '编辑全部主机策略');
+                        $hdata['sRs'] = Yii::t('app', '失败');
                         $hdata['sAct'] = $act . '/' . $show;
                         saveOperationLog($hdata);
                     }
                 } else {
                     $success = false;
-                    $msg = "后台编辑全部主机策略失败";
-                    $hdata['sDes'] = '后台编辑全部主机策略';
-                    $hdata['sRs'] = '失败';
+                    $msg = Yii::t('app', "后台编辑全部主机策略失败");
+                    $hdata['sDes'] = Yii::t('app', '后台编辑全部主机策略');
+                    $hdata['sRs'] = Yii::t('app', '失败');
                     $hdata['sAct'] = $act . '/' . $show;
                     saveOperationLog($hdata);
                 }
@@ -664,24 +664,24 @@ class HostpolicyController extends BaseController
                         }
 
                         $success = true;
-                        $msg = "预设全部主机策略成功";
-                        $hdata['sDes'] = '新增全部主机策略';
-                        $hdata['sRs'] = '成功';
+                        $msg = Yii::t('app', "预设全部主机策略成功");
+                        $hdata['sDes'] = Yii::t('app', '新增全部主机策略');
+                        $hdata['sRs'] = Yii::t('app', '成功');
                         $hdata['sAct'] = $act . '/' . $show;
                         saveOperationLog($hdata);
                     } else {
                         $success = false;
-                        $msg = "预设全部主机策略失败";
-                        $hdata['sDes'] = '新增全部主机策略';
-                        $hdata['sRs'] = '失败';
+                        $msg = Yii::t('app', "预设全部主机策略失败");
+                        $hdata['sDes'] = Yii::t('app', '新增全部主机策略');
+                        $hdata['sRs'] = Yii::t('app', '失败');
                         $hdata['sAct'] = $act . '/' . $show;
                         saveOperationLog($hdata);
                     }
                 } else {
                     $success = false;
-                    $msg = "后台创建全部主机策略失败";
-                    $hdata['sDes'] = '后台新增全部主机策略';
-                    $hdata['sRs'] = '失败';
+                    $msg = Yii::t('app', "后台创建全部主机策略失败");
+                    $hdata['sDes'] = Yii::t('app', '后台新增全部主机策略');
+                    $hdata['sRs'] = Yii::t('app', '失败');
                     $hdata['sAct'] = $act . '/' . $show;
                     saveOperationLog($hdata);
                 }
@@ -690,7 +690,7 @@ class HostpolicyController extends BaseController
             echo $msg;
             exit;
         } else {
-            $aData['title'] = "设置全部主机策略";
+            $aData['title'] = Yii::t('app', "设置全部主机策略");
             template2($act . '/defaultAllPolicy', $aData);
         }
 

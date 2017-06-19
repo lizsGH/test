@@ -78,16 +78,16 @@ class SysconfigController extends BaseController
         $query = "update " . getTable('userconfig') . " set maxError=$maxError,lockTime=$lockTime WHERE iId=1";
         if ($db->query($query)) {
             $success = true;
-            $msg = "操作成功";
-            $hdata['sDes'] = '登录失败设置';
-            $hdata['sRs'] = '成功';
+            $msg = Yii::t('app', "操作成功");
+            $hdata['sDes'] = Yii::t('app', '登录失败设置');
+            $hdata['sRs'] = Yii::t('app', '成功');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
         } else {
             $success = false;
-            $msg = "操作失败";
-            $hdata['sDes'] = '登录失败设置';
-            $hdata['sRs'] = '失败';
+            $msg = Yii::t('app', "操作失败");
+            $hdata['sDes'] = Yii::t('app', '登录失败设置');
+            $hdata['sRs'] = Yii::t('app', '失败');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
         }
@@ -108,16 +108,16 @@ class SysconfigController extends BaseController
         $query = "update " . getTable('userconfig') . " set iSessionTimeout=$iSessionTimeout WHERE iId=1";
         if ($db->query($query)) {
             $success = true;
-            $msg = "操作成功";
-            $hdata['sDes'] = '自动退出设置';
-            $hdata['sRs'] = '成功';
+            $msg = Yii::t('app', "操作成功");
+            $hdata['sDes'] = Yii::t('app', '自动退出设置');
+            $hdata['sRs'] = Yii::t('app', '成功');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
         } else {
             $success = false;
-            $msg = "操作失败";
-            $hdata['sDes'] = '自动退出设置';
-            $hdata['sRs'] = '失败';
+            $msg = Yii::t('app', "操作失败");
+            $hdata['sDes'] = Yii::t('app', '自动退出设置');
+            $hdata['sRs'] = Yii::t('app', '失败');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
         }
@@ -143,19 +143,19 @@ class SysconfigController extends BaseController
 
         $sFile = DIR_ROOT . "data/system/snmp.config";
         if (file_put_contents($sFile, serialize($aData))) {
-            $aJson['msg'] = "操作成功";
+            $aJson['msg'] = Yii::t('app', "操作成功");
             $aJson ['success'] = true;
-            $hdata['sDes'] = 'SNMP设置';
-            $hdata['sRs'] = '成功';
+            $hdata['sDes'] = Yii::t('app', 'SNMP设置');
+            $hdata['sRs'] = Yii::t('app', '成功');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
             exit;
         } else {
-            $aJson['msg'] = "操作失败";
+            $aJson['msg'] = Yii::t('app', "操作失败");
             $aJson ['success'] = false;
-            $hdata['sDes'] = 'SNMP设置';
-            $hdata['sRs'] = '失败';
+            $hdata['sDes'] = Yii::t('app', 'SNMP设置');
+            $hdata['sRs'] = Yii::t('app', '失败');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
@@ -177,19 +177,19 @@ class SysconfigController extends BaseController
 
         $sFile = DIR_ROOT . "data/system/pswstrategy.config";
         if (file_put_contents($sFile, serialize($aData))) {
-            $aJson['msg'] = "操作成功";
+            $aJson['msg'] = Yii::t('app', "操作成功");
             $aJson ['success'] = true;
-            $hdata['sDes'] = '密码安全策略';
-            $hdata['sRs'] = '成功';
+            $hdata['sDes'] = Yii::t('app', '密码安全策略');
+            $hdata['sRs'] = Yii::t('app', '成功');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
             exit;
         } else {
-            $aJson['msg'] = "操作失败";
+            $aJson['msg'] = Yii::t('app', "操作失败");
             $aJson ['success'] = false;
-            $hdata['sDes'] = '密码安全策略';
-            $hdata['sRs'] = '失败';
+            $hdata['sDes'] = Yii::t('app', '密码安全策略');
+            $hdata['sRs'] = Yii::t('app', '失败');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
@@ -210,19 +210,19 @@ class SysconfigController extends BaseController
 
         $sFile = DIR_ROOT . "data/system/syslog.config";
         if (file_put_contents($sFile, serialize($aData))) {
-            $aJson['msg'] = "操作成功";
+            $aJson['msg'] = Yii::t('app', "操作成功");
             $aJson ['success'] = true;
-            $hdata['sDes'] = 'SYSLOG配置';
-            $hdata['sRs'] = '成功';
+            $hdata['sDes'] = Yii::t('app', 'SYSLOG配置');
+            $hdata['sRs'] = Yii::t('app', '成功');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
             exit;
         } else {
-            $aJson['msg'] = "操作失败";
+            $aJson['msg'] = Yii::t('app', "操作失败");
             $aJson ['success'] = false;
-            $hdata['sDes'] = 'SYSLOG配置';
-            $hdata['sRs'] = '失败';
+            $hdata['sDes'] = Yii::t('app', 'SYSLOG配置');
+            $hdata['sRs'] = Yii::t('app', '失败');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
@@ -258,19 +258,19 @@ class SysconfigController extends BaseController
         $sFile = DIR_ROOT . "data/system/stmp.config";
         if (file_put_contents($sFile, serialize($aData))) {
             exec("/home/bluedon/openvas/bdscan/setmsmtp  $email $password");
-            $aJson['msg'] = "操作成功";
+            $aJson['msg'] = Yii::t('app', "操作成功");
             $aJson ['success'] = true;
-            $hdata['sDes'] = '邮件服务器设置';
-            $hdata['sRs'] = '成功';
+            $hdata['sDes'] = Yii::t('app', '邮件服务器设置');
+            $hdata['sRs'] = Yii::t('app', '成功');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
             exit;
         } else {
-            $aJson['msg'] = "操作失败";
+            $aJson['msg'] = Yii::t('app', "操作失败");
             $aJson ['success'] = false;
-            $hdata['sDes'] = '邮件服务器设置';
-            $hdata['sRs'] = '失败';
+            $hdata['sDes'] = Yii::t('app', '邮件服务器设置');
+            $hdata['sRs'] = Yii::t('app', '失败');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
@@ -294,19 +294,19 @@ class SysconfigController extends BaseController
 
         $sFile = DIR_ROOT . "data/system/lognum.config";
         if (file_put_contents($sFile, serialize($aData))) {
-            $aJson['msg'] = "操作成功";
+            $aJson['msg'] = Yii::t('app', "操作成功");
             $aJson ['success'] = true;
-            $hdata['sDes'] = '日志阀值设置';
-            $hdata['sRs'] = '成功';
+            $hdata['sDes'] = Yii::t('app', '日志阀值设置');
+            $hdata['sRs'] = Yii::t('app', '成功');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
             exit;
         } else {
-            $aJson['msg'] = "操作失败";
+            $aJson['msg'] = Yii::t('app', "操作失败");
             $aJson ['success'] = false;
-            $hdata['sDes'] = '日志阀值设置';
-            $hdata['sRs'] = '失败';
+            $hdata['sDes'] = Yii::t('app', '日志阀值设置');
+            $hdata['sRs'] = Yii::t('app', '失败');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
@@ -340,7 +340,7 @@ class SysconfigController extends BaseController
 
             if ($logcount['logcount'] >= $maxlognum && $user_role['role'] != 16) {
                 $aJson['success'] = true;
-                $aJson['msg'] = "日志数据存储量已经达到阀值,请导出备份数据或者清除部分数据！";
+                $aJson['msg'] = Yii::t('app', "日志数据存储量已经达到阀值,请导出备份数据或者清除部分数据！");
                 echo json_encode($aJson);
             } else {
                 $aJson['success'] = false;
@@ -401,14 +401,15 @@ class SysconfigController extends BaseController
                         $rightIP = $ips_yanzhen[1];
                         if (!filter_var($leftIP, FILTER_VALIDATE_IP) || !filter_var($rightIP, FILTER_VALIDATE_IP)) {
                             $data['success'] = false;
-                            $data['msg'] = '第' . $s_r . '行ip格式错误';
+                            // TODO: translate
+                            $data['msg'] = Yii::t('app', '第 ') . $s_r . Yii::t('app', '行ip格式错误');
                             echo json_encode($data);
                             exit;
                         }
                     } else {
                         if (!filter_var($v, FILTER_VALIDATE_IP)) {
                             $data['success'] = false;
-                            $data['msg'] = '第' . $s_r . '行ip格式错误';
+                            $data['msg'] = Yii::t('app', '第 ') . $s_r . Yii::t('app', '行ip格式错误');
                             echo json_encode($data);
                             exit;
                         }
@@ -451,14 +452,14 @@ class SysconfigController extends BaseController
                         $rIP = $ips_yanzhen_login[1];
                         if (!filter_var($lIP, FILTER_VALIDATE_IP) || !filter_var($rIP, FILTER_VALIDATE_IP)) {
                             $data['success'] = false;
-                            $data['msg'] = '第' . $s_r . '行ip格式错误';
+                            $data['msg'] = Yii::t('app', '第 ') . $s_r . Yii::t('app', '行ip格式错误');
                             echo json_encode($data);
                             exit;
                         }
                     } else {
                         if (!filter_var($v, FILTER_VALIDATE_IP)) {
                             $data['success'] = false;
-                            $data['msg'] = '第' . $s_r . '行ip格式错误';
+                            $data['msg'] = Yii::t('app', '第 ') . $s_r . Yii::t('app', '行ip格式错误');
                             echo json_encode($data);
                             exit;
                         }
@@ -472,12 +473,12 @@ class SysconfigController extends BaseController
             $sql = "update bd_sys_scanset set smrws = " . $smrws . ",allowIPs ='" . $allowIPs . "' , allow_login_ips ='" . $allow_login_ips . "' where iId =1";
             if ($db->query($sql)) {
                 $aJson['success'] = true;
-                $aJson['msg'] = "保存成功";
+                $aJson['msg'] = Yii::t('app', '保存成功');
                 echo json_encode($aJson);
                 exit;
             } else {
                 $aJson['success'] = false;
-                $aJson['msg'] = "保存失败";
+                $aJson['msg'] = Yii::t('app', "保存失败");
                 echo json_encode($aJson);
                 exit;
             }
@@ -485,4 +486,3 @@ class SysconfigController extends BaseController
         }
     }
 }
-?>

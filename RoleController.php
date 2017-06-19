@@ -130,7 +130,7 @@ class RoleController extends BaseController
             $iTotal = $db->result_first("SELECT COUNT(`iRoleName`) FROM " . getTable('role') . " where iRoleName='" . $iRoleName . "' and iRoleId != '" . $iRoleId . "'");
             if (!empty($iTotal)) {
                 $data['success'] = false;
-                $data['msg'] = "[" . $iRoleName . '] 已存在，请更换';
+                $data['msg'] = "[" . $iRoleName . '] ' . Yii::t('app', '已存在，请更换');
                 echo json_encode($data);
                 exit;
             }
@@ -143,16 +143,16 @@ class RoleController extends BaseController
                     $db->query($insRolenav);
                 }
                 $success = true;
-                $msg = "操作成功";
-                $hdata['sDes'] = '编辑角色';
-                $hdata['sRs'] = '成功';
+                $msg = Yii::t('app', '操作成功');
+                $hdata['sDes'] = Yii::t('app', '编辑角色');
+                $hdata['sRs'] = Yii::t('app', '成功');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
             } else {
                 $success = false;
-                $msg = "操作失败";
-                $hdata['sDes'] = '编辑角色';
-                $hdata['sRs'] = '失败';
+                $msg = Yii::t('app', "操作失败");
+                $hdata['sDes'] = Yii::t('app', '编辑角色');
+                $hdata['sRs'] = Yii::t('app', '失败');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
             }
@@ -160,7 +160,7 @@ class RoleController extends BaseController
             $iTotal = $db->result_first("SELECT COUNT(`iRoleName`) FROM " . getTable('role') . " where iRoleName='" . $iRoleName . "'");
             if (!empty($iTotal)) {
                 $data['success'] = false;
-                $data['msg'] = "[" . $iRoleName . '] 已存在，请更换';
+                $data['msg'] = "[" . $iRoleName . '] ' . Yii::t('app', '已存在，请更换');
                 echo json_encode($data);
                 exit;
             }
@@ -174,16 +174,16 @@ class RoleController extends BaseController
                     $db->query($sqlrolnav);
                 }
                 $success = true;
-                $msg = "操作成功";
-                $hdata['sDes'] = '新增角色';
-                $hdata['sRs'] = '成功';
+                $msg = Yii::t('app', '操作成功');
+                $hdata['sDes'] = Yii::t('app', '新增角色');
+                $hdata['sRs'] = Yii::t('app', '成功');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
             } else {
                 $success = false;
-                $msg = "操作失败";
-                $hdata['sDes'] = '新增角色';
-                $hdata['sRs'] = '失败';
+                $msg = Yii::t('app', "操作失败");
+                $hdata['sDes'] = Yii::t('app', '新增角色');
+                $hdata['sRs'] = Yii::t('app', '失败');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
             }
@@ -205,7 +205,7 @@ class RoleController extends BaseController
         $rRole = $db->result_first($sqlRole);
         if ($rRole) {
             $success = false;
-            $msg = "该角色还有子角色存在，不能删除。";
+            $msg = Yii::t('app', "该角色还有子角色存在，不能删除。");
             $data['success'] = $success;
             $data['msg'] = $msg;
             echo json_encode($data);
@@ -214,7 +214,7 @@ class RoleController extends BaseController
             $sqluser = "select count(*) from " . getTable('user') . " where role ='" . $sPost['iRoleId'] . "'";
             if ($db->result_first($sqluser)) {
                 $success = false;
-                $msg = "该角色有用户存在，不能删除。请删除用户在删除该角色！";
+                $msg = Yii::t('app', "该角色有用户存在，不能删除。请删除用户在删除该角色！");
                 $data['success'] = $success;
                 $data['msg'] = $msg;
                 echo json_encode($data);
@@ -222,12 +222,12 @@ class RoleController extends BaseController
             }
             $sqlDrole = "delete from " . getTable('role') . " where iRoleId = '" . $sPost['iRoleId'] . "'";
             if ($db->query($sqlDrole)) {
-                $hdata['sDes'] = '删除角色成功';
-                $hdata['sRs'] = '成功';
+                $hdata['sDes'] = Yii::t('app', '删除角色成功');
+                $hdata['sRs'] = Yii::t('app', '成功');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
                 $success = true;
-                $msg = "操作成功";
+                $msg = Yii::t('app', '操作成功');
                 $data['success'] = $success;
                 $data['msg'] = $msg;
                 echo json_encode($data);
@@ -277,7 +277,7 @@ class RoleController extends BaseController
             }
         } else {
             $aData['success'] = false;
-            $aData['msg'] = "请求数据失败";
+            $aData['msg'] = Yii::t('app', "请求数据失败");
         }
 
         echo json_encode($aData);

@@ -75,19 +75,19 @@ class SiteController extends BaseController
         global $db;
         $the_ver = $db->result_first("select pname from bd_sys_sysinfo WHERE id=1");
         if(!empty($the_ver)){
-            if($the_ver=='蓝盾安全扫描系统'){
+            if($the_ver == Yii::t('app', '蓝盾安全扫描系统')){
                 $logo = "/resource/skin/blue/images/logo-putong.png";
-                $ver_t  = "蓝盾安全扫描系统";
-            }elseif ($the_ver=='蓝盾安全漏洞扫描系统'){
+                $ver_t  = Yii::t('app', "蓝盾安全扫描系统");
+            }elseif ($the_ver == Yii::t('app', '蓝盾安全漏洞扫描系统')){
                 $logo = "/resource/skin/blue/images/logo-shemi.png";
-                $ver_t  = "蓝盾安全漏洞扫描系统";
+                $ver_t  = Yii::t('app', "蓝盾安全漏洞扫描系统");
             }else{
                 $logo = "/resource/skin/blue/images/logo-putong.png";
-                $ver_t  = "蓝盾安全扫描系统";
+                $ver_t  = Yii::t('app', '蓝盾安全扫描系统');
             }
         }else{
             $logo = "/resource/skin/blue/images/logo-putong.png";
-            $ver_t  = "蓝盾安全扫描系统";
+            $ver_t  = Yii::t('app', '蓝盾安全扫描系统');
         }
         $last_logintime=$db->result_first("select last_logintime from bd_sys_user WHERE id={$_SESSION['userid']}");
 //        var_dump($last_logintime);die;
@@ -133,10 +133,10 @@ class SiteController extends BaseController
             $allow_login_ips = $db->fetch_first("SELECT allow_login_ips FROM ".getTable('scanset')." WHERE iId =1 "); //查找配置文件
             if(!empty($allow_login_ips['allow_login_ips']) && $allow_login_ips['allow_login_ips']!=$ClienIp){
                 $data['success'] = false;
-                $data['message'] = '被禁止的ip，不允许登录';
-                $hdata['sDes'] = '用户登录';
+                $data['message'] = Yii::t('app', '被禁止的ip，不允许登录');
+                $hdata['sDes'] = Yii::t('app', '用户登录');
                 $hdata['user_name'] = filterStr($_POST['name']);
-                $hdata['status'] ='被禁止的ip，不允许登录';
+                $hdata['status'] = Yii::t('app', '被禁止的ip，不允许登录');
                 $hdata['action'] = $act.'/'.$show;
                 $sql = "SELECT role_id role FROM ".getTable('user')." WHERE username='".$hdata['username']."' limit 1";
                 $roleRes = $db->fetch_first($sql);
@@ -159,18 +159,18 @@ class SiteController extends BaseController
             if(strtolower($vcode) != strtolower($_SESSION['__captcha/site/captcha'])){ //判断验证码
                 if($lock['maxError'] !=0){
                     if($row['errors'] >= $lock['maxError']){
-                        $data['message'] = "用户已锁,".$lock['lockTime']."分钟后重新登录";
-                        $hdata['sRs'] ='失败，账号已被锁定';
+                        $data['message'] = Yii::t('app', '用户已锁') . ",".$lock['lockTime'] . Yii::t('app', "分钟后重新登录");
+                        $hdata['sRs'] = Yii::t('app', '失败，账号已被锁定');
                         $errorsql = "update ".getTable('user')." set errors = errors+1 ,locktime =".$time." where username = '".$name."'";
                         $db->query($errorsql);
                     }else{
-                        $data['message'] = '验证码错误';
-                        $hdata['sRs'] = '失败，验证码错误';
+                        $data['message'] = Yii::t('app', '验证码错误');
+                        $hdata['sRs'] = Yii::t('app', '失败，验证码错误');
                     }
                 }
                 $errorsql = "Update ".getTable('user')." set errors = errors+1 where username = '".$name."'";
                 $db->query($errorsql);
-                $hdata['sDes'] = '用户登录';
+                $hdata['sDes'] = Yii::t('app', '用户登录');
                 $hdata['username'] = filterStr($_POST['name']);
                 $hdata['sAct'] = $act.'/'.$show;
 
@@ -183,17 +183,17 @@ class SiteController extends BaseController
                 exit;
             }
             if(empty($row)){
-                $data['message'] = '用户名或密码错误';
+                $data['message'] = Yii::t('app', '用户名或密码错误');
                 $data['success'] = false;
                 echo json_encode($data);
                 exit;
             }else{
                 if($row['status'] == 0){
                     $data['success'] = false;
-                    $data['message'] = '用户已被禁止登录';
-                    $hdata['sDes'] = '用户登录';
+                    $data['message'] = Yii::t('app', '用户已被禁止登录');
+                    $hdata['sDes'] = Yii::t('app', '用户登录');
                     $hdata['username'] = filterStr($_POST['name']);
-                    $hdata['sRs'] ='账号已被禁止';
+                    $hdata['sRs'] = Yii::t('app', '账号已被禁止');
                     $hdata['sAct'] = $act.'/'.$show;
 
                     $sql = "SELECT role_id as role FROM ".getTable('user')." WHERE username='".$hdata['username']."' limit 1";
@@ -214,11 +214,11 @@ class SiteController extends BaseController
                                 $errorsql = "update ".getTable('user')." set errors = errors+1 ,locktime =".$time." where username = '".$name."'";
                                 $db->query($errorsql);
                                 $data['success'] = false;
-                                $data['message'] = "用户已锁,".$lock['lockTime']."分钟后重新登录";
+                                $data['message'] = Yii::t('app', "用户已锁") . ",".$lock['lockTime'].Yii::t('app', "分钟后重新登录");
                                 $data['lockTime']=$locktime>0 ? $locktime :0;
-                                $hdata['sDes'] = '用户登录';
+                                $hdata['sDes'] = Yii::t('app', '用户登录');
                                 $hdata['username'] = filterStr($_POST['name']);
-                                $hdata['sRs'] ='账号已被锁定';
+                                $hdata['sRs'] = Yii::t('app', '账号已被锁定');
                                 $hdata['sAct'] = $act.'/'.$show;
 
                                 $sql = "SELECT role_id as role FROM ".getTable('user')." WHERE username='".$hdata['username']."' limit 1";
@@ -234,11 +234,11 @@ class SiteController extends BaseController
                                     $errorsql = "update ".getTable('user')." set errors = errors+1  where username = '".$name."'";
                                     $db->query($errorsql);
                                     $data['success'] = false;
-                                    $data['message'] = "用户已锁,".$lock['lockTime']."分钟后重新登录";
+                                    $data['message'] = Yii::t('app', "用户已锁") . ",".$lock['lockTime'].Yii::t('app', "分钟后重新登录");
                                     $data['lockTime']=$locktime>0 ? $locktime :0;
                                     $hdata['sDes'] = '用户登录';
                                     $hdata['username'] = filterStr($_POST['name']);
-                                    $hdata['sRs'] ='账号已被锁定';
+                                    $hdata['sRs'] = Yii::t('app', '账号已被锁定');
                                     $hdata['sAct'] = $act.'/'.$show;
 
                                     $sql = "SELECT role_id as role FROM ".getTable('user')." WHERE username='".$hdata['username']."' limit 1";
@@ -275,10 +275,10 @@ class SiteController extends BaseController
 //                                        }
 
                                         $data['success'] = true;
-                                        $data['message'] = '登录成功';
-                                        $hdata['sDes'] = '用户登录';
+                                        $data['message'] = Yii::t('app', '登录成功');
+                                        $hdata['sDes'] = Yii::t('app', '用户登录');
                                         $hdata['username'] = filterStr($_POST['name']);
-                                        $hdata['sRs'] ='成功';
+                                        $hdata['sRs'] = Yii::t('app', '成功');
                                         $hdata['sAct'] = $act.'/'.$show;
 
                                         $sql = "SELECT role_id as role FROM ".getTable('user')." WHERE username='".$hdata['username']."' limit 1";
@@ -289,8 +289,8 @@ class SiteController extends BaseController
 
                                         if(filterStr($_POST['name'])=='sec_admin'||$user_role['role']==4){
                                             $hdata['username'] = 'System';
-                                            $hdata['sDes'] = 'CPU使用率:'.getCPURate().'%,内存使用率:'.getMemoryRate().'%,硬盘使用率:'.getDiskRate().'%';
-                                            $hdata['sRs'] ='成功';
+                                            $hdata['sDes'] = Yii::t('app', 'CPU使用率') . ':'.getCPURate().'%,' . Yii::t('app', '内存使用率') . ':'.getMemoryRate().'%,' . Yii::t('app', '硬盘使用率') . ':'.getDiskRate().'%';
+                                            $hdata['sRs'] = Yii::t('app', '成功');
                                             saveOperationLog($hdata);
                                         }
 
@@ -300,17 +300,17 @@ class SiteController extends BaseController
                                         $db->query("UPDATE ".getTable('user')." SET errors=0,locktime=0  WHERE username='$name'");
                                         $db->query("UPDATE ".getTable('user')." SET errors=errors+1  WHERE username='$name'");
                                         $data['success'] = false;
-                                        $data['message'] = '账号或密码错误';
+                                        $data['message'] = Yii::t('app', '账号或密码错误');
                                         $errors=$db->query("select errors from ".getTable('user')."  WHERE username='$name'");
                                         $max_errors=$db->query("select maxError from ".getTable('userconfig')." ");
                                         if($errors>$max_errors){
-                                            $data['message'] = "用户已锁,".$lock['lockTime']."分钟后重新登录";
+                                            $data['message'] = Yii::t('app', '用户已锁') . ",".$lock['lockTime'].Yii::t('app', "分钟后重新登录");
                                             $data['lockTime']=$locktime>0 ? $locktime :0;
                                         }
 
-                                        $hdata['sDes'] = '用户登录';
+                                        $hdata['sDes'] = Yii::t('app', '用户登录');
                                         $hdata['username'] = filterStr($_POST['name']);
-                                        $hdata['sRs'] ='账号或密码错误';
+                                        $hdata['sRs'] = Yii::t('app', '账号或密码错误');
                                         $hdata['sAct'] = $act.'/'.$show;
 
                                         $sql = "SELECT role_id as role FROM ".getTable('user')." WHERE username='".$hdata['username']."' limit 1";
@@ -350,10 +350,10 @@ class SiteController extends BaseController
 //                                    exit;
 //                                }
                                 $data['success'] = true;
-                                $data['message'] = '登录成功';
-                                $hdata['sDes'] = '用户登录';
+                                $data['message'] = Yii::t('app', '登录成功');
+                                $hdata['sDes'] = Yii::t('app', '用户登录');
                                 $hdata['username'] = filterStr($_POST['name']);
-                                $hdata['sRs'] ='成功';
+                                $hdata['sRs'] = Yii::t('app', '成功');
                                 $hdata['sAct'] = $act.'/'.$show;
 
                                 $sql = "SELECT role_id as role FROM ".getTable('user')." WHERE username='".$hdata['username']."' limit 1";
@@ -365,8 +365,8 @@ class SiteController extends BaseController
 
                                 if(filterStr($_POST['name'])=='sec_admin'||$user_role['role']==4){
                                     $hdata['username'] = 'System';
-                                    $hdata['sDes'] = 'CPU使用率:'.getCPURate().'%,内存使用率:'.getMemoryRate().'%,硬盘使用率:'.getDiskRate().'%';
-                                    $hdata['sRs'] ='成功';
+                                    $hdata['sDes'] = Yii::t('app', 'CPU使用率') . ':'.getCPURate().'%,' . Yii::t('app', '内存使用率') . ':'.getMemoryRate().'%,' . Yii::t('app', '硬盘使用率') . ':'.getDiskRate().'%';
+                                    $hdata['sRs'] = Yii::t('app', '成功');
                                     saveOperationLog($hdata);
                                 }
                                 /**
@@ -383,10 +383,10 @@ class SiteController extends BaseController
                             }else{
                                 $db->query("UPDATE ".getTable('user')." SET errors=errors+1 WHERE username='$name'");
                                 $data['success'] = false;
-                                $data['message'] = '账号或密码错误';
-                                $hdata['sDes'] = '用户登录';
+                                $data['message'] = Yii::t('app', '账号或密码错误');
+                                $hdata['sDes'] = Yii::t('app', '用户登录');
                                 $hdata['username'] = filterStr($_POST['name']);
-                                $hdata['sRs'] ='密码错误';
+                                $hdata['sRs'] = Yii::t('app', '密码错误');
                                 $hdata['sAct'] = $act.'/'.$show;
 
                                 $sql = "SELECT role_id as role FROM ".getTable('user')." WHERE username='".$hdata['username']."' limit 1";
@@ -425,17 +425,17 @@ class SiteController extends BaseController
 //                            }
 
                             $data['success'] = true;
-                            $data['message'] = '登录成功';
-                            $hdata['sDes'] = '用户登录';
+                            $data['message'] = Yii::t('app', '登录成功');
+                            $hdata['sDes'] = Yii::t('app', '用户登录');
                             $hdata['username'] = filterStr($_POST['name']);
-                            $hdata['sRs'] ='成功';
+                            $hdata['sRs'] = Yii::t('app', '成功');
                             $hdata['sAct'] = $act.'/'.$show;
                             saveOperationLog($hdata);
 
                             if(filterStr($_POST['name'])=='sec_admin'||$user_role['role']==4){
                                 $hdata['username'] = 'System';
-                                $hdata['sDes'] = 'CPU使用率:'.getCPURate().'%,内存使用率:'.getMemoryRate().'%,硬盘使用率:'.getDiskRate().'%';
-                                $hdata['sRs'] ='成功';
+                                $hdata['sDes'] = Yii::t('app', 'CPU使用率') . ':'.getCPURate().'%,' . Yii::t('app', '内存使用率') . ':'.getMemoryRate().'%,' . Yii::t('app', '硬盘使用率') . ':'.getDiskRate().'%';
+                                $hdata['sRs'] = Yii::t('app', '成功');
                                 saveOperationLog($hdata);
                             }
 
@@ -445,10 +445,10 @@ class SiteController extends BaseController
                         }else{
                             $db->query("UPDATE ".getTable('user')." SET errors=errors+1 WHERE username='$name'");
                             $data['success'] = false;
-                            $data['message'] = '账号或密码错误';
-                            $hdata['sDes'] = '用户登录';
+                            $data['message'] = Yii::t('app', '账号或密码错误');
+                            $hdata['sDes'] = Yii::t('app', '用户登录');
                             $hdata['username'] = filterStr($_POST['name']);
-                            $hdata['sRs'] ='密码错误';
+                            $hdata['sRs'] = Yii::t('app', '密码错误');
                             $hdata['sAct'] = $act.'/'.$show;
 
                             $sql = "SELECT role_id role FROM ".getTable('user')." WHERE username='".$hdata['username']."' limit 1";
@@ -468,19 +468,19 @@ class SiteController extends BaseController
         $the_ver = $db->result_first("select pname from bd_sys_sysinfo WHERE id=1");
 
         if(!empty($the_ver)){
-            if($the_ver=='蓝盾安全扫描系统'){
+            if($the_ver==Yii::t('app', '蓝盾安全扫描系统')){
                 $log_bg = "/resource/skin/blue/images/log_bg-putong.jpg";
                 $ver_t  = "蓝盾安全扫描系统";
-            }elseif ($the_ver=='蓝盾安全漏洞扫描系统'){
+            }elseif ($the_ver==Yii::t('app', '蓝盾安全漏洞扫描系统')){
                 $log_bg = "/resource/skin/blue/images/log_bg-shemi.jpg";
-                $ver_t  = "蓝盾安全漏洞扫描系统";
+                $ver_t  = Yii::t('app', "蓝盾安全漏洞扫描系统");
             }else{
                 $log_bg = "/resource/skin/blue/images/log_bg-putong.jpg";
-                $ver_t  = "蓝盾安全扫描系统";
+                $ver_t  = Yii::t('app', "蓝盾安全扫描系统");
             }
         }else{
             $log_bg = "/resource/skin/blue/images/log_bg-putong.jpg";
-            $ver_t  = "蓝盾安全扫描系统";
+            $ver_t  = Yii::t('app', "蓝盾安全扫描系统");
         }
         $this->layout=false;
         return $this->render('login', [
@@ -501,15 +501,15 @@ class SiteController extends BaseController
 
         global $db,$act,$show;
         $db->query("DELETE FROM bd_sys_sessions WHERE username='".filterStr($_SESSION['username'])."' and uuid='{$_SESSION['uuid']}'");
-        $hdata['sDes'] = '退出系统';
-        $hdata['sRs'] ='成功';
+        $hdata['sDes'] = Yii::t('app', '退出系统');
+        $hdata['sRs'] = Yii::t('app', '成功');
         $hdata['username'] = filterStr($_SESSION['username']);
         $hdata['sAct'] = $act.'/'.$show;
         saveOperationLog($hdata);
         session_unset();
         session_destroy();
         $data['success'] = true;
-        $data['message'] = '退出成功';
+        $data['message'] = Yii::t('app', '退出成功');
         Yii::$app->user->logout();
         return $this->redirect('/site/login');
 //        echo json_encode($data);
@@ -526,8 +526,8 @@ class SiteController extends BaseController
         $pData = unserialize(file_get_contents(DIR_ROOT . "../config/data/system/pswstrategy.config"));
         $userInfo = $db->fetch_first("SELECT update_pwd_time FROM ".getTable('user')." WHERE username = '".$username."' and password='".$password."'");
         if( !empty($userInfo) && (time()-$userInfo['update_pwd_time']  >= $pData['pPeriod']*24*60*60) ){
-            $data['message'] = '密码过期';
-            $data['sDes'] = '用户登录';
+            $data['message'] = Yii::t('app', '密码过期');
+            $data['sDes'] = Yii::t('app', '用户登录');
             return $data;
         }else{
             return false;
@@ -748,3 +748,4 @@ class SiteController extends BaseController
         var_dump(Yii::$app->db_jx->createCommand("select * from t_rule")->queryAll());die;
     }
 }
+

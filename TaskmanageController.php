@@ -93,11 +93,11 @@ class TaskmanageController extends BaseController
             }
             $weak_rows=$db->fetch_all("select * from bd_weakpwd_task_manage $where order by sort desc");
             foreach ($weak_rows as $k=>$v){
-                $weak_rows[$k]['type']='弱密码';
+                $weak_rows[$k]['type'] = Yii::t('app', '弱密码');
             }
             $host_rows=$db->fetch_all("select * from bd_host_task_manage $where  order by sort desc");
             foreach ($host_rows as $k=>$v){
-                $host_rows[$k]['type']='主机';
+                $host_rows[$k]['type'] = Yii::t('app', '主机');
             }
             $web_rows=$db->fetch_all("select * from bd_web_task_manage $where order by sort desc");
             foreach ($web_rows as $k=>$v){
@@ -134,12 +134,12 @@ class TaskmanageController extends BaseController
 
             $jxhc_rows = array();
             $timeType = array(
-                0=>'立即执行',
-                1=>'某个时刻执行',
-                2=>'每天一次',
-                3=>'每周一次',
-                4=>'每月一次（按日期）',
-                5=>'每月一次（按星期）',
+                0 => Yii::t('app', '立即执行'),
+                1 => Yii::t('app', '某个时刻执行'),
+                2 => Yii::t('app', '每天一次'),
+                3 => Yii::t('app', '每周一次'),
+                4 => Yii::t('app', '每月一次（按日期）'),
+                5 => Yii::t('app', '每月一次（按星期）'),
             );
             foreach ($hData as $k => $v) {
                 $v['use_time'] = isset($v['use_time'])&&!empty($v['use_time']) ? $this->time2second($v['use_time']) : $this->time2second(0);
@@ -230,7 +230,7 @@ select uuid from bd_web_history");
         }
         $msg='';
         foreach ($checking_rows as $v){
-            $msg.='正在检测:'.$v['name'].'('.$v['type'].')'.';IP/域名:'.$v['target']."\r\n";
+            $msg.= Yii::t('app', '正在检测').':'.$v['name'].'('.$v['type'].')'.';IP/' . Yii::t('app', '域名') . ':'.$v['target']."\r\n";
             $data['time'] = time() - strtotime($v['start_time']);
         }
         $data['check_msg'] = $msg;
@@ -242,22 +242,22 @@ select uuid from bd_web_history");
 
     function time2second($seconds){
         if($seconds<1000){
-            return !empty($seconds) ? $seconds.'毫秒' : '0毫秒';
+            return !empty($seconds) ? $seconds . Yii::t('app', '毫秒') : '0' . Yii::t('app', '毫秒');
         }
         $time = !empty($seconds) ? ($seconds/1000) : 0;
         //取得整数部分
         $seconds = floor($time);
         $seconds = (int)$seconds;
         if( $seconds<86400 ){//如果不到一天
-            $format_time = gmstrftime('%H时%M分%S秒', $seconds);
+            $format_time = gmstrftime('%H' . Yii::t('app', '时') . '%M' . Yii::t('app', '分') . '%S' . Yii::t('app', '秒'), $seconds);
         }else{
             $time = explode(' ', gmstrftime('%j %H %M %S', $seconds));//Array ( [0] => 04 [1] => 14 [2] => 14 [3] => 35 )
-            $format_time = ($time[0]-1).'天'.$time[1].'时'.$time[2].'分'.$time[3].'秒';
+            $format_time = ($time[0]-1).Yii::t('app', '天').$time[1].Yii::t('app', '时').$time[2].Yii::t('app', '分').$time[3].Yii::t('app', '秒');
         }
-        $format_time = str_replace('00天','',$format_time);
-        $format_time = str_replace('00时','',$format_time);
-        $format_time = str_replace('00分','',$format_time);
-        $format_time = str_replace('00秒','',$format_time);
+        $format_time = str_replace('00' . Yii::t('app', '天'),'',$format_time);
+        $format_time = str_replace('00' . Yii::t('app', '时'),'',$format_time);
+        $format_time = str_replace('00' . Yii::t('app', '分'),'',$format_time);
+        $format_time = str_replace('00' . Yii::t('app', '秒'),'',$format_time);
         return $format_time;
     }
 
@@ -288,7 +288,7 @@ select uuid from bd_web_history");
             array_filter($a_domain);
             if (!in_array($login_domain, $a_domain)) {
                 $data['success'] = false;
-                $data['msg'] = '登录域名必须包含在扫描对象的域名中！';
+                $data['msg'] = Yii::t('app', '登录域名必须包含在扫描对象的域名中！');
                 echo json_encode($data);
                 exit;
             }
@@ -312,10 +312,10 @@ select uuid from bd_web_history");
         }
         if (file_exists('/usr/local/nginx/html/report/logindata/' . $guid . '.html')) {
             $success = true;
-            $msg = "操作成功";
+            $msg = Yii::t('app', "操作成功");
         } else {
             $success = false;
-            $msg = "html文件不存在，操作失败";
+            $msg = Yii::t('app', "html文件不存在，操作失败");
         }
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')
             $http = 'https://';
@@ -338,7 +338,7 @@ select uuid from bd_web_history");
             $arr_ips = explode("\r\n", $chuli_ip);
             if (count($arr_ips) != count(array_unique($arr_ips))) {
                 $data['success'] = false;
-                $data['msg'] = '请勿输入相同的ip';
+                $data['msg'] = Yii::t('app', '请勿输入相同的ip');
                 echo json_encode($data);
                 exit;
             }
@@ -358,7 +358,7 @@ select uuid from bd_web_history");
                 foreach ($arr2 as $v) {
                     if ($v >= $val[0] && $v <= $val[1]) {
                         $data['success'] = false;
-                        $data['msg'] = '请检查输入ip,是否已重复';
+                        $data['msg'] = Yii::t('app', '请检查输入ip,是否已重复');
                         echo json_encode($data);
                         exit;
                     }
@@ -391,7 +391,7 @@ select uuid from bd_web_history");
                     $renwu = (ip2long($x[0]) & $lousaomask);
                     if ($lousao == $renwu) {
                         $data['success'] = false;
-                        $data['msg'] = '启用pptp时，不允许扫描同一网段';
+                        $data['msg'] = Yii::t('app', '启用pptp时，不允许扫描同一网段');
                         echo json_encode($data);
                         exit;
                     }
@@ -419,7 +419,7 @@ select uuid from bd_web_history");
             $cl_domain = explode("\r\n", $chuli_domain);
             if (count($cl_domain) != count(array_unique($cl_domain))) {
                 $data['success'] = false;
-                $data['msg'] = '请勿输入相同的域名';
+                $data['msg'] = Yii::t('app', '请勿输入相同的域名');
                 echo json_encode($data);
                 exit;
             }
@@ -449,7 +449,7 @@ select uuid from bd_web_history");
         }
         if (!empty($iTotal)) {
             $data['success'] = false;
-            $data['msg'] = $sRows['task_name'] . '已存在，请更换';
+            $data['msg'] = $sRows['task_name'] . Yii::t('app', '已存在，请更换');
             echo json_encode($data);exit;
         }
 
@@ -682,9 +682,9 @@ select uuid from bd_web_history");
 
                 if (1) {
                     $success = true;
-                    $msg = "新增扫描任务成功";
-                    $hdata['sDes'] = '新增扫描任务(' . $task_name . ')';
-                    $hdata['sRs'] = "成功";
+                    $msg = Yii::t('app', "新增扫描任务成功");
+                    $hdata['sDes'] = Yii::t('app', '新增扫描任务') . '(' . $task_name . ')';
+                    $hdata['sRs'] = Yii::t('app', '成功');
                     $hdata['sAct'] = $act . '/' . $show;
                     saveOperationLog($hdata);
                     $data['success'] = $success;
@@ -693,9 +693,9 @@ select uuid from bd_web_history");
                     exit;
                 } else {
                     $success = false;
-                    $msg = "新增扫描任务失败";
-                    $hdata['sDes'] = '新增扫描任务(' . $task_name . ')';
-                    $hdata['sRs'] = "失败";
+                    $msg = Yii::t('app', "新增扫描任务失败");
+                    $hdata['sDes'] = Yii::t('app', '新增扫描任务') . '(' . $task_name . ')';
+                    $hdata['sRs'] = Yii::t('app', "失败");
                     $hdata['sAct'] = $act . '/' . $show;
                     saveOperationLog($hdata);
                     $data['success'] = $success;
@@ -706,9 +706,9 @@ select uuid from bd_web_history");
 
             } else {
                 $success = false;
-                $msg = "新增扫描任务失败";
-                $hdata['sDes'] = '新增扫描任务(' . $task_name . ')';
-                $hdata['sRs'] = "失败";
+                $msg = Yii::t('app', "新增扫描任务失败");
+                $hdata['sDes'] = Yii::t('app', '新增扫描任务') . '(' . $task_name . ')';
+                $hdata['sRs'] = Yii::t('app', "失败");
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
                 $data['success'] = $success;
@@ -718,7 +718,7 @@ select uuid from bd_web_history");
             }
         } else {
             $success = false;
-            $msg = "后台创建任务失败";
+            $msg = Yii::t('app', "后台创建任务失败");
             $data['success'] = $success;
             $data['msg'] = $msg;
             echo json_encode($data);
@@ -732,7 +732,7 @@ select uuid from bd_web_history");
          $iTotal = $db->result_first("SELECT COUNT(`task_name`) as num FROM task_manage where task_name='" . $sRows['task_name'] . "' And id !=" . $id);
          if (!empty($iTotal)) {
              $data['success'] = false;
-             $data['msg'] = $sRows['task_name'] . '已存在，请更换';
+             $data['msg'] = $sRows['task_name'] . Yii::t('app', '已存在，请更换');
              echo json_encode($data);exit;
          }
          $sRows['ipnum'] = $icount;
@@ -743,7 +743,7 @@ select uuid from bd_web_history");
              $avaliatenum = $ipnum - intval($totalipnum);
              if ($i_count > $avaliatenum) {
                  $data['success'] = false;
-                 $data['msg'] = '可扫描IP数量不能超过'.$ipnum.'（' . $totalipnum . '）';
+                 $data['msg'] = Yii::t('app', '可扫描IP数量不能超过').$ipnum.'（' . $totalipnum . '）';
                  echo json_encode($data);exit;
              }
          }
@@ -900,32 +900,32 @@ select uuid from bd_web_history");
                  //var_dump($backcreateport);die;
                  if ($backcreateport == 1) {
                      $success = true;
-                     $msg = "编辑成功";
-                     $hdata['sDes'] = '编辑扫描任务(' . $task_name . ')';
-                     $hdata['sRs'] = "成功";
+                     $msg = Yii::t('app', "编辑成功");
+                     $hdata['sDes'] = Yii::t('app', '编辑扫描任务') . '(' . $task_name . ')';
+                     $hdata['sRs'] = Yii::t('app', '成功');
                      $hdata['sAct'] = $act . '/' . $show;
                      saveOperationLog($hdata);
                  } else {
                      $success = false;
-                     $msg = "编辑失败";
-                     $hdata['sDes'] = '编辑扫描任务(' . $task_name . ')';
-                     $hdata['sRs'] = "失败";
+                     $msg = Yii::t('app', "编辑失败");
+                     $hdata['sDes'] = Yii::t('app', '编辑扫描任务') . '(' . $task_name . ')';
+                     $hdata['sRs'] = Yii::t('app', "失败");
                      $hdata['sAct'] = $act . '/' . $show;
                      saveOperationLog($hdata);
                  }
              } else {
                  $success = false;
-                 $msg = "编辑失败";
-                 $hdata['sDes'] = '编辑任务(' . $task_name . ')';
-                 $hdata['sRs'] = '失败';
+                 $msg = Yii::t('app', "编辑失败");
+                 $hdata['sDes'] = Yii::t('app', '编辑任务') . '(' . $task_name . ')';
+                 $hdata['sRs'] = Yii::t('app', '失败');
                  $hdata['sAct'] = $act . '/' . $show;
                  saveOperationLog($hdata);
              }
          } else {
              $success = false;
-             $msg = "后台编辑任务失败";
-             $hdata['sDes'] = '后台编辑任务(' . $task_name . ')';
-             $hdata['sRs'] = '失败';
+             $msg = Yii::t('app', "后台编辑任务失败");
+             $hdata['sDes'] = Yii::t('app', '后台编辑任务') . '(' . $task_name . ')';
+             $hdata['sRs'] = Yii::t('app', '失败');
              $hdata['sAct'] = $act . '/' . $show;
              saveOperationLog($hdata);
          }
@@ -978,7 +978,7 @@ select uuid from bd_web_history");
                         Yii::$app->db->createCommand("drop table bd_web_url_$vv[2]")->execute();
                     }
 
-                }elseif($vv[1]=='主机'){
+                }elseif($vv[1]==Yii::t('app', '主机')){
                     Yii::$app->db->createCommand("delete from bd_host_task_manage where uuid='$vv[0]'")->execute();
                     if(in_array("bd_host_result_$vv[2]",$this->getAllTables())){
                         Yii::$app->db->createCommand("drop table bd_host_result_$vv[2]")->execute();
@@ -1020,9 +1020,9 @@ select uuid from bd_web_history");
 
             }
         }
-        saveOperationLog(['sRs'=>'删除任务','sAct'=>Yii::$app->request->getUrl()]);
+        saveOperationLog(['sRs'=>Yii::t('app', '删除任务'),'sAct'=>Yii::$app->request->getUrl()]);
         $data['success'] = true;
-        $data['msg'] = '删除成功';
+        $data['msg'] = Yii::t('app', '删除成功');
         echo json_encode($data);
         exit;
     }
@@ -1050,7 +1050,7 @@ select uuid from bd_web_history");
         $alltables = $this->getAllTables();
         $findhosttable = "bd_host_result_" . $taskid;
         $i = 0;
-        if (in_array($findhosttable, $alltables) && ($type=='主机')) {
+        if (in_array($findhosttable, $alltables) && ($type==Yii::t('app', '主机'))) {
             //主机
             $iprows = $db->fetch_all("SELECT distinct ip FROM bd_host_result_" . $taskid . "  $where");
             foreach ($iprows as $k => $v) {
@@ -1065,7 +1065,7 @@ select uuid from bd_web_history");
 
                 }
                 if ($r_flag) {
-                    $rows1[$i]['group'] = "主机扫描结果";
+                    $rows1[$i]['group'] = Yii::t('app', "主机扫描结果");
                     $rows1[$i]['category'] = "HOST";
                     $rows1[$i]['ip'] = $v['ip'];
                     $rows1[$i]['domain_title'] = 'HOST';
@@ -1127,7 +1127,7 @@ select uuid from bd_web_history");
                     }
                 }
                 if ($i_flag) {
-                    $rows2[$i]['group'] = "WEB扫描结果";
+                    $rows2[$i]['group'] = Yii::t('app', "WEB扫描结果");
                     $rows2[$i]['category'] = "WEB";
                     $rows2[$i]['ip'] = $v1['domain'];
                     $rows2[$i]['domain_title'] = "WEB";
@@ -1172,7 +1172,7 @@ select uuid from bd_web_history");
 
         $findwebtable = "bd_weakpwd_result_" . $taskid;
         //$wlevel = array(4=>'H',3=>'M',2=>'L');
-        if (in_array($findwebtable, $alltables) && ($type=='弱密码')) {
+        if (in_array($findwebtable, $alltables) && ($type==Yii::t('app', '弱密码'))) {
             //web
             $webiprows = $db->fetch_all("SELECT distinct s.ip FROM bd_weakpwd_result_" . $taskid . " AS s  $where");
             foreach ($webiprows as $k1 => $v1) {
@@ -1184,10 +1184,10 @@ select uuid from bd_web_history");
             }*/
                 if ($hnum > 0) {
                     $rows3[$i]['H'] = $hnum;
-                    $rows3[$i]['group'] = "弱密码扫描结果";
+                    $rows3[$i]['group'] = Yii::t('app', "弱密码扫描结果");
                     $rows3[$i]['category'] = "WEAK";
                     $rows3[$i]['ip'] = $v1['ip'];
-                    $rows3[$i]['domain_title'] = "弱密码";
+                    $rows3[$i]['domain_title'] = Yii::t('app', "弱密码");
                     $rows3[$i]['risk_factor'] = 'H';//弱密码暂时写死为H
                     $i++;
                 }
@@ -1400,7 +1400,7 @@ select uuid from bd_web_history");
         $tData = array(
             "open" => true,
             "ilevel" => 1,
-            "name" => "主机漏洞",
+            "name" => Yii::t('app', "主机漏洞"),
             "children" => $aData
         );
 
@@ -1471,7 +1471,7 @@ select uuid from bd_web_history");
         $tData = array(
             "open" => true,
             "ilevel" => 1,
-            "name" => "主机列表",
+            "name" => Yii::t('app', "主机列表"),
             "children" => $aData
         );
 
@@ -1561,7 +1561,7 @@ select uuid from bd_web_history");
         $tData = array(
             "open" => true,
             "ilevel" => 1,
-            "name" => "WEB漏洞",
+            "name" => Yii::t('app', "WEB漏洞"),
             "children" => $aData
         );
         echo json_encode($tData);
@@ -1594,21 +1594,22 @@ select uuid from bd_web_history");
                         array_push($aData1, $aItem1);
                     }
                 }
+                // TODO: translate, when comparing with db field
                 if ($v['vul_name'] == 'IBM_DB2弱密码') {
                     $aItem = array(
                         "open" => false,
                         "ilevel" => 2,
-                        "name" => "类型：" . $v['vul_name'] . ", 数据库：" . $v['dbname'] . "，用户名：" . $v['username'] . "，密码：" . $v['password'] . "，[" . $sTotal . "]",
+                        "name" => Yii::t('app', '类型') . "：" . $v['vul_name'] . ", " . Yii::t('app', '数据库') . "：" . $v['dbname'] . "，" . Yii::t('app', '用户名') . "：" . $v['username'] . "，" . Yii::t('app', '密码') . "：" . $v['password'] . "，[" . $sTotal . "]",
                         "risk_factor" => "H",
                         "icon" => "/resource/skin/blue/images/h_level.png",
                         "children" => $aData1
                     );
-                }  elseif ($v['vul_name'] == 'FTP弱密码') {
+                }  elseif ($v['vul_name'] == 'FTP弱密码') { // TODO: translate, when comparing with db field
                     if(strtolower($v['username']) == 'anonymous'){
                         $aItem = array(
                             "open" => false,
                             "ilevel" => 2,
-                            "name" => "类型：" . $v['vul_name'] .'，用户名：匿名用户',
+                            "name" => Yii::t('app', '类型') . "：" . $v['vul_name'] .'，' . Yii::t('app', '用户名') . '：' . Yii::t('app', '匿名用户'),
                             "risk_factor" => "H",
                             "icon" => "/resource/skin/blue/images/h_level.png",
                             "children" => $aData1
@@ -1617,7 +1618,7 @@ select uuid from bd_web_history");
                         $aItem = array(
                             "open" => false,
                             "ilevel" => 2,
-                            "name" => "类型：" . $v['vul_name'] . "，用户名：" . $v['username'] . "，密码：" . $v['password'] . "，[" . $sTotal . "]",
+                            "name" => Yii::t('app', '类型') . "：" . $v['vul_name'] . "，" . Yii::t('app', '用户名') . "：" . $v['username'] . "，" . Yii::t('app', '密码') . "：" . $v['password'] . "，[" . $sTotal . "]",
                             "risk_factor" => "H",
                             "icon" => "/resource/skin/blue/images/h_level.png",
                             "children" => $aData1
@@ -1627,7 +1628,7 @@ select uuid from bd_web_history");
                     $aItem = array(
                         "open" => false,
                         "ilevel" => 2,
-                        "name" => "类型：" . $v['vul_name'] . "，用户名：" . $v['username'] . "，密码：" . $v['password'] . "，[" . $sTotal . "]",
+                        "name" => Yii::t('app', '类型') . "：" . $v['vul_name'] . "，" . Yii::t('app', '用户名') . "：" . $v['username'] . "，" . Yii::t('app', '密码') . "：" . $v['password'] . "，[" . $sTotal . "]",
                         "risk_factor" => "H",
                         "icon" => "/resource/skin/blue/images/h_level.png",
                         "children" => $aData1
@@ -1640,7 +1641,7 @@ select uuid from bd_web_history");
         $tData = array(
             "open" => true,
             "ilevel" => 1,
-            "name" => "弱密码漏洞",
+            "name" => Yii::t('app', "弱密码漏洞"),
             "children" => $aData
         );
 
@@ -1768,7 +1769,7 @@ select uuid from bd_web_history");
             $aJson['zcdata'] = $arr_d;
         } else {
             $aJson['success'] = false;
-            $aJson['zcdata'] = '没有相关风险结果';
+            $aJson['zcdata'] = Yii::t('app', '没有相关风险结果');
         }
         //2.风险数目区域
         //$sql_f = "select report_time,num,h as H,m as M,l as L,i as I from `history_task` WHERE task_id=".$taskid;
@@ -1795,7 +1796,7 @@ select uuid from bd_web_history");
 
         } else {
             $aJson['success'] = false;
-            $aJson['zcsmdata'] = '没有相关风险结果';
+            $aJson['zcsmdata'] = Yii::t('app', '没有相关风险结果');
         }
         echo json_encode($aJson);
         exit;
@@ -2160,7 +2161,7 @@ select uuid from bd_web_history");
         $type = $aPost['type'];
         //var_dump($taskid);
         if ($taskid && $type) {
-            if($type=='主机'){
+            if($type==Yii::t('app', '主机')){
                 $sql="select * from bd_host_task_manage WHERE id='$taskid'";
             }elseif ($type=='web'){
                 $sql="select * from bd_web_task_manage WHERE id='$taskid'";
@@ -2208,7 +2209,7 @@ select uuid from bd_web_history");
             $model = new BdHostTaskManage();
             $row =$model::findOne(['name'=>$sPost['task_name']]);
             if($row){
-                echo json_encode(['success'=>false,'msg'=>'任务名已存在~~']);die;
+                echo json_encode(['success'=>false,'msg'=>Yii::t('app', '任务名已存在') . '~~']);die;
             }
         }
         $model->uuid=uuid();
@@ -2249,7 +2250,7 @@ select uuid from bd_web_history");
         $pattern = "/^([0-9A-Za-z\\-_\\.]+)@([0-9a-z]+\\.[a-z]{2,3}(\\.[a-z]{2})?)$/i";
         if ( !empty($model->email) && !preg_match( $pattern, Yii::$app->request->post('email')) )
         {
-            echo json_encode(['success'=>false,'msg'=>'邮箱地址格式不正确']);die;
+            echo json_encode(['success'=>false,'msg'=>Yii::t('app', '邮箱地址格式不正确')]);die;
         }
        // var_dump($model->attributes);die;
 
@@ -2257,9 +2258,9 @@ select uuid from bd_web_history");
             if(Yii::$app->request->get('uuid') !='undefined'){
                 $model->start_time = 0;
                 $model->end_time = 0;
-                $data['msg']='修改任务成功';
+                $data['msg']=Yii::t('app', '修改任务成功');
             }else{
-                $data['msg']='保存任务成功';
+                $data['msg']=Yii::t('app', '保存任务成功');
             }
             $model->save();
             $data['success']=true;
@@ -2288,7 +2289,7 @@ select uuid from bd_web_history");
             $d_count = count($a_domain);
             if($d_count > 10){
                 $data['success'] = false;
-                $data['msg'] = '扫描对象：批量域名不能多于10';
+                $data['msg'] = Yii::t('app', '扫描对象：批量域名不能多于10');
                 echo json_encode($data);
                 exit;
             }
@@ -2297,7 +2298,7 @@ select uuid from bd_web_history");
                 $s_r = $s_r-1;
                 if(!checkDomain($v)){  //检测域名合法性
                     $data['success'] = false;
-                    $data['msg'] = '扫描对象：批量域名第'.$s_r.'行格式错误';
+                    $data['msg'] = Yii::t('app', '扫描对象：批量域名第').$s_r.Yii::t('app', '行格式错误');
                     echo json_encode($data);
                     exit;
                 }
@@ -2313,7 +2314,7 @@ select uuid from bd_web_history");
                     $model = new BdWebTaskManage();
                     $row =$model::findOne(['name'=>$sPost['task_name']]);
                     if($row){
-                        echo json_encode(['success'=>false,'msg'=>'任务名已存在~~']);die;
+                        echo json_encode(['success'=>false,'msg'=>Yii::t('app', '任务名已存在') . '~~']);die;
                     }
                 }
                 $model->uuid=uuid();
@@ -2368,7 +2369,7 @@ select uuid from bd_web_history");
                 $pattern = "/^([0-9A-Za-z\\-_\\.]+)@([0-9a-z]+\\.[a-z]{2,3}(\\.[a-z]{2})?)$/i";
                 if ( !empty($model->email) && !preg_match( $pattern, Yii::$app->request->post('email')) )
                 {
-                    echo json_encode(['success'=>false,'msg'=>'邮箱地址格式不正确']);die;
+                    echo json_encode(['success'=>false,'msg'=>Yii::t('app', '邮箱地址格式不正确')]);die;
                 }
 
                 //var_dump($model->attributes);die;
@@ -2378,9 +2379,9 @@ select uuid from bd_web_history");
                 if(Yii::$app->request->get('uuid') !='undefined'){
                     $model->start_time = 0;
                     $model->end_time = 0;
-                    $data['msg']='修改任务成功';
+                    $data['msg']=Yii::t('app', '修改任务成功');
                 }else{
-                    $data['msg']='保存任务成功';
+                    $data['msg']=Yii::t('app', '保存任务成功');
                 }
                 $model->save();
 
@@ -2406,10 +2407,10 @@ select uuid from bd_web_history");
         $targrtip = trim($sPost['target_ip']);
         $target_ip= $this->check_ip($targrtip);    //检测ip合法性
         if($sPost['weak_thread'] == ''){
-            echo json_encode(['success'=>false,'msg'=>'扫描线程不能为空!']);die;
+            echo json_encode(['success'=>false,'msg'=>Yii::t('app', '扫描线程不能为空!')]);die;
         }
         if($sPost['weak_timeout'] == ''){
-            echo json_encode(['success'=>false,'msg'=>'扫描超时不能为空!']);die;
+            echo json_encode(['success'=>false,'msg'=>Yii::t('app', '扫描超时不能为空!')]);die;
         }
         $Transaction = Yii::$app->db->beginTransaction();
         try{
@@ -2420,7 +2421,7 @@ select uuid from bd_web_history");
                 $model = new BdWeakpwdTaskManage();
                 $row =$model::findOne(['name'=>$sPost['task_name']]);
                 if($row){
-                    echo json_encode(['success'=>false,'msg'=>'任务名已存在~~']);die;
+                    echo json_encode(['success'=>false,'msg'=>Yii::t('app', '任务名已存在') . '~~']);die;
                 }
             }
 //                var_dump($sPost);die;
@@ -2451,16 +2452,16 @@ select uuid from bd_web_history");
             $pattern = "/^([0-9A-Za-z\\-_\\.]+)@([0-9a-z]+\\.[a-z]{2,3}(\\.[a-z]{2})?)$/i";
             if ( !empty($model->email) && !preg_match( $pattern, Yii::$app->request->post('email')) )
             {
-                echo json_encode(['success'=>false,'msg'=>'邮箱地址格式不正确']);die;
+                echo json_encode(['success'=>false,'msg'=>Yii::t('app', '邮箱地址格式不正确')]);die;
             }
 
 
             if(Yii::$app->request->get('uuid') !='undefined'){
                 $model->start_time = 0;
                 $model->end_time = 0;
-                $data['msg']='修改任务成功';
+                $data['msg']=Yii::t('app', '修改任务成功');
             }else{
-                $data['msg']='保存任务成功';
+                $data['msg']=Yii::t('app', '保存任务成功');
             }
             $model->save();
             $data['success']=true;
@@ -2565,11 +2566,11 @@ select uuid from bd_web_history");
 
             if (empty ($taskData ['id'])) {
                 unset($taskData['id']);
-                $sDesc = "增加任务成功";
+                $sDesc = Yii::t('app', "增加任务成功");
 
             } else {
                 $id = $taskData['id'];
-                $sDesc = "编辑任务成功";
+                $sDesc = Yii::t('app', "编辑任务成功");
             }
 
             if ($aPost['uuid']!='undefined') {
@@ -2604,8 +2605,8 @@ select uuid from bd_web_history");
                     //$pData = new stdClass();
                     //$pData->sDesc = $sDesc;
                     //$this->saveOperationLog($pData);
-                    $hdata['sDes'] = '编辑基线任务';
-                    $hdata['sRs'] = "成功";
+                    $hdata['sDes'] = Yii::t('app', '编辑基线任务');
+                    $hdata['sRs'] = Yii::t('app', '成功');
                     $hdata['sAct'] = $act.'/'.$show;
                     saveOperationLog($hdata);
 
@@ -2617,8 +2618,8 @@ select uuid from bd_web_history");
                 //$pData = new stdClass();
                 //$pData->sDesc = $sDesc;
                 //$this->saveOperationLog($pData);
-                $hdata['sDes'] = '编辑基线任务';
-                $hdata['sRs'] = "失败";
+                $hdata['sDes'] = Yii::t('app', '编辑基线任务');
+                $hdata['sRs'] = Yii::t('app', "失败");
                 $hdata['sAct'] = $act.'/'.$show;
                 saveOperationLog($hdata);
 
@@ -2646,7 +2647,7 @@ select uuid from bd_web_history");
             if($db_jx->query($sql,'db_jx')){
                 //保存生成
                 $success = true;
-                $aJson ['msg'] = '新增任务成功';
+                $aJson ['msg'] = Yii::t('app', '新增任务成功');
                 $aJson ['id'] = $db_jx->insert_id('db_jx');
 
                 /*向t_dev表插入数据*/
@@ -2659,19 +2660,19 @@ select uuid from bd_web_history");
                 //shellResult($shell);
                 $ret = \BDRpc::call("add_task", array("task_id" => $aJson ['id']));
                 $success = true;
-                $aJson ['msg'] = '新增任务成功';
+                $aJson ['msg'] = Yii::t('app', '新增任务成功');
                 /***
                  * 操作日志
                  */
-                $hdata['sDes'] = '新增基线任务';
-                $hdata['sRs'] = "成功";
+                $hdata['sDes'] = Yii::t('app', '新增基线任务');
+                $hdata['sRs'] = Yii::t('app', '成功');
                 $hdata['sAct'] = $act.'/'.$show;
                 saveOperationLog($hdata);
             }else{
                 $success = false;
-                $aJson ['msg'] = '新增任务失败';
-                $hdata['sDes'] = '新增基线任务';
-                $hdata['sRs'] = "失败";
+                $aJson ['msg'] = Yii::t('app', '新增任务失败');
+                $hdata['sDes'] = Yii::t('app', '新增基线任务');
+                $hdata['sRs'] = Yii::t('app', "失败");
                 $hdata['sAct'] = $act.'/'.$show;
                 saveOperationLog($hdata);
             }
@@ -2723,20 +2724,20 @@ select uuid from bd_web_history");
             if ($db_jx->query($sql,'db_jx')) {
                 //保存生成
                 $success = true;
-                $aJson ['msg'] = '成功添加设备和规范';
+                $aJson ['msg'] = Yii::t('app', '成功添加设备和规范');
                 /***
                  * 操作日志
                  */
-                $hdata['sDes'] = '添加设备和规范';
-                $hdata['sRs'] = "成功";
+                $hdata['sDes'] = Yii::t('app', '添加设备和规范');
+                $hdata['sRs'] = Yii::t('app', '成功');
                 $hdata['sAct'] = $act.'/'.$show;
                 saveOperationLog($hdata);
 
             } else {
                 $success = false;
-                $aJson ['msg'] = '添加设备和规范失败';
-                $hdata['sDes'] = '添加设备和规范';
-                $hdata['sRs'] = "失败";
+                $aJson ['msg'] = Yii::t('app', '添加设备和规范失败');
+                $hdata['sDes'] = Yii::t('app', '添加设备和规范');
+                $hdata['sRs'] = Yii::t('app', "失败");
                 $hdata['sAct'] = $act.'/'.$show;
                 saveOperationLog($hdata);
             }
@@ -2864,7 +2865,7 @@ select uuid from bd_web_history");
         foreach ($ids as $v){
             $vv=explode(':',$v);
             $time= time();
-            if($vv[1]=='弱密码'){
+            if($vv[1]==Yii::t('app', '弱密码')){
                 Yii::$app->db->createCommand("insert into task_manage set action=4 , task_uuid='$vv[0]' , type=3")->execute();
                 Yii::$app->db->createCommand("update bd_weakpwd_task_manage set send=0,status=6, start_time=$time,sort= $time WHERE uuid='$vv[0]' ")->execute();
             }elseif($vv[1]=='web'){
@@ -2872,7 +2873,7 @@ select uuid from bd_web_history");
                 Yii::$app->db->createCommand("insert into task_manage set action=4 , task_uuid='$vv[0]' , type=2")->execute();
                 Yii::$app->db->createCommand("update bd_web_task_manage set send=0,status=6, start_time=".time()." WHERE uuid='$vv[0]' ")->execute();
                 // $sql="insert into task_manage set action=1 , task_uuid='$vv[0]' , type=3";
-            }elseif($vv[1]=='主机'){
+            }elseif($vv[1]==Yii::t('app', '主机')){
                 Yii::$app->db->createCommand("insert into task_manage set action=4 , task_uuid='$vv[0]' , type=1")->execute();
                 Yii::$app->db->createCommand("update bd_host_task_manage set send=0,status=6, start_time=".time()." WHERE uuid='$vv[0]' ")->execute();
             }elseif($vv[1]=='jxhc'){
@@ -2897,7 +2898,7 @@ select uuid from bd_web_history");
 
         foreach ($ids as $v){
             $vv=explode(':',$v);
-            if($vv[1]=='弱密码'){
+            if($vv[1]==Yii::t('app', '弱密码')){
                 Yii::$app->db->createCommand("insert into task_manage set action=6 ,task_uuid='$vv[0]',type=3")->execute();
                 Yii::$app->db->createCommand("update bd_weakpwd_task_manage set status=7 WHERE uuid='$vv[0]'")->execute();
             }elseif($vv[1]=='web'){
@@ -2917,7 +2918,7 @@ select uuid from bd_web_history");
 
         foreach ($ids as $v){
             $vv=explode(':',$v);
-            if($vv[1]=='弱密码'){
+            if($vv[1]==Yii::t('app', '弱密码')){
                 Yii::$app->db->createCommand("insert into task_manage set action=5 ,task_uuid='$vv[0]',type=3")->execute();
                 Yii::$app->db->createCommand("update bd_weakpwd_task_manage set status=8 WHERE uuid='$vv[0]'")->execute();
             }elseif($vv[1]=='web'){
@@ -2945,7 +2946,12 @@ select uuid from bd_web_history");
         global $db;
         $type=Yii::$app->request->get('type');
         $uuid=Yii::$app->request->get('uuid');
-        $periodunit = array('hour'=>'小时','day'=>'天','week'=>'周','month'=>'月');
+        $periodunit = array(
+            'hour'=>Yii::t('app', '小时'),
+            'day'=>Yii::t('app', '天'),
+            'week'=>Yii::t('app', '周'),
+            'month'=>Yii::t('app', '月'),
+        );
         $starttime=date('Y-m-d H:i:s',time());
 
         if($_GET['type']=='weakpwd'){
@@ -3045,7 +3051,12 @@ select uuid from bd_web_history");
             }
         }
 //var_dump($row);die;
-        $periodunit = array('hour'=>'小时','day'=>'天','week'=>'周','month'=>'月');
+        $periodunit = array(
+            'hour'=>Yii::t('app', '小时'),
+            'day'=>Yii::t('app', '天'),
+            'week'=>Yii::t('app', '周'),
+            'month'=>Yii::t('app', '月'),
+        );
         template2('/taskmanage/edit',[
             'type'=>$type,
             'policy'=>$policy,
@@ -3080,7 +3091,7 @@ select uuid from bd_web_history");
                     $err_lines[]=$k;
                     $errs .= ($k+1).',';
                     $data['success'] = false;
-                    $data['msg'] = '扫描对象：批量IP第' . ($k+1) . '行格式错误';
+                    $data['msg'] = Yii::t('app', '扫描对象：批量IP第') . ($k+1) . Yii::t('app', '行格式错误');
                     echo json_encode($data);exit;
                 } else {
                     $a_target_single = explode("-", trim($v));
@@ -3093,7 +3104,7 @@ select uuid from bd_web_history");
                             if (!empty($loginuser['allowIPs'])) {
                                 if (!$this->in_allowipv6(explode(',', $loginuser['allowIPs']), $v, 2)) {
                                     $data['success'] = false;
-                                    $data['msg'] = '第' . $s_r . '行不在允许扫描的IP范围内';
+                                    $data['msg'] = Yii::t('app', '第 ') . $s_r . Yii::t('app', '行不在允许扫描的IP范围内');
                                     echo json_encode($data);
                                     exit;
                                 }
@@ -3111,14 +3122,14 @@ select uuid from bd_web_history");
                                 if ($a_sin0[0] == $a_rootip[0] && $a_sin0[1] == $a_rootip[1] && $a_sin0[2] == $a_rootip[2]) {
                                     if (intval($a_rootip[3]) >= intval($a_sin0[3]) && intval($a_rootip[3]) <= intval($a_sin1[3])) {
                                         $data['success'] = false;
-                                        $data['msg'] = '扫描对象：批量IP第' . $s_r . '行网段包含了本机IP';
+                                        $data['msg'] = Yii::t('app', '扫描对象：批量IP第') . $s_r . Yii::t('app', '行网段包含了本机IP');
                                         echo json_encode($data);exit;
                                     }
                                 }
                                 if (!empty($loginuser['allowIPs'])) {
                                     if (!$this->in_allowip(explode(',', $loginuser['allowIPs']), $v, 2)) {
                                         $data['success'] = false;
-                                        $data['msg'] = '扫描对象：批量IP第' . $s_r . '行不在允许扫描的IP范围内';
+                                        $data['msg'] = Yii::t('app', '扫描对象：批量IP第') . $s_r . Yii::t('app', '行不在允许扫描的IP范围内');
                                         echo json_encode($data);exit;
                                     }
                                 }
@@ -3126,7 +3137,7 @@ select uuid from bd_web_history");
                                 $i_count = $i_count + $i_thiscount;
                             } else {
                                 $data['success'] = false;
-                                $data['msg'] = '扫描对象：批量IP第' . $s_r . '行格式错误，不能跨网段扫描';
+                                $data['msg'] = Yii::t('app', '扫描对象：批量IP第') . $s_r . Yii::t('app', '行格式错误，不能跨网段扫描');
                                 echo json_encode($data);
                                 exit;
                             }
@@ -3135,12 +3146,12 @@ select uuid from bd_web_history");
                         if (!empty($loginuser['allowIPs'])) {
                             if (!strpos($v, ':') && !$this->in_allowip(explode(',', $loginuser['allowIPs']), $v, 1)) {
                                 $data['success'] = false;
-                                $data['msg'] = '扫描对象：批量IPV4第' . $s_r . '行不在允许扫描的IP范围内';
+                                $data['msg'] = Yii::t('app', '扫描对象：批量IPV4第') . $s_r . Yii::t('app', '行不在允许扫描的IP范围内');
                                 echo json_encode($data);
                                 exit;
                             } else if (strpos($v, ':') && !$this->in_allowipv6(explode(',', $loginuser['allowIPs']), $v, 1)) {
                                 $data['success'] = false;
-                                $data['msg'] = '扫描对象：批量IPV6第' . $s_r . '行不在允许扫描的IP范围内';
+                                $data['msg'] = Yii::t('app', '扫描对象：批量IPV6第') . $s_r . Yii::t('app', '行不在允许扫描的IP范围内');
                                 echo json_encode($data);
                                 exit;
                             }
@@ -3157,7 +3168,7 @@ select uuid from bd_web_history");
            // var_dump($err_lines);die;
         }else{
             $data['success'] = false;
-            $data['msg'] = '扫描对象不能为空';
+            $data['msg'] = Yii::t('app', '扫描对象不能为空');
             echo json_encode($data);
             exit;
         }
@@ -3237,7 +3248,7 @@ select uuid from bd_web_history");
                 $aJson['mdata'] = $arr_d;
             } else {
                 $aJson['success'] = false;
-                $aJson['mdata'] = '数据异常';
+                $aJson['mdata'] = Yii::t('app', '数据异常');
             }
 
             $res = $db->fetch_all("select vul_id from $table  WHERE uuid='$uuid'  ORDER by end_time ");
@@ -3332,7 +3343,7 @@ select uuid from bd_web_history");
                 $aJson['success'] = true;
             } else {
                 $aJson['success'] = false;
-                $aJson['mdata'] = '没有相关风险结果';
+                $aJson['mdata'] = Yii::t('app', '没有相关风险结果');
             }
             echo json_encode($aJson);
             exit;
@@ -3402,19 +3413,19 @@ select uuid from bd_web_history");
             $res= json_decode($res[0],true);
             if($res['status']==1){
 
-                echo json_encode(['state'=>1, 'msg'=>'登录成功!']);
+                echo json_encode(['state'=>1, 'msg'=>Yii::t('app', '登录成功') . '!']);
             }else{
-                echo json_encode(['state'=>0,'msg'=>'登录失败']);
+                echo json_encode(['state'=>0,'msg'=>Yii::t('app', '登录失败')]);
             }
         }else{
-            echo json_encode(['state'=>0,'msg'=>'登录异常']);die;
+            echo json_encode(['state'=>0,'msg'=>Yii::t('app', '登录异常')]);die;
         }
     }
 
     public function actionMail(){
         $mail= Yii::$app->mailer->compose();
         $mail->setTo('1002310963@qq.com');
-        $mail->setSubject("邮件测试");
+        $mail->setSubject(Yii::t('app', "邮件测试"));
 //$mail->setTextBody('zheshisha ');   //发布纯文字文本
         $mail->setHtmlBody("<br>问我我我我我");    //发布可以带html标签的文本
         if($mail->send())
@@ -3448,5 +3459,3 @@ select uuid from bd_web_history");
         return $ip;
     }
 }
-?>
-

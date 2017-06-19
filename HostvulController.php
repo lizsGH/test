@@ -55,12 +55,12 @@ class HostvulController extends BaseController
         $treeType = intval($sPost['tree_type']);
         if (!empty($treeType) && $treeType == 3) {
             $CVEyear = filterStr($sPost['CVEyear']);
-            if ($CVEyear != 'CVE年份') {
+            if ($CVEyear != Yii::t('app', 'CVE年份')) {
                 $where .= " AND vi.CVEyear = '" . $CVEyear . "'";
             }
         } else if (!empty($treeType) && $treeType == 2) {
             $published_time = filterStr($sPost['published_time']);
-            if ($published_time != '时间' && $published_time != 'OtherTime') {
+            if ($published_time != Yii::t('app', '时间') && $published_time != 'OtherTime') {
                 //$where .= " AND vi.published_time = '".$published_time."'";
                 $where .= " AND vi.published_time LIKE '{$published_time}%'";
             } else if ($published_time == 'OtherTime') {
@@ -227,7 +227,7 @@ class HostvulController extends BaseController
             $refids = array();
             $leng = 0;
             if (!empty($treeType) && $treeType == 3) {
-                if ($CVEyear != 'CVE年份') {
+                if ($CVEyear != Yii::t('app', 'CVE年份')) {
                     $where = "WHERE vi.oid!='' AND vi.CVEyear = '" . $CVEyear . "'";
                     if (!empty($vul_name)) {
                         $where .= " AND vi.vul_name LIKE '%{$vul_name}%'";
@@ -269,7 +269,7 @@ class HostvulController extends BaseController
             $refids = array();
             $leng = 0;
             if (!empty($treeType) && $treeType == 2) {
-                if ($published_time != '时间' && $published_time != 'OtherTime') {
+                if ($published_time != Yii::t('app', '时间') && $published_time != 'OtherTime') {
                     $where = "WHERE vi.oid!='' AND vi.published_time LIKE '{$published_time}%'";
                 } else if ($published_time == 'OtherTime') {
                     $where = "WHERE vi.oid!='' AND vi.published_time is null";
@@ -463,7 +463,7 @@ class HostvulController extends BaseController
             "open" => true,
             "id" => 0,
             "tree_type" => "1",
-            "name" => '所有漏洞',
+            "name" => Yii::t('app', '所有漏洞'),
             "parent_id" => '',
             "pId" => ''
         );
@@ -507,7 +507,7 @@ class HostvulController extends BaseController
             "open" => true,
             "id" => 0,
             "tree_type" => "3",
-            "name" => 'CVE年份',
+            "name" => Yii::t('app', 'CVE年份'),
             "parent_id" => '',
             "pId" => ''
         );
@@ -712,7 +712,7 @@ class HostvulController extends BaseController
         $rData = array(
             "open" => true,
             "id" => 0,
-            "name" => '所有漏洞',
+            "name" => Yii::t('app', '所有漏洞'),
             "parent_id" => '',
             "pId" => ''
         );
@@ -768,7 +768,7 @@ class HostvulController extends BaseController
             $refids = array();
             $leng = 0;
             if (!empty($treeType) && $treeType == 3) {
-                if ($CVEyear != 'CVE年份') {
+                if ($CVEyear != Yii::t('app', 'CVE年份')) {
                     $where = "WHERE vi.oid!='' AND vi.CVEyear = '" . $CVEyear . "'";
                     if (!empty($vul_name)) {
                         $where .= " AND vi.vul_name LIKE '%{$vul_name}%'";
@@ -810,7 +810,7 @@ class HostvulController extends BaseController
             $refids = array();
             $leng = 0;
             if (!empty($treeType) && $treeType == 2) {
-                if ($published_time != '时间' && $published_time != 'OtherTime') {
+                if ($published_time != Yii::t('app', '时间') && $published_time != 'OtherTime') {
                     $where = "WHERE vi.oid!='' AND vi.published_time LIKE '{$published_time}%'";
                 } else if ($published_time == 'OtherTime') {
                     $where = "WHERE vi.oid!='' AND vi.published_time is null";
@@ -967,4 +967,3 @@ class HostvulController extends BaseController
 
 
 }
-?>

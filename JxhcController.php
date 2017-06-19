@@ -137,12 +137,12 @@ function actionIndexListData()
 
     $aData = array();
     $timeType = array(
-        0=>'立即执行',
-        1=>'某个时刻执行',
-        2=>'每天一次',
-        3=>'每周一次',
-        4=>'每月一次（按日期）',
-        5=>'每月一次（按星期）',
+        0 => Yii::t('app', '立即执行'),
+        1 => Yii::t('app', '某个时刻执行'),
+        2 => Yii::t('app', '每天一次'),
+        3 => Yii::t('app', '每周一次'),
+        4 => Yii::t('app', '每月一次（按日期）'),
+        5 => Yii::t('app', '每月一次（按星期）'),
     );
     foreach ($hData as $k => $v) {
         $v['use_time'] = isset($v['use_time'])&&!empty($v['use_time']) ? $this->time2second($v['use_time']) : $this->time2second(0);
@@ -172,7 +172,7 @@ function actionIndexListData()
 
 function time2second($seconds){
     if($seconds<1000){
-        return !empty($seconds) ? $seconds.'毫秒' : '0毫秒';
+        return !empty($seconds) ? $seconds . Yii::t('app', '毫秒') : '0' . Yii::t('app', '毫秒');
     }
     $time = !empty($seconds) ? ($seconds/1000) : 0;
     //取得整数部分
@@ -182,12 +182,12 @@ function time2second($seconds){
         $format_time = gmstrftime('%H时%M分%S秒', $seconds);
     }else{
         $time = explode(' ', gmstrftime('%j %H %M %S', $seconds));//Array ( [0] => 04 [1] => 14 [2] => 14 [3] => 35 )
-        $format_time = ($time[0]-1).'天'.$time[1].'时'.$time[2].'分'.$time[3].'秒';
+        $format_time = ($time[0]-1).Yii::t('app', '天').$time[1].Yii::t('app', '时').$time[2].Yii::t('app', '分').$time[3].Yii::t('app', '秒');
     }
-    $format_time = str_replace('00天','',$format_time);
-    $format_time = str_replace('00时','',$format_time);
-    $format_time = str_replace('00分','',$format_time);
-    $format_time = str_replace('00秒','',$format_time);
+    $format_time = str_replace('00' . Yii::t('app', '天'), '', $format_time);
+    $format_time = str_replace('00' . Yii::t('app', '时'), '', $format_time);
+    $format_time = str_replace('00' . Yii::t('app', '分'), '', $format_time);
+    $format_time = str_replace('00' . Yii::t('app', '秒'), '', $format_time);
     return $format_time;
 }
 
@@ -230,19 +230,19 @@ function editTaskitem($task_id,$aPost,$edit,$dFieldValue){
         if ($db_jx->query($sql,'db_jx')) {
             //保存生成
             $success = true;
-            $aJson ['msg'] = '成功添加设备和规范';
+            $aJson ['msg'] = Yii::t('app', '成功添加设备和规范');
             /***
              * 操作日志
              */
-            $hdata['sDes'] = '添加设备和规范';
-            $hdata['sRs'] = "成功";
+            $hdata['sDes'] = Yii::t('app', '添加设备和规范');
+            $hdata['sRs'] = Yii::t('app', "成功");
             $hdata['sAct'] = $act.'/'.$show;
             saveOperationLog($hdata);
 
         } else {
             $success = false;
-            $aJson ['msg'] = '添加设备和规范失败';
-            $hdata['sDes'] = '添加设备和规范';
+            $aJson ['msg'] = Yii::t('app', '添加设备和规范失败');
+            $hdata['sDes'] = Yii::t('app', '添加设备和规范');
             $hdata['sRs'] = "失败";
             $hdata['sAct'] = $act.'/'.$show;
             saveOperationLog($hdata);
@@ -343,11 +343,11 @@ function actionAddAndEditData()
 
         if (empty ($taskData ['id'])) {
             unset($taskData['id']);
-            $sDesc = "增加任务成功";
+            $sDesc = Yii::t('app', "增加任务成功");
 
         } else {
             $id = $taskData['id'];
-            $sDesc = "编辑任务成功";
+            $sDesc = Yii::t('app', "编辑任务成功");
         }
 
         if ($id!='') {//编辑
@@ -366,7 +366,7 @@ function actionAddAndEditData()
             if($db_jx->query($sql,'db_jx')){
                 //保存生成
                 $success = true;
-                $aJson ['msg'] = '编辑任务成功';
+                $aJson ['msg'] = Yii::t('app', '编辑任务成功');
                 $aJson ['id'] = $id;
                 $dev_id = $db_jx->fetch_first("select dev_id from t_task_item where task_id = ".$id,"db_jx");
                 $aPost['dev_id'] = $dev_id['dev_id'];
@@ -380,15 +380,15 @@ function actionAddAndEditData()
                 //$pData = new stdClass();
                 //$pData->sDesc = $sDesc;
                 //$this->saveOperationLog($pData);
-                $hdata['sDes'] = '编辑基线任务';
-                $hdata['sRs'] = "成功";
+                $hdata['sDes'] = Yii::t('app', '编辑基线任务');
+                $hdata['sRs'] = Yii::t('app', "成功");
                 $hdata['sAct'] = $act.'/'.$show;
                 saveOperationLog($hdata);
             }else{
                 $success = false;
-                $aJson ['msg'] = '编辑任务失败';
+                $aJson ['msg'] = Yii::t('app', '编辑任务失败');
                 $hdata['sDes'] = '编辑基线任务';
-                $hdata['sRs'] = "失败";
+                $hdata['sRs'] = Yii::t('app', "失败");
                 $hdata['sAct'] = $act.'/'.$show;
                 saveOperationLog($hdata);
             }
@@ -415,7 +415,7 @@ function actionAddAndEditData()
             if($db_jx->query($sql,'db_jx')){
                 //保存生成
                 $success = true;
-                $aJson ['msg'] = '新增任务成功';
+                $aJson ['msg'] = Yii::t('app', '增加任务成功');
                 $aJson ['id'] = $db_jx->insert_id();
 
                 /*向t_dev表插入数据*/
@@ -428,19 +428,19 @@ function actionAddAndEditData()
                 //shellResult($shell);
                 $ret = \BDRpc::call("add_task", array("task_id" => $aJson ['id']));
                 $success = true;
-                $aJson ['msg'] = '新增任务成功';
+                $aJson ['msg'] = Yii::t('app', '增加任务成功');
                 /***
                  * 操作日志
                  */
-                $hdata['sDes'] = '新增基线任务';
-                $hdata['sRs'] = "成功";
+                $hdata['sDes'] = Yii::t('app', '新增基线任务');
+                $hdata['sRs'] = Yii::t('app', "成功");
                 $hdata['sAct'] = $act.'/'.$show;
                 saveOperationLog($hdata);
             }else{
                 $success = false;
-                $aJson ['msg'] = '新增任务失败';
-                $hdata['sDes'] = '新增基线任务';
-                $hdata['sRs'] = "失败";
+                $aJson ['msg'] = Yii::t('app', '新增任务失败');
+                $hdata['sDes'] = Yii::t('app', '新增基线任务');
+                $hdata['sRs'] = Yii::t('app', "失败");
                 $hdata['sAct'] = $act.'/'.$show;
                 saveOperationLog($hdata);
             }
@@ -470,13 +470,13 @@ function actionDelData()
 
     if ($db_jx->query($sql,'db_jx')) {
         $aJson ['success'] = true;
-        $aJson ['msg'] = '操作成功';
+        $aJson ['msg'] = Yii::t('app', '操作成功');
         /***
          * 操作日志
          */
-        $sDesc = "删除任务成功";
-        $hdata['sDes'] = '删除基线任务';
-        $hdata['sRs'] = "成功";
+        $sDesc = Yii::t('app', "删除任务成功");
+        $hdata['sDes'] = Yii::t('app', '删除基线任务');
+        $hdata['sRs'] = Yii::t('app', "成功");
         $hdata['sAct'] = $act.'/'.$show;
         saveOperationLog($hdata);
 
@@ -497,9 +497,9 @@ function actionDelData()
         }
     } else {
         $aJson ['success'] = false;
-        $aJson ['msg'] = '删除任务失败';
-        $hdata['sDes'] = '删除基线任务';
-        $hdata['sRs'] = "失败";
+        $aJson ['msg'] = Yii::t('app', '删除任务失败');
+        $hdata['sDes'] = Yii::t('app', '删除基线任务');
+        $hdata['sRs'] = Yii::t('app', "失败");
         $hdata['sAct'] = $act.'/'.$show;
         saveOperationLog($hdata);
     }
@@ -552,10 +552,10 @@ function actionStarttask(){
         $ret = \BDRpc::call("start_task", array("task_id" => $hPost['task_id'],
             "client_ip" => $this->getClientIp()));
         $aJson ['success'] = true;
-        $aJson ['msg'] = '操作成功';
+        $aJson ['msg'] = Yii::t('app', '操作成功');
     }else{
         $aJson ['success'] = false;
-        $aJson ['msg'] = '操作失败';
+        $aJson ['msg'] = Yii::t('app', '操作失败');
     }
     echo json_encode($aJson);
     exit;
@@ -569,10 +569,10 @@ function actionResumetask(){
         $ret = \BDRpc::call("resume_task", array("task_id" => $hPost['task_id'],
             "client_ip" => $this->getClientIp()));
         $aJson ['success'] = true;
-        $aJson ['msg'] = '操作成功';
+        $aJson ['msg'] = Yii::t('app', '操作成功');
     }else{
         $aJson ['success'] = false;
-        $aJson ['msg'] = '操作失败';
+        $aJson ['msg'] = Yii::t('app', '操作失败');
     }
     echo json_encode($aJson);
     exit;
@@ -586,10 +586,10 @@ function actionStoptask(){
         $ret = \BDRpc::call("stop_task", array("task_id" => $hPost['task_id'],
             "client_ip" => $this->getClientIp()));
         $aJson ['success'] = true;
-        $aJson ['msg'] = '操作成功';
+        $aJson ['msg'] = Yii::t('app', '操作成功');
     }else{
         $aJson ['success'] = false;
-        $aJson ['msg'] = '操作失败';
+        $aJson ['msg'] = Yii::t('app', '操作失败');
     }
     echo json_encode($aJson);
     exit;
@@ -603,10 +603,10 @@ function actionRestarttask(){
         $ret = \BDRpc::call("restart_task", array("task_id" => $hPost['task_id'],
             "client_ip" => $this->getClientIp()));
         $aJson ['success'] = true;
-        $aJson ['msg'] = '操作成功';
+        $aJson ['msg'] = Yii::t('app', '操作成功');
     }else{
         $aJson ['success'] = false;
-        $aJson ['msg'] = '操作失败';
+        $aJson ['msg'] = Yii::t('app', '操作失败');
     }
     echo json_encode($aJson);
     exit;
@@ -620,10 +620,10 @@ function actionPausetask(){
         $ret = \BDRpc::call("pause_task", array("task_id" => $hPost['task_id'],
             "client_ip" => $this->getClientIp()));
         $aJson ['success'] = true;
-        $aJson ['msg'] = '操作成功';
+        $aJson ['msg'] = Yii::t('app', '操作成功');
     }else{
         $aJson ['success'] = false;
-        $aJson ['msg'] = '操作失败';
+        $aJson ['msg'] = Yii::t('app', '操作失败');
     }
     echo json_encode($aJson);
     exit;

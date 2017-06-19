@@ -16,14 +16,14 @@ class ToolController extends BaseController {
         $file = CACHE_DIR. \Yii::$app->session->get('username');
         //echo $file;die;
         if($post == 1){
-            $data = array('success'=>false, 'num'=>0, 'message'=>'操作失败');
+            $data = array('success'=>false, 'num'=>0, 'message'=>Yii::t('app', '操作失败'));
 
             $t    = trim($_POST['t']);
             $c    = trim(str_replace($type, '',$_POST['c']));
 
             if($t!='arp'){
                 if($t=='' || $c=='' || !in_array($t, $type)){
-                    $data['message'] = '指令为空或类型不对';
+                    $data['message'] = Yii::t('app', '指令为空或类型不对');
                     echo json_encode($data);
                     exit;
                 }
@@ -32,7 +32,7 @@ class ToolController extends BaseController {
             $c = escapeshellcmd($c);
             if($t == 'tcpdump'){
                 if(!preg_match('/\-[i] eth([0-9]) port \d+$/i',$c)){
-                    $data['message'] = '指令参数不正确';
+                    $data['message'] = Yii::t('app', '指令参数不正确');
                     echo json_encode($data);
                     exit;
                 }
@@ -41,13 +41,13 @@ class ToolController extends BaseController {
                 file_put_contents($file,"");
                 exec("tcpdump $c -c 5 >>$file");
                 $con = file_get_contents($file);
-                if(!$con){file_put_contents($file,"没有返回结果");}
+                if(!$con){file_put_contents($file,Yii::t('app', "没有返回结果"));}
 
             }else{//ping telnet traceroute nslookup
                 if($t == 'ping'){
                     $c = $this->getIPUrl($c);
                     if($c == ''){
-                        $data['message'] = 'IP或域名不正确';
+                        $data['message'] = Yii::t('app', 'IP或域名不正确');
                         echo json_encode($data);
                         exit;
                     }
@@ -60,7 +60,7 @@ class ToolController extends BaseController {
                 }else if($t == 'telnet'){
                     $arr   = explode(' ',$c);
                     if(!is_array($arr) || intval($arr[1])<0 || count($arr)>2){
-                        $data['message'] = '指令参数不正确';
+                        $data['message'] = Yii::t('app', '指令参数不正确');
                         echo json_encode($data);
                         exit;
                     }
@@ -71,12 +71,12 @@ class ToolController extends BaseController {
                     exec("telnet $c >>$file");
 
                     $con = file_get_contents($file);
-                    if(!$con){file_put_contents($file,"没有返回结果");}
+                    if(!$con){file_put_contents($file,Yii::t('app', "没有返回结果"));}
 
                 }else if($t == 'nslookup'){
                     $c = $this->getIPUrl($c);
                     if($c == ''){
-                        $data['message'] = 'IP或域名不正确';
+                        $data['message'] = Yii::t('app', 'IP或域名不正确');
                         echo json_encode($data);
                         exit;
                     }
@@ -85,13 +85,13 @@ class ToolController extends BaseController {
                     exec("nslookup $c >>$file");
 
                     $con = file_get_contents($file);
-                    if(!$con){file_put_contents($file,"没有返回结果");}
+                    if(!$con){file_put_contents($file,Yii::t('app', "没有返回结果"));}
 
                 }else if($t == 'traceroute'){
                     $c = $this->getIPUrl($c);
 
                     if($c == ''){
-                        $data['message'] = 'IP或域名不正确';
+                        $data['message'] = Yii::t('app', 'IP或域名不正确');
                         echo json_encode($data);
                         exit;
                     }
@@ -110,16 +110,16 @@ class ToolController extends BaseController {
                     file_put_contents($file,"");
                     exec("/sbin/arp >>$file");
                     $con = file_get_contents($file);
-                    if(!$con){file_put_contents($file,"没有返回结果");}
+                    if(!$con){file_put_contents($file,Yii::t('app', "没有返回结果"));}
                 }
             }
             $data['success'] = true;
             $data['val']     = $c;
-            $data['message'] = '即将输出结果';
+            $data['message'] = Yii::t('app', '即将输出结果');
             echo json_encode($data);
             exit;
         }else if($post == 2){
-            $data = array('success'=>false, 'col'>'', 'message'=>'操作失败');
+            $data = array('success'=>false, 'col'>'', 'message'=>Yii::t('app', '操作失败'));
 
             $t    = trim($_POST['t']);
             if($t == 'ping'){
@@ -149,7 +149,7 @@ class ToolController extends BaseController {
             exit;
         }else{
             //$data['menu'] = $modules['system'].' - '.$items['system'][3]['name'].' - '.$three['system'][3][6]['name'];
-            userLog('system',3,6,'查看');
+            userLog('system',3,6,Yii::t('app', '查看'));
 //            return $this->render('nettool',$data);
 
             template('nettool', $data);
@@ -176,12 +176,3 @@ class ToolController extends BaseController {
         return $v;*/
     }
 }
-
-
-
-
-
-
-
-
-?>

@@ -30,8 +30,8 @@ class SysmaintenanceController extends BaseController
     function actionRebootsys()
     {
         global $act, $show;
-        $hdata['sDes'] = '重启系统';
-        $hdata['sRs'] = '成功';
+        $hdata['sDes'] = Yii::t('app', '重启系统');
+        $hdata['sRs'] = Yii::t('app', '成功');
         $hdata['username'] = filterStr($_SESSION['username']);
         $hdata['sAct'] = $act . '/' . $show;
         saveOperationLog($hdata);
@@ -42,8 +42,8 @@ class SysmaintenanceController extends BaseController
     function actionClosesys()
     {
         global $act, $show;
-        $hdata['sDes'] = '关闭系统';
-        $hdata['sRs'] = '成功';
+        $hdata['sDes'] = Yii::t('app', '关闭系统');
+        $hdata['sRs'] = Yii::t('app', '成功');
         $hdata['username'] = filterStr($_SESSION['username']);
         $hdata['sAct'] = $act . '/' . $show;
         saveOperationLog($hdata);
@@ -61,10 +61,10 @@ class SysmaintenanceController extends BaseController
             $Shell = "/sbin/clock";
             shellResult($Shell);
             $ajson['success'] = true;
-            $ajson['msg'] = "操作成功";
+            $ajson['msg'] = Yii::t('app', "操作成功");
         }
         $ajson['success'] = false;
-        $ajson['msg'] = "请选择时间";
+        $ajson['msg'] = Yii::t('app', "请选择时间");
         echo json_encode($ajson);
         exit;
 
@@ -118,19 +118,19 @@ class SysmaintenanceController extends BaseController
             //$sShell = "cd /usr/local/nginx/html/config/data/bacup; zip -q -r -j ./bacup.zip ./bacup.config";
             //shellResult($sShell);
             $ajson['success'] = true;
-            $ajson['msg'] = "导出成功";
+            $ajson['msg'] = Yii::t('app', "导出成功");
             //file_get_contents(DIR_ROOT . "../config/data/bacup/bacup.config");
-            $ajson['downhtml'] = "<a href=\"/data/bacup/bacup.config\" target='_blank'>下载导出文件</a>&nbsp;&nbsp;";
-            $hdata['sDes'] = '导出系统配置';
-            $hdata['sRs'] = '成功';
+            $ajson['downhtml'] = "<a href=\"/data/bacup/bacup.config\" target='_blank'>" . Yii::t('app', '下载导出文件') . "</a>&nbsp;&nbsp;";
+            $hdata['sDes'] = Yii::t('app', '导出系统配置');
+            $hdata['sRs'] = Yii::t('app', '成功');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($ajson);
             exit;
         } else {
             $ajson['success'] = false;
-            $ajson['msg'] = "导出失败";
-            $ajson['downhtml'] = "<a href=\"data/bacup/bacup.config\">下载导出文件</a>&nbsp;&nbsp;";
+            $ajson['msg'] = Yii::t('app', "导出失败");
+            $ajson['downhtml'] = "<a href=\"data/bacup/bacup.config\">" . Yii::t('app', '下载导出文件') . "</a>&nbsp;&nbsp;";
             echo json_encode($ajson);
             exit;
         }
@@ -247,7 +247,7 @@ class SysmaintenanceController extends BaseController
                         }
 
                         $aJson['success'] = true;
-                        $aJson['msg'] = '恢复成功！';
+                        $aJson['msg'] = Yii::t('app', '恢复成功！');
                         echo json_encode($aJson);
                         exit;
                     }
@@ -266,7 +266,7 @@ class SysmaintenanceController extends BaseController
         if (!empty($_POST['shouquanma'])) {
             if (filterStr($_POST['shouquanma']) != 'D0UhVcnARBpox9ySf22IQ2wzGLem2kj3') {
                 $aJson ['success'] = false;
-                $aJson ['msg'] = '授权码错误';
+                $aJson ['msg'] = Yii::t('app', '授权码错误');
                 echo json_encode($aJson);
                 exit;
             }
@@ -280,48 +280,48 @@ class SysmaintenanceController extends BaseController
                         $shell = "/home/soc/preupgrade/preupgrade -tupgrade -a" . $dir . $_FILES['filenamesys']['name'];
                         if (shellResult($shell)) {
                             $aJson ['success'] = true;
-                            $aJson ['msg'] = '升级成功。';
+                            $aJson ['msg'] = Yii::t('app', '升级成功。');
                             //$hdata['sDes'] = '系统升级成功'.$_FILES['filenamesys']['tmp_name'];
-                            $hdata['sDes'] = '系统升级成功';
-                            $hdata['sRs'] = '成功';
+                            $hdata['sDes'] = Yii::t('app', '系统升级成功');
+                            $hdata['sRs'] = Yii::t('app', '成功');
                             $hdata['sAct'] = $act . '/' . $show;
                             saveOperationLog($hdata);
                         } else {
                             $aJson ['success'] = false;
-                            $aJson ['msg'] = '升级失败，请检查/preupgrade目录是否存在';
+                            $aJson ['msg'] = Yii::t('app', '升级失败，请检查/preupgrade目录是否存在');
                         }
                     } else {
                         $aJson ['success'] = false;
-                        $aJson ['msg'] = '升级文件格式不对，请联系管理员。';
+                        $aJson ['msg'] = Yii::t('app', '升级文件格式不对，请联系管理员。');
                         //$hdata['sDes'] = '系统升级失败'.$_FILES['filenamesys']['tmp_name'];
-                        $hdata['sDes'] = '系统升级失败';
-                        $hdata['sRs'] = '文件格式不对';
+                        $hdata['sDes'] = Yii::t('app', '系统升级失败');
+                        $hdata['sRs'] = Yii::t('app', '文件格式不对');
                         $hdata['sAct'] = $act . '/' . $show;
                         saveOperationLog($hdata);
                     }
                 } else {
                     $aJson ['success'] = false;
-                    $aJson ['msg'] = '升级的文件太大，请联系管理员。';
+                    $aJson ['msg'] = Yii::t('app', '升级的文件太大，请联系管理员。');
                     //$hdata['sDes'] = '系统升级失败'.$_FILES['filenamesys']['tmp_name'];
-                    $hdata['sDes'] = '系统升级失败';
-                    $hdata['sRs'] = '升级的文件太大';
+                    $hdata['sDes'] = Yii::t('app', '系统升级失败');
+                    $hdata['sRs'] = Yii::t('app', '升级的文件太大');
                     $hdata['sAct'] = $act . '/' . $show;
                     saveOperationLog($hdata);
                 }
             } else {
                 $aJson ['success'] = false;
-                $aJson ['msg'] = '升级文件格式不对，请联系管理员。';
+                $aJson ['msg'] = Yii::t('app', '升级文件格式不对，请联系管理员。');
                 //$hdata['sDes'] = '系统升级失败'.$_FILES['filenamesys']['tmp_name'];
-                $hdata['sDes'] = '系统升级失败';
-                $hdata['sRs'] = '升级文件格式不对';
+                $hdata['sDes'] = Yii::t('app', '系统升级失败');
+                $hdata['sRs'] = Yii::t('app', '升级文件格式不对');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
             }
         } else {
             $aJson ['success'] = false;
-            $aJson ['msg'] = '文件不能为空！';
-            $hdata['sDes'] = '系统升级失败';
-            $hdata['sRs'] = '文件不能为空';
+            $aJson ['msg'] = Yii::t('app', '文件不能为空') . '!';
+            $hdata['sDes'] = Yii::t('app', '系统升级失败');
+            $hdata['sRs'] = Yii::t('app', '文件不能为空');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
         }
@@ -347,46 +347,46 @@ class SysmaintenanceController extends BaseController
                         $shell = "/home/soc/preupgrade/preupgrade -tupgrade -a" . $dir . $_FILES['filenamerule']['name'];
                         if (shellResult($shell)) {
                             $aJson ['success'] = true;
-                            $aJson ['msg'] = '升级成功。';
+                            $aJson ['msg'] = Yii::t('app', '升级成功。');
                             //$hdata['sDes'] = '规则升级'.$_FILES['filenamesys']['tmp_name'];
-                            $hdata['sDes'] = '规则升级';
-                            $hdata['sRs'] = '成功';
+                            $hdata['sDes'] = Yii::t('app', '规则升级');
+                            $hdata['sRs'] = Yii::t('app', '成功');
                             $hdata['sAct'] = $act . '/' . $show;
                             saveOperationLog($hdata);
                         }
                     } else {
                         $aJson ['success'] = false;
-                        $aJson ['msg'] = '升级文件格式不对，请联系管理员。';
+                        $aJson ['msg'] = Yii::t('app', '升级文件格式不对，请联系管理员。');
                         //$hdata['sDes'] = '规则升级失败'.$_FILES['filenamesys']['tmp_name'];
-                        $hdata['sDes'] = '规则升级失败';
-                        $hdata['sRs'] = '升级文件格式不对';
+                        $hdata['sDes'] = Yii::t('app', '规则升级失败');
+                        $hdata['sRs'] = Yii::t('app', '升级文件格式不对');
                         $hdata['sAct'] = $act . '/' . $show;
                         saveOperationLog($hdata);
                     }
                 } else {
                     $aJson ['success'] = false;
-                    $aJson ['msg'] = '升级的文件太大，请联系管理员。';
+                    $aJson ['msg'] = Yii::t('app', '升级的文件太大，请联系管理员。');
                     //$hdata['sDes'] = '规则升级失败'.$_FILES['filenamesys']['tmp_name'];
-                    $hdata['sDes'] = '规则升级失败';
-                    $hdata['sRs'] = '升级的文件太大';
+                    $hdata['sDes'] = Yii::t('app', '规则升级失败');
+                    $hdata['sRs'] = Yii::t('app', '升级的文件太大');
                     $hdata['sAct'] = $act . '/' . $show;
                     saveOperationLog($hdata);
                 }
             } else {
                 $aJson ['success'] = false;
-                $aJson ['msg'] = '升级文件格式不对，请联系管理员。';
+                $aJson ['msg'] = Yii::t('app', '升级文件格式不对，请联系管理员。');
                 //$hdata['sDes'] = '规则升级失败'.$_FILES['filenamesys']['tmp_name'];
-                $hdata['sDes'] = '规则升级失败';
-                $hdata['sRs'] = '升级文件格式不对';
+                $hdata['sDes'] = Yii::t('app', '规则升级失败');
+                $hdata['sRs'] = Yii::t('app', '升级文件格式不对');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
 
             }
         } else {
             $aJson ['success'] = false;
-            $aJson ['msg'] = '文件不能为空！';
-            $hdata['sDes'] = '系统升级失败';
-            $hdata['sRs'] = '文件不能为空';
+            $aJson ['msg'] = Yii::t('app', '文件不能为空') . '!';
+            $hdata['sDes'] = Yii::t('app', '系统升级失败');
+            $hdata['sRs'] = Yii::t('app', '文件不能为空');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
 
@@ -481,7 +481,7 @@ class SysmaintenanceController extends BaseController
                 file_put_contents($sFile, serialize($aData['dns']));
             }
             $aJson['success'] = true;
-            $aJson['msg'] = '恢复成功！';
+            $aJson['msg'] = Yii::t('app', '恢复成功！');
             echo json_encode($aJson);
             exit;
         }

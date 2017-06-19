@@ -42,7 +42,7 @@ class NetconfigController extends BaseController
             if ($v != '') {
                 if (!$this->filter_ip($v) || '0.0.0.0' == $v) {
                     $success = false;
-                    $msg = "dns地址 $v 不合法";
+                    $msg = Yii::t('app', 'dns地址') . $v . Yii::t('app', '不合法');
                     //$msg = "dns地址 $v 格式错误";
                     $data['success'] = $success;
                     $data['msg'] = $msg;
@@ -67,7 +67,7 @@ class NetconfigController extends BaseController
             $query = "insert into " . getTable('dns') . " (id ,ipv4firstdns,ipv4alertdns,ipv6firstdns,ipv6alertdns) values('','" . $aData['firstDnsIp'] . "','" . $aData['alertDnsIp'] . "','" . $aData['firstDnsIpv6'] . "','" . $aData['alertDnsIpv6'] . "')";
             if (!$db->query($query)) {
                 $success = false;
-                $msg = "操作失败";
+                $msg = Yii::t('app', "操作失败");
                 $data['success'] = $success;
                 $data['msg'] = $msg;
                 echo json_encode($data);
@@ -89,19 +89,19 @@ class NetconfigController extends BaseController
           //  var_dump(file_put_contents($dnsfile, $dnsseting));die;
             //exec("cp $sFile /etc/resolv1.conf ");
            // $this->setdnsconfig($aData['firstDnsIp'],$aData['alertDnsIp']);
-            $aJson['msg'] = "操作成功";
+            $aJson['msg'] = Yii::t('app', '操作成功');
             $aJson ['success'] = true;
-            $hdata['sDes'] = 'DNS服务器设置';
-            $hdata['sRs'] = '成功';
+            $hdata['sDes'] = Yii::t('app', 'DNS服务器设置');
+            $hdata['sRs'] = Yii::t('app', '成功');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);
             exit;
         } else {
-            $aJson['msg'] = "操作失败";
+            $aJson['msg'] = Yii::t('app', "操作失败");
             $aJson ['success'] = false;
-            $hdata['sDes'] = 'DNS服务器设置';
-            $hdata['sRs'] = '失败';
+            $hdata['sDes'] = Yii::t('app', 'DNS服务器设置');
+            $hdata['sRs'] = Yii::t('app', '失败');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
             echo json_encode($aJson);

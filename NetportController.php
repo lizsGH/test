@@ -127,7 +127,7 @@ class NetportController extends BaseController
         $aPost = $_POST;
         if (!empty($aPost['ipv6address']) && !$this->filter_ip($aPost['ipv6address'])) {
             $success = false;
-            $msg = "ipv6地址格式错误";
+            $msg = Yii::t('app', "ipv6地址格式错误");
             $data['success'] = $success;
             $data['msg'] = $msg;
             echo json_encode($data);
@@ -135,7 +135,7 @@ class NetportController extends BaseController
         }
         if (!filter_ip($aPost['ipaddress'])) {
             $success = false;
-            $msg = "ipv4地址格式错误";
+            $msg = Yii::t('app', "ipv4地址格式错误");
             $data['success'] = $success;
             $data['msg'] = $msg;
             echo json_encode($data);
@@ -143,7 +143,7 @@ class NetportController extends BaseController
         }
         if (!filter_ip($aPost['subnetmask'])) {
             $success = false;
-            $msg = "子网掩码格式错误";
+            $msg = Yii::t('app', "子网掩码格式错误");
             $data['success'] = $success;
             $data['msg'] = $msg;
             echo json_encode($data);
@@ -153,7 +153,7 @@ class NetportController extends BaseController
             $aPost['ipv6prefix'] = intval($aPost['ipv6prefix']);
             if ($aPost['ipv6prefix'] > 127 || $aPost['ipv6prefix'] < 1) {
                 $success = false;
-                $msg = "ipv6前缀必须在1~127的范围内";
+                $msg = Yii::t('app', "ipv6前缀必须在1~127的范围内");
                 $data['success'] = $success;
                 $data['msg'] = $msg;
                 echo json_encode($data);
@@ -193,8 +193,8 @@ class NetportController extends BaseController
 
                 $aJson['success'] = true;
                 // $aJson['msg'] = '更新成功！';
-                $hdata['sDes'] = '网口更新';
-                $hdata['sRs'] = '成功';
+                $hdata['sDes'] = Yii::t('app', '网口更新');
+                $hdata['sRs'] = Yii::t('app', '成功');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
             }
@@ -213,9 +213,9 @@ class NetportController extends BaseController
                 }
 
                 $aJson['success'] = true;
-                $aJson['msg'] = '创建成功！';
-                $hdata['sDes'] = '网口创建';
-                $hdata['sRs'] = '成功';
+                $aJson['msg'] = Yii::t('app', '创建成功') . '！';
+                $hdata['sDes'] = Yii::t('app', '网口创建');
+                $hdata['sRs'] = Yii::t('app', '成功');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
             }

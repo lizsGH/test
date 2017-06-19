@@ -46,7 +46,7 @@ class OperatelogController extends BaseController
 
         if (strtotime($iStartDate) > strtotime($iEndDate)) {
             $data['success'] = false;
-            $data['msg'] = "开始时间不能大于结束时间";
+            $data['msg'] = Yii::t('app', "开始时间不能大于结束时间");
             echo json_encode($data);
             exit;
         }
@@ -118,16 +118,16 @@ class OperatelogController extends BaseController
         $query = "DELETE FROM " . "bd_sys_operatelog" . " where id in (" . $id . ") ";
         if ($db->query($query)) {
             $success = true;
-            $msg = "操作成功";
-            $hdata['sDes'] = '删除日志';
-            $hdata['status'] = '成功';
+            $msg = Yii::t('app', '操作成功');
+            $hdata['sDes'] = Yii::t('app', '删除日志');
+            $hdata['status'] = Yii::t('app', '成功');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
         } else {
             $success = false;
-            $msg = "操作失败";
-            $hdata['sDes'] = '删除日志';
-            $hdata['status'] = '失败';
+            $msg = Yii::t('app', "操作失败");
+            $hdata['sDes'] = Yii::t('app', '删除日志');
+            $hdata['status'] = Yii::t('app', '失败');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
         }
@@ -156,14 +156,14 @@ class OperatelogController extends BaseController
 
         if ($db->query($query)) {
             $success = true;
-            $msg = "操作成功";
-            $hdata['sDes'] = '清空所有日志';
-            $hdata['status'] = '成功';
+            $msg = Yii::t('app', '操作成功');
+            $hdata['sDes'] = Yii::t('app', '清空所有日志');
+            $hdata['status'] = Yii::t('app', '成功');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
         } else {
             $success = false;
-            $msg = "操作失败";
+            $msg = Yii::t('app', "操作失败");
         }
         $data['success'] = $success;
         $data['msg'] = $msg;
@@ -189,7 +189,7 @@ class OperatelogController extends BaseController
         $iEndDate = empty($icEndDate) ? $icEndDate : $icEndDate - 8 * 60 * 60;
         if (strtotime($iStartDate) > strtotime($iEndDate)) {
             $data['success'] = false;
-            $data['msg'] = "开始时间不能大于结束时间";
+            $data['msg'] = Yii::t('app', "开始时间不能大于结束时间");
             echo json_encode($data);
             exit;
         }
@@ -344,16 +344,16 @@ class OperatelogController extends BaseController
                 shellResult($sShell);
             }
             $success = true;
-            $msg = "操作成功";
-            $hdata['sDes'] = '删除备份日志';
-            $hdata['status'] = '成功';
+            $msg = Yii::t('app', '操作成功');
+            $hdata['sDes'] = Yii::t('app', '删除备份日志');
+            $hdata['status'] = Yii::t('app', '成功');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
         } else {
             $success = false;
-            $msg = "操作失败";
-            $hdata['sDes'] = '删除备份日志';
-            $hdata['status'] = '失败';
+            $msg = Yii::t('app', "操作失败");
+            $hdata['sDes'] = Yii::t('app', '删除备份日志');
+            $hdata['status'] = Yii::t('app', '失败');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
         }
@@ -390,14 +390,14 @@ class OperatelogController extends BaseController
                 shellResult($sShell);
             }
             $success = true;
-            $msg = "操作成功";
-            $hdata['sDes'] = '清空所有日志';
-            $hdata['status'] = '成功';
+            $msg = Yii::t('app', '操作成功');
+            $hdata['sDes'] = Yii::t('app', '清空所有日志');
+            $hdata['status'] = Yii::t('app', '成功');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
         } else {
             $success = false;
-            $msg = "操作失败";
+            $msg = Yii::t('app', "操作失败");
         }
         $data['success'] = $success;
         $data['msg'] = $msg;
