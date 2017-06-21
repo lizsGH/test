@@ -1514,19 +1514,19 @@ class ZcglController extends BaseController
 
         if ($db->query($query)) {     //返回1则删除成功
             $success = true;
-            $msg = "操作成功";
+            $msg = Yii::t('app', "操作成功");
             foreach ($TAR_NAME as $k => $v) {
-                $hdata['sDes'] = '删除资产(' . $v['name'] . ')';
-                $hdata['sRs'] = '成功';
+                $hdata['sDes'] = Yii::t('app', '删除资产') . '(' . $v['name'] . ')';
+                $hdata['sRs'] = Yii::t('app', '成功');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
             }
         } else {
             $success = false;
-            $msg = "操作失败";
+            $msg = Yii::t('app', "操作失败");
             foreach ($TAR_NAME as $k => $v) {
-                $hdata['sDes'] = '删除资产(' . $v['name'] . ')';
-                $hdata['sRs'] = '失败';
+                $hdata['sDes'] = Yii::t('app', '删除资产') . '(' . $v['name'] . ')';
+                $hdata['sRs'] = Yii::t('app', '失败');
                 $hdata['sAct'] = $act . '/' . $show;
                 saveOperationLog($hdata);
             }
@@ -1581,26 +1581,26 @@ class ZcglController extends BaseController
                 //$bmid = $sPost['curbumen'][0]['value'];
                 $query_del_zc = "delete from bd_asset_device_info where depart_id =" . $bid;
                 if ($db->query($query_del_zc)) {
-                    $msg = "操作成功，已删除部门，同时删除了相应资产";
-                    $hdata['sDes'] = '删除部门(' . $DEPART_NAME . ')' . '同时删除了相应资产';
+                    $msg = Yii::t('app', "操作成功，已删除部门，同时删除了相应资产");
+                    $hdata['sDes'] = Yii::t('app', '删除部门') . '(' . $DEPART_NAME . ')' . Yii::t('app', '同时删除了相应资产');
                 } else {
-                    $msg = "已删除部门，但是相应资产没能成功删除";
-                    $hdata['sDes'] = '删除部门(' . $DEPART_NAME . ')' . '但是保留了相应资产';
+                    $msg = Yii::t('app', "已删除部门，但是相应资产没能成功删除");
+                    $hdata['sDes'] = Yii::t('app', '删除部门') . '(' . $DEPART_NAME . ')' . Yii::t('app', '但是保留了相应资产');
                 }
             } else {
-                $msg = "操作成功，已删除部门，该部门资产转入未登记资产";
+                $msg = Yii::t('app', "操作成功，已删除部门，该部门资产转入未登记资产");
                 $udateSql = "UPDATE bd_asset_device_info SET depart_id=1 WHERE depart_id=$bid";
                 $db->query($udateSql);
-                $hdata['sDes'] = '删除部门(' . $DEPART_NAME . ')' . ',该部门资产转入未登记资产';
+                $hdata['sDes'] = Yii::t('app', '删除部门') . '(' . $DEPART_NAME . ')' . ',' . Yii::t('app', '该部门资产转入未登记资产');
             }
-            $hdata['sRs'] = '成功';
+            $hdata['sRs'] = Yii::t('app', '成功');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
         } else {
             $success = false;
-            $msg = "操作失败";
-            $hdata['sDes'] = '删除部门(' . $DEPART_NAME . ')';
-            $hdata['sRs'] = '失败';
+            $msg = Yii::t('app', "操作失败");
+            $hdata['sDes'] = Yii::t('app', '删除部门') . '(' . $DEPART_NAME . ')';
+            $hdata['sRs'] = Yii::t('app', '失败');
             $hdata['sAct'] = $act . '/' . $show;
             saveOperationLog($hdata);
         }
@@ -1666,7 +1666,7 @@ class ZcglController extends BaseController
 
             $db->query($sql);
             $success = true;
-            $msg = "操作成功";
+            $msg = Yii::t('app', "操作成功");
             //$hdata['sDes'] = '新增自发现配置';
             //$hdata['sRs'] ='成功';
             //$hdata['sAct'] = $act.'/'.$show;
@@ -1739,44 +1739,44 @@ class ZcglController extends BaseController
                 $phpexcel = new \PHPExcel();
 
                 //设置表头
-                $phpexcel->getActiveSheet()->setCellValue('A1', '资产标识')
-                    ->setCellValue('B1', '所属部门')
-                    ->setCellValue('C1', '资产类型')
-                    ->setCellValue('D1', '负责人')
-                    ->setCellValue('E1', '资产价值')
-                    ->setCellValue('F1', '备注')
+                $phpexcel->getActiveSheet()->setCellValue('A1', Yii::t('app', '资产标识'))
+                    ->setCellValue('B1', Yii::t('app', '所属部门'))
+                    ->setCellValue('C1', Yii::t('app', '资产类型'))
+                    ->setCellValue('D1', Yii::t('app', '负责人'))
+                    ->setCellValue('E1', Yii::t('app', '资产价值'))
+                    ->setCellValue('F1', Yii::t('app', '备注'))
                     ->setCellValue('G1', 'ipv4')
                     ->setCellValue('H1', 'ipv6')
-                    ->setCellValue('I1', 'MAC地址')
-                    ->setCellValue('J1', '设备名称')
-                    ->setCellValue('K1', '操作系统')
-                    ->setCellValue('L1', '跃点数')
-                    ->setCellValue('M1', '资产状态')
-                    ->setCellValue('N1', '开放端口');
+                    ->setCellValue('I1', Yii::t('app', 'MAC地址'))
+                    ->setCellValue('J1', Yii::t('app', '设备名称'))
+                    ->setCellValue('K1', Yii::t('app', '操作系统'))
+                    ->setCellValue('L1', Yii::t('app', '跃点数'))
+                    ->setCellValue('M1', Yii::t('app', '资产状态'))
+                    ->setCellValue('N1', Yii::t('app', '开放端口'));
 
                 $i = 2;
                 foreach ($list as $v) {
                     if ($v['type'] == null || $v['type'] == 0) {
-                        $zctype_tmp = '通用设备';
+                        $zctype_tmp = Yii::t('app', '通用设备');
                     } else if ($v['type'] == 1) {
-                        $zctype_tmp = '交换机';
+                        $zctype_tmp = Yii::t('app', '交换机');
                     } else if ($v['type'] == 2) {
-                        $zctype_tmp = '路由器';
+                        $zctype_tmp = Yii::t('app', '路由器');
                     } else if ($v['type'] == 3) {
-                        $zctype_tmp = '其它';
+                        $zctype_tmp = Yii::t('app', '其它');
                     } else {
-                        $zctype_tmp = '其它';
+                        $zctype_tmp = Yii::t('app', '其它');
                     }
                     if ($v['value'] == null || $v['value'] == 3) {
-                        $zcvalue_tmp = '高';
+                        $zcvalue_tmp = Yii::t('app', '高');
                     } else if ($v['value'] == 2) {
-                        $zcvalue_tmp = '中';
+                        $zcvalue_tmp = Yii::t('app', '中');
                     } else if ($v['value'] == 1) {
-                        $zcvalue_tmp = '低';
+                        $zcvalue_tmp = Yii::t('app', '低');
                     } else if ($v['value'] == 0) {
-                        $zcvalue_tmp = '未知';
+                        $zcvalue_tmp = Yii::t('app', '未知');
                     } else {
-                        $zcvalue_tmp = '未知';
+                        $zcvalue_tmp = Yii::t('app', '未知');
                     }
                     $phpexcel->getActiveSheet()->setCellValue('A' . $i, $v['name'])
                         ->setCellValue('B' . $i, $v['name'])
@@ -1815,7 +1815,7 @@ class ZcglController extends BaseController
                 exit;
             }
             $aJson['success'] = false;
-            $aJson['msg'] = '导出失败';
+            $aJson['msg'] = Yii::t('app', '导出失败');
             echo json_encode($aJson);
             exit;
         }
@@ -1849,7 +1849,7 @@ class ZcglController extends BaseController
             //var_dump($file_type);
             if (!in_array($file_type, $types)) {
                 $aJson ['success'] = false;
-                $aJson ['msg'] = '请上传Excel文件';
+                $aJson ['msg'] = Yii::t('app', '请上传Excel文件');
                 echo json_encode($aJson);
                 exit;
             } else {
@@ -1896,20 +1896,20 @@ class ZcglController extends BaseController
                             $temp_g = filter_var($temp_g, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) ? $temp_g : '';
 
                             if (empty($temp_b) || empty($temp_d)) {//$temp_b或$temp_d为空时
-                                array_push($aData, '第' . $r_i . '行的所属部门、负责人和IPV4都不能为空！');
+                                array_push($aData, Yii::t('app', '第 ') . $r_i . Yii::t('app', '行的所属部门、负责人和IPV4都不能为空！'));
                                 $s_flag = false;
                                 $k_sum--;
                                 continue;
                             } else if (!empty($temp_a)) {//$temp_a不为空时
                                 $temp_sql = "select name from bd_asset_device_info where name = " . "'" . $temp_a . "'";
                                 if ($db->fetch_first($temp_sql)) {//已经存在时
-                                    array_push($aData, '第' . $r_i . '行，资产标识 ' . $temp_a . ' 已经存在！');
+                                    array_push($aData, Yii::t('app', '第 ') . $r_i . Yii::t('app', ' 行，资产标识 ') . $temp_a . Yii::t('app', ' 已经存在！'));
                                     $s_flag = false;
                                     $k_sum--;
                                     continue;
                                 } else {//是新的
                                     if (empty($temp_g)) {//$temp_g为空时
-                                        array_push($aData, '第' . $r_i . '行的所属部门、负责人和IPV4都不能为空！');
+                                        array_push($aData, Yii::t('app', '第 ') . $r_i . Yii::t('app', '行的所属部门、负责人和IPV4都不能为空！'));
                                         $s_flag = false;
                                         $k_sum--;
                                         continue;
@@ -1919,7 +1919,7 @@ class ZcglController extends BaseController
                                 if (!empty($temp_g)) {//如果资产标识为空，默认将ipv4作为资产标识
                                     $temp_sql = "select name from bd_asset_device_info where name = " . "'" . $temp_g . "'";
                                     if ($db->fetch_first($temp_sql)) {//已经存在时
-                                        array_push($aData, '第' . $r_i . '行，资产标识 ' . $temp_a . ' 已经存在！');
+                                        array_push($aData, Yii::t('app', '第 ') . $r_i . Yii::t('app', ' 行，资产标识 ') . $temp_a . Yii::t('app', ' 已经存在！'));
                                         $s_flag = false;
                                         $k_sum--;
                                         continue;
@@ -1927,7 +1927,7 @@ class ZcglController extends BaseController
                                         $temp_a = $temp_g;
                                     }
                                 } else {//4个都为空时
-                                    array_push($aData, '第' . $r_i . '行的部门、负责人和IPV4都不能为空！');
+                                    array_push($aData, Yii::t('app', '第 ') . $r_i . Yii::t('app', '行的部门、负责人和IPV4都不能为空！'));
                                     $s_flag = false;
                                     $k_sum--;
                                     continue;
@@ -1946,11 +1946,11 @@ class ZcglController extends BaseController
                                     case 2://TAR_TYPE资产类型
                                         $temp = $sheet->getCell('C' . $row->getRowIndex())->getValue();
                                         $item[$i] = empty($temp) ? $temp : filterStr($temp);
-                                        if ($item[$i] == '通用设备' || $item[$i] == null) {//默认
+                                        if ($item[$i] == Yii::t('app', '通用设备') || $item[$i] == null) {//默认
                                             $item[$i] = 0;
-                                        } else if ($item[$i] == '交换机') {
+                                        } else if ($item[$i] == Yii::t('app', '交换机')) {
                                             $item[$i] = 1;
-                                        } else if ($item[$i] == '路由器') {
+                                        } else if ($item[$i] == Yii::t('app', '路由器')) {
                                             $item[$i] = 2;
                                         } else {
                                             $item[$i] = 3;//其它
@@ -1962,11 +1962,11 @@ class ZcglController extends BaseController
                                     case 4://TAR_VALUE资产价值
                                         $temp = $sheet->getCell('E' . $row->getRowIndex())->getValue();
                                         $item[$i] = empty($temp) ? $temp : filterStr($temp);
-                                        if ($item[$i] == '高' || $item[$i] == null) {//默认
+                                        if ($item[$i] == Yii::t('app', '高') || $item[$i] == null) {//默认
                                             $item[$i] = 3;
-                                        } else if ($item[$i] == '中') {
+                                        } else if ($item[$i] == Yii::t('app', '中')) {
                                             $item[$i] = 2;
-                                        } else if ($item[$i] == '低') {
+                                        } else if ($item[$i] == Yii::t('app', '低')) {
                                             $item[$i] = 1;
                                         } else {
                                             $item[$i] = 0;//未知
@@ -2099,7 +2099,7 @@ class ZcglController extends BaseController
                         unlink($uploadfile);//入库完即将文件删了
                         if ($s_sum == 1) {
                             $aJson ['success'] = false;
-                            $aJson ['msg'] = '上传失败！请严格按模板填写！';
+                            $aJson ['msg'] = Yii::t('app', '上传失败！请严格按模板填写！');
                             echo json_encode($aJson);
                             exit;
                         } else if ($s_sum >= 2) {
@@ -2111,22 +2111,22 @@ class ZcglController extends BaseController
                             }
                             if ($k_sum == 1) {
                                 $aJson ['success'] = false;
-                                $aJson ['msg'] = '上传失败！' . '<br>' . $s_msg;
+                                $aJson ['msg'] = Yii::t('app', '上传失败！') . '<br>' . $s_msg;
                                 $aJson ['data'] = $aData;
                                 echo json_encode($aJson);
                                 exit;
                             } else {
                                 if ($db->query($sql)) {
                                     if ($s_msg != '') {
-                                        $s_msg = '但是部分上传失败: ' . '<br>' . $s_msg;
+                                        $s_msg = Yii::t('app', '但是部分上传失败: ') . '<br>' . $s_msg;
                                     }
                                     $aJson ['success'] = true;
-                                    $aJson ['msg'] = '上传成功！' . '<br>' . $s_msg;
+                                    $aJson ['msg'] = Yii::t('app', '上传成功！') . '<br>' . $s_msg;
                                     echo json_encode($aJson);
                                     exit;
                                 } else {
                                     $aJson ['success'] = false;
-                                    $aJson ['msg'] = '上传失败！' . '<br>' . $s_msg;
+                                    $aJson ['msg'] = Yii::t('app', '上传失败！') . '<br>' . $s_msg;
                                     $aJson ['data'] = $aData;
                                     echo json_encode($aJson);
                                     exit;
@@ -2134,7 +2134,7 @@ class ZcglController extends BaseController
                             }
                         } else {
                             $aJson ['success'] = false;
-                            $aJson ['msg'] = '上传失败！';
+                            $aJson ['msg'] = Yii::t('app', '上传失败！');
                             echo json_encode($aJson);
                             exit;
                         }
@@ -2194,4 +2194,3 @@ class ZcglController extends BaseController
         exit;
     }
 }
-?>
