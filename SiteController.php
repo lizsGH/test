@@ -119,12 +119,25 @@ class SiteController extends BaseController
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
+        if( Yii::$app->request->isAjax ){
 
-        if( isset($_POST['submit']) ){
-            //$_POST['name'] =base64_decode($_POST['name']);
-            $_POST['pwd'] =base64_decode($_POST['pwd']);
-//            var_dump(base64_decode($_POST['pwd']));die;
-            // echo  md5(md5('bluedon').'admin');die;
+          //  var_dump($_POST);die;
+        //if( isset($_GET["callback"]) ){
+//            header("Access-Control-Allow-Origin: *");//同源策略 跨域请求 头设置
+//            header('content-type:text/html;charset=utf8 ');
+//            //获取回调函数名
+//            $jsoncallback = htmlspecialchars($_REQUEST['callback']);//把预定义的字符转换为 HTML 实体。
+//
+//            $zhi = htmlspecialchars($_REQUEST['pwd']);
+//
+//            $arr=yii::$app->db->createCommand("select * from bd_sys_user")->queryAll();//用的like进行模糊查询
+//
+//            $json_data=json_encode($arr);//转换为json数据
+//
+//            //输出jsonp格式的数据
+//            echo $jsoncallback . "(" . $json_data . ")";die;
+
+
             global $db,$timestamp,$exp_time,$act,$show;
             $ClienIp = onlineIp();
             $hdata =array();
@@ -151,11 +164,12 @@ class SiteController extends BaseController
             $hdata =array();
             $time = time();
             $lock = $db->fetch_first("SELECT * FROM ".getTable('userconfig')." WHERE iId =1 "); //查找配置文件
-            $pwd = md5(md5($pwd).$name);
+            $pwd = md5(md5($_POST['pwd']).$name);
+            //echo $pwd;die;
             $row = $db->fetch_first("SELECT id, username,password,role_id as role,errors,locktime,status,allow_login_ips FROM ".getTable('user')." WHERE username='$name'");
 
 
-            // var_dump(strtolower($vcode) ,$_SESSION['__captcha/site/captcha']);die;
+//             var_dump(strtolower($vcode) ,$_SESSION['__captcha/site/captcha']);die;
             if(strtolower($vcode) != strtolower($_SESSION['__captcha/site/captcha'])){ //判断验证码
                 if($lock['maxError'] !=0){
                     if($row['errors'] >= $lock['maxError']){
