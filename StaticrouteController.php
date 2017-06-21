@@ -223,6 +223,7 @@ class StaticrouteController extends BaseController
                 $dShell .= " gw " . $oldgateway;
             }
             $dShell .= " " . $oldnic . " 2>/dev/stdout";
+            //echo $dShell;die;
             $handle = popen($dShell, "r");
             $buffer = fgets($handle);
             //var_dump($buffer);die;
@@ -372,7 +373,7 @@ class StaticrouteController extends BaseController
                         $routeShell .= " gw " . $gateway;
                     }
                     $routeShell .= " " . $nic . " 2>/dev/stdout";
-                    //echo $routeShell;die;
+                   //echo $routeShell;die;
                     $handle = popen($routeShell, "r");
                     $buffer = fgets($handle);
                     pclose($handle);
@@ -590,10 +591,10 @@ class StaticrouteController extends BaseController
                     }
                     //添加这条路由，返回提示信息（成功或者失败）；
                     //$query = "insert into ".getTable('staticroute2')." (id ,nic,dest,mask,gateway) values('','".$nic."','".$dest."','".$mask."','".$gateway."')";
-                    $this->writeRoute();
+
                     $query = "insert into " . getTable('staticroute2') . " (id ,nic,dest,mask,gateway,ipv6dest,ipv6prefix,ipv6gateway) values('','" . $nic . "','" . $dest . "','" . $mask . "','" . $gateway . "','" . $ipv6dest . "','" . $ipv6prefix . "','" . $ipv6gateway . "')";
                     if ($db->query($query)) {
-
+                        $this->writeRoute();
                         $success = true;
                         $msg = Yii::t('app', "操作成功");
                         $data['success'] = $success;
@@ -702,7 +703,6 @@ class StaticrouteController extends BaseController
                     $routeShell .= " " . $v['nic'] . "\n";
 
                 }
-
                 file_put_contents(DIR_ROOT . "../data/route/route.sh", $routeShell);
             }
         } else {

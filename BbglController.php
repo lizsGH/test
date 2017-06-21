@@ -156,6 +156,11 @@ class BbglController extends BaseController {
 
                 $content = $wordcon = $imageCon = '';
                 global $act,$show;
+
+                $content = file_get_contents($dym . '/attack_host.html');
+                $imgcontent = file_get_contents($dym . '/attack-image.html');  //图片
+                $docCon = file_get_contents($dym . '/attack-doc.html');  //doc
+
                 if($_REQUEST['type']=='weakpwd'){
                     if(!in_array($tablepwd,$this->getAllTables())){
                         $db->execute("CREATE TABLE $tablepwd (
@@ -178,7 +183,7 @@ class BbglController extends BaseController {
 ) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 ");
                     }
-                    $content = file_get_contents($dym . '/attack_host.html');
+                   // $content = file_get_contents($dym . '/attack_host.html');
 
                     $total=\Yii::$app->db->createCommand("select count(1) as num from $tablepwd")->queryColumn()[0];
                     $rows=\Yii::$app->db->createCommand("select * from $tablepwd")->queryAll();
@@ -187,6 +192,10 @@ class BbglController extends BaseController {
                    // var_dump($num);die;
                     $content = str_replace('{$weak_num}', $total, $content);
                     $content = str_replace('{$type}', '弱密码', $content);
+
+                    $docCon = str_replace('{$weak_num}', $total, $docCon);
+                    $docCon = str_replace('{$type}', '弱密码', $docCon);
+
                     $level=$this->getLevel($rows);
                     $h_sum=$m_sum=$l_sum=0;
                     foreach ($rows as $v){
@@ -209,12 +218,18 @@ class BbglController extends BaseController {
                     $content = str_replace('{$m_sum}', $m_sum, $content);
                     $content = str_replace('{$l_sum}', $l_sum, $content);
 
+                    $docCon = str_replace('{$level}', $level, $docCon);
+                    $docCon = str_replace('{$h_sum}', $h_sum, $docCon);
+                    $docCon = str_replace('{$m_sum}', $m_sum, $docCon);
+                    $docCon = str_replace('{$l_sum}', $l_sum, $docCon);
+
                     //风险分布图
                     $h_fx = number_format((($h_sum / $total) * 100), 2, '.', '');
                     $m_fx = number_format((($m_sum / $total) * 100), 2, '.', '');
                     $l_fx = number_format((($l_sum / $total) * 100), 2, '.', '');
                     $data1 = '{name:"' . Yii::t('app', '高风险') . '('.$h_sum.')",value:[' . $h_fx. '],color:"#ffa500"},{name:"' . Yii::t('app', '中风险') . '('.$m_sum.')",value:[' .  $m_fx . '],color:"#f737ec"},{name:"' . Yii::t('app', '低风险') . '('.$l_sum.')",value:[' .  $l_fx . '],color:"#6060fe"}';
                     $content = str_replace('{$data_level}', $data1, $content);
+                    $imgcontent = str_replace('{$data_level}', $data1, $imgcontent);
 
                     /*漏洞类型分布图*/
                     $category = $db->fetch_all("select id,vul_name from bd_weakpwd_vul_lib ");
@@ -229,6 +244,9 @@ class BbglController extends BaseController {
                     }
                     $content= str_replace('{$type_li}',$str,$content);
                     $content= str_replace('{$type_list}',$type_list,$content);
+
+                    $docCon= str_replace('{$type_li}',$str,$docCon);
+                    $docCon= str_replace('{$type_list}',$type_list,$docCon);
                     //var_dump($category);die;
                     $vuls_type = $db->fetch_all("SELECT COUNT(1) as num,t.id as category from(
 select a.vul_name,a.vul_id,b.id from $tablepwd a LEFT JOIN bd_weakpwd_vul_lib b on a.vul_id = b.vul_id
@@ -251,6 +269,7 @@ select a.vul_name,a.vul_id,b.id from $tablepwd a LEFT JOIN bd_weakpwd_vul_lib b 
                     // echo json_encode($arr);die;
                     //var_dump($arr);die;
                     $content = str_replace('{$data_type}', json_encode($arr), $content);
+                    $imgcontent = str_replace('{$data_type}', json_encode($arr), $imgcontent);
                     /*TOP10危险IP所有漏洞统计图*/
                     //$ipld = $db->fetch_all("SELECT ip FROM $tablevul GROUP BY ip DESC LIMIT 10");
                     $topid=[];
@@ -298,7 +317,8 @@ select a.vul_name,a.vul_id,b.id from $tablepwd a LEFT JOIN bd_weakpwd_vul_lib b 
                     $data7 = '{name:"' . Yii::t('app', '高风险') . '",value:[' . join(',', $ldhnum) . '],color:"#ffa500"},{name:"' . Yii::t('app', '中风险') . '",value:[' . join(',', $ldmnum) . '],color:"#f737ec"},{name:"' . Yii::t('app', '低风险') . '",value:[' . join(',', $ldlnum) . '],color:"#6060fe"}';
                     $content = str_replace('{$dataip}', join(',', $topid), $content);
                     $content = str_replace('{$data7}', $data7, $content);
-
+                    $imgcontent = str_replace('{$dataip}', join(',', $topid), $imgcontent);
+                    $imgcontent = str_replace('{$data7}', $data7, $imgcontent);
 
                     /*3.按漏洞类型列表*/
                     $str='';
@@ -308,16 +328,22 @@ select a.vul_name,a.vul_id,b.id from $tablepwd a LEFT JOIN bd_weakpwd_vul_lib b 
                     $content= str_replace('{$type_li}',$str,$content);
                     $content = str_replace('{$vuls_sys_list}',$this->gridview($tablepwd,'type',$rt),$content);
 
+                    $docCon= str_replace('{$type_li}',$str,$docCon);
+                    $docCon = str_replace('{$vuls_sys_list}',$this->gridview($tablepwd,'type',$rt),$docCon);
+
                     /* 4.安全等级详细信息*/
                     $content = str_replace('{$vuls_level_list}',$this->gridview($tablepwd,'level',$rt),$content);
+                    $docCon = str_replace('{$vuls_level_list}',$this->gridview($tablepwd,'level',$rt),$docCon);
 
                     /* 5.ip详细信息*/
                     $content = str_replace('{$vuls_ip_list}',$this->gridview($tablepwd,'ip',$rt),$content);
+                    $docCon = str_replace('{$vuls_ip_list}',$this->gridview($tablepwd,'ip',$rt),$docCon);
 
                     $sql="select * from bd_weakpwd_task_manage WHERE id=$val";
                     $row = $db->fetch_row($sql);
                     // var_dump($row);die;
                     $content = str_replace('{$target}', $row['target'], $content);
+                    $docCon = str_replace('{$target}', $row['target'], $docCon);
                     if($row['start_time']==0){
                         $start = Yii::t('app', '未开始');
                     }else{
@@ -331,7 +357,8 @@ select a.vul_name,a.vul_id,b.id from $tablepwd a LEFT JOIN bd_weakpwd_vul_lib b 
                     $content = str_replace('{$starttime}', $start, $content);
                     $content = str_replace('{$endtime}',$end, $content);
 
-
+                    $docCon = str_replace('{$starttime}', $start, $docCon);
+                    $docCon = str_replace('{$endtime}',$end, $docCon);
                 }elseif($_REQUEST['type']=='web'){
                     if(!in_array($tablescan,$this->getAllTables())){
                         $db->execute("CREATE TABLE $tablescan (
@@ -355,8 +382,12 @@ select a.vul_name,a.vul_id,b.id from $tablepwd a LEFT JOIN bd_weakpwd_vul_lib b 
                     $total=\Yii::$app->db->createCommand("select count(1) as num from $tablescan")->queryColumn()[0];
                     $rows=\Yii::$app->db->createCommand("select  `level` from $tablescan")->queryAll();
                     $main_tasks=\Yii::$app->db->createCommand("SELECT * FROM bd_web_task_manage WHERE id='$tasks'")->queryOne();
+
                     $content = str_replace('{$weak_num}', $total, $content);
                     $content = str_replace('{$type}', 'WEB', $content);
+
+                    $docCon = str_replace('{$weak_num}', $total, $docCon);
+                    $docCon = str_replace('{$type}', 'WEB', $docCon);
 
                     $h_sum=$m_sum=$l_sum=0;
                     $level=$this->getLevel($rows);
@@ -377,6 +408,11 @@ select a.vul_name,a.vul_id,b.id from $tablepwd a LEFT JOIN bd_weakpwd_vul_lib b 
                     $content = str_replace('{$m_sum}', $m_sum, $content);
                     $content = str_replace('{$l_sum}', $l_sum, $content);
 
+                    $docCon = str_replace('{$level}', $level, $docCon);
+                    $docCon = str_replace('{$h_sum}', $h_sum, $docCon);
+                    $docCon = str_replace('{$m_sum}', $m_sum, $docCon);
+                    $docCon = str_replace('{$l_sum}', $l_sum, $docCon);
+
                     //风险分布图
                     $h_fx = number_format((($h_sum / $total) * 100), 2, '.', '');
                     $m_fx = number_format((($m_sum / $total) * 100), 2, '.', '');
@@ -384,6 +420,7 @@ select a.vul_name,a.vul_id,b.id from $tablepwd a LEFT JOIN bd_weakpwd_vul_lib b 
                     // $data1 = '{name:"高风险('.$h_sum.')个",value:[' . $h_fx. '],color:"#ffa500"},{name:"中风险('.$m_sum.')个",value:[' .  $m_fx . '],color:"#f737ec"},{name:"低风险('.$l_sum.')个",value:[' .  $l_fx . '],color:"#6060fe"}';
                     $data1 = '{name:"' . Yii::t('app', '高风险') . '('.$h_sum.')",value:[' . $h_fx. '],color:"#ffa500"},{name:"' . Yii::t('app', '中风险') . '('.$m_sum.')",value:[' .  $m_fx . '],color:"#f737ec"},{name:"' . Yii::t('app', '低风险') . '('.$l_sum.')",value:[' .  $l_fx . '],color:"#6060fe"}';
                     $content = str_replace('{$data_level}', $data1, $content);
+                    $imgcontent = str_replace('{$data_level}', $data1, $imgcontent);
 
                     /*漏洞类型分布图*/
                     $category = $db->fetch_all("select id,description from bd_web_family WHERE parent_id=0");
@@ -429,6 +466,7 @@ select a.vul_name,a.vul_id,b.module_id from $tablescan a LEFT JOIN bd_web_vul_li
                     // echo json_encode($arr);die;
                     //var_dump($arr);die;
                     $content = str_replace('{$data_type}', json_encode($arr), $content);
+                    $imgcontent = str_replace('{$data_type}', json_encode($arr), $imgcontent);
                     /*TOP10危险IP所有漏洞统计图*/
                     //$ipld = $db->fetch_all("SELECT ip FROM $tablevul GROUP BY ip DESC LIMIT 10");
                     $topid=[];
@@ -478,6 +516,9 @@ select a.vul_name,a.vul_id,b.module_id from $tablescan a LEFT JOIN bd_web_vul_li
                     $content = str_replace('{$dataip}', join(',', $topid), $content);
                     $content = str_replace('{$data7}', $data7, $content);
 
+                    $imgcontent = str_replace('{$dataip}', join(',', $topid), $imgcontent);
+                    $imgcontent = str_replace('{$data7}', $data7, $imgcontent);
+
                     /*3.按漏洞类型列表*/
                     $str='';
                     foreach ($category as $c_i=>$v){
@@ -485,17 +526,21 @@ select a.vul_name,a.vul_id,b.module_id from $tablescan a LEFT JOIN bd_web_vul_li
                     }
                     $content= str_replace('{$type_li}',$str,$content);
                     $content = str_replace('{$vuls_sys_list}',$this->gridview($tablescan,'type',$rt),$content);
+                    $docCon = str_replace('{$vuls_sys_list}',$this->gridview($tablescan,'type',$rt),$docCon);
 
                     /* 4.安全等级详细信息*/
                     $content = str_replace('{$vuls_level_list}',$this->gridview($tablescan,'level',$rt),$content);
+                    $docCon = str_replace('{$vuls_level_list}',$this->gridview($tablescan,'level',$rt),$docCon);
 
                     /* 5.ip详细信息*/
                     $content = str_replace('{$vuls_ip_list}',$this->gridview($tablescan,'ip',$rt),$content);
+                    $docCon = str_replace('{$vuls_ip_list}',$this->gridview($tablescan,'ip',$rt),$docCon);
 
                     $sql="select * from bd_web_task_manage WHERE id=$val";
                     $row = $db->fetch_row($sql);
                     // var_dump($row);die;
                     $content = str_replace('{$target}', $row['target'], $content);
+                    $docCon = str_replace('{$target}', $row['target'], $docCon);
                     if($row['start_time']==0){
                         $start = Yii::t('app', '未开始');
                     }else{
@@ -508,6 +553,8 @@ select a.vul_name,a.vul_id,b.module_id from $tablescan a LEFT JOIN bd_web_vul_li
                     }
                     $content = str_replace('{$starttime}', $start, $content);
                     $content = str_replace('{$endtime}',$end, $content);
+                    $docCon = str_replace('{$starttime}', $start, $docCon);
+                    $docCon = str_replace('{$endtime}',$end, $docCon);
 
                     // var_dump($content);die;
                 }elseif($_REQUEST['type']=='host'){
@@ -534,13 +581,19 @@ select a.vul_name,a.vul_id,b.module_id from $tablescan a LEFT JOIN bd_web_vul_li
 
 ");
                     }
-                    $content = file_get_contents($dym . '/attack_host.html');
+
 
                     $total=\Yii::$app->db->createCommand("select count(1) as num from $tablevul")->queryColumn()[0];
                     $rows=\Yii::$app->db->createCommand("select vul_level as `level` from $tablevul")->queryAll();
                     $main_tasks=\Yii::$app->db->createCommand("SELECT * FROM bd_host_task_manage WHERE id='$tasks'")->queryOne();
+
                     $content = str_replace('{$weak_num}', $total, $content);
                     $content = str_replace('{$type}', Yii::t('app', '主机'), $content);
+                    $content = str_replace('{$type}', '主机', $content);
+
+                    $docCon = str_replace('{$weak_num}', $total, $docCon);
+                    $docCon = str_replace('{$type}', '主机', $docCon);
+
                     $h_sum=$m_sum=$l_sum=0;
                     $level=$this->getLevel($rows);
                     foreach ($rows as $v){
@@ -560,6 +613,11 @@ select a.vul_name,a.vul_id,b.module_id from $tablescan a LEFT JOIN bd_web_vul_li
                     $content = str_replace('{$m_sum}', $m_sum, $content);
                     $content = str_replace('{$l_sum}', $l_sum, $content);
 
+                    $docCon = str_replace('{$level}', $level, $docCon);
+                    $docCon = str_replace('{$h_sum}', $h_sum, $docCon);
+                    $docCon = str_replace('{$m_sum}', $m_sum, $docCon);
+                    $docCon = str_replace('{$l_sum}', $l_sum, $docCon);
+
                     /*风险分布图*/
                     $h_fx = number_format((($h_sum / $total) * 100), 2, '.', '');
                     $m_fx = number_format((($m_sum / $total) * 100), 2, '.', '');
@@ -567,6 +625,7 @@ select a.vul_name,a.vul_id,b.module_id from $tablescan a LEFT JOIN bd_web_vul_li
                     // $data1 = '{name:"高风险('.$h_sum.')个",value:[' . $h_fx. '],color:"#ffa500"},{name:"中风险('.$m_sum.')个",value:[' .  $m_fx . '],color:"#f737ec"},{name:"低风险('.$l_sum.')个",value:[' .  $l_fx . '],color:"#6060fe"}';
                     $data1 = '{name:"' . Yii::t('app', '高风险') . '('.$h_sum.')",value:[' . $h_fx. '],color:"#ffa500"},{name:"' . Yii::t('app', '中风险') . '('.$m_sum.')",value:[' .  $m_fx . '],color:"#f737ec"},{name:"' . Yii::t('app', '低风险') . '('.$l_sum.')",value:[' .  $l_fx . '],color:"#6060fe"}';
                     $content = str_replace('{$data_level}', $data1, $content);
+                    $imgcontent = str_replace('{$data_level}', $data1, $imgcontent);
 
                     /*漏洞类型分布图*/
                     $category = $db->fetch_all("select id,description from bd_host_family_list WHERE parent_id=0");
@@ -611,6 +670,7 @@ select a.vul_name,a.vul_id,b.category from $tablevul a LEFT JOIN bd_host_vul_lib
                     sort($arr);
 
                     $content = str_replace('{$data_type}', json_encode($arr), $content);
+                    $imgcontent = str_replace('{$data_type}', json_encode($arr), $imgcontent);
 
                     /*TOP10危险IP所有漏洞统计图*/
                     //$ipld = $db->fetch_all("SELECT ip FROM $tablevul GROUP BY ip DESC LIMIT 10");
@@ -659,9 +719,10 @@ select a.vul_name,a.vul_id,b.category from $tablevul a LEFT JOIN bd_host_vul_lib
                     // $data7 = '{name:"高风险",value:[' . join(',', $ldhnum) . '],color:"#ffa500"},{name:"中风险",value:[' . join(',', $ldmnum) . '],color:"#f737ec"},{name:"低风险",value:[' . join(',', $ldlnum) . '],color:"#6060fe"}';
                     $data7 = '{name:"' . Yii::t('app', '高风险') . '",value:[' . join(',', $ldhnum) . '],color:"#ffa500"},{name:"' . Yii::t('app', '中风险') . '",value:[' . join(',', $ldmnum) . '],color:"#f737ec"},{name:"' . Yii::t('app', '低风险') . '",value:[' . join(',', $ldlnum) . '],color:"#6060fe"}';
                     $content = str_replace('{$dataip}', join(',', $topid), $content);
+                    $imgcontent = str_replace('{$dataip}', join(',', $topid), $imgcontent);
                     $content = str_replace('{$data7}', $data7, $content);
-//                    $imageCon = str_replace('{$dataip}', join(',', $topid), $imageCon);
-//                    $imageCon = str_replace('{$data7}', $data7, $imageCon);
+                    $imgcontent = str_replace('{$data7}', $data7, $imgcontent);
+
 
                     /*3.按漏洞类型列表*/
                     $str='';
@@ -671,16 +732,22 @@ select a.vul_name,a.vul_id,b.category from $tablevul a LEFT JOIN bd_host_vul_lib
                     $content= str_replace('{$type_li}',$str,$content);
                     $content = str_replace('{$vuls_sys_list}',$this->gridview($tablevul,'type',$rt),$content);
 
+                    $docCon= str_replace('{$type_li}',$str,$docCon);
+                    $docCon = str_replace('{$vuls_sys_list}',$this->gridview($tablevul,'type',$rt),$docCon);
+
                     /* 4.安全等级详细信息*/
                     $content = str_replace('{$vuls_level_list}',$this->gridview($tablevul,'level',$rt),$content);
+                    $docCon = str_replace('{$vuls_level_list}',$this->gridview($tablevul,'level',$rt),$docCon);
 
                     /* 5.ip详细信息*/
                     $content = str_replace('{$vuls_ip_list}',$this->gridview($tablevul,'ip',$rt),$content);
+                    $docCon = str_replace('{$vuls_ip_list}',$this->gridview($tablevul,'ip',$rt),$docCon);
 
                     $sql="select * from bd_host_task_manage WHERE id=$val";
                     $row = $db->fetch_row($sql);
                    // var_dump($row);die;
                     $content = str_replace('{$target}', $row['target'], $content);
+                    $docCon = str_replace('{$target}', $row['target'], $docCon);
                     if($row['start_time']==0){
                         $start = Yii::t('app', '未开始');
                     }else{
@@ -693,7 +760,9 @@ select a.vul_name,a.vul_id,b.category from $tablevul a LEFT JOIN bd_host_vul_lib
                     }
                     $content = str_replace('{$starttime}', $start, $content);
                     $content = str_replace('{$endtime}',$end, $content);
-//                    $content = str_replace('{$target}', $row['host_policy'], $content);
+
+                    $docCon = str_replace('{$starttime}', $start, $docCon);
+                    $docCon = str_replace('{$endtime}',$end, $docCon);
                 }
 
                 $content = str_replace('{$bbtitle}', $bbtitle, $content);
@@ -706,38 +775,61 @@ select a.vul_name,a.vul_id,b.category from $tablevul a LEFT JOIN bd_host_vul_lib
 
                 //$new_content.=$content."\r\n";
                 $name=$bbname . Yii::t('app', '的安全评估');
+                $docCon = str_replace('{$bbtitle}', $bbtitle, $docCon);
+                $docCon = str_replace('{$reportname}', $bbname, $docCon);
+                $docCon = str_replace('{$date}', date('Y-m-d H:i:s', time()), $docCon);
+                $docCon = str_replace('{$reportid}', "BD-REPORT-" . $tasks, $docCon);
+                $docCon = str_replace('{$tasksname}', $main_tasks['name'], $docCon);
+                $docCon = str_replace('{$task_id}', $tasks, $docCon); //修改任务id
+                $docCon = str_replace('{$bbname}', Yii::t('app', '蓝盾安全扫描系统'), $docCon);
+
+                $name=$bbname.'的安全评估';
 
                 if($rt=='html') {
+                    $content = str_replace('{$cover}','',$content);
+                    $content = str_replace('{$cover2}','',$content);
+                    $content = str_replace('{$cover_time}','',$content);
+
                     file_put_contents($dir . '/attack-'.$tasks. ".html", $content, LOCK_EX);
                 }elseif($rt=='pdf'){
 
-                    $new_content = str_replace('{$download_type}','pdf',$content);
-                    $new_content = str_replace('{$cover}','<img src="'.\Yii::$app->request->getHostInfo().'/img/cover.png" style="">',$new_content);
-//var_dump($new_content);die;
+                    $content = str_replace('{$cover}','<img src="'.\Yii::$app->request->getHostInfo().'/report/cover.png" style="">',$content);
+                    $content = str_replace('{$cover2}','<img src="'.\Yii::$app->request->getHostInfo().'/report/cover2.png" style="">',$content);
+                    $content = str_replace('{$cover_time}','<p style="text-align: center;margin: 50px 0 100px 30px"><font style="font-size: 20px">'.date('Y-m-d H:i:s',time()).'</font></p>',$content);
+
                     $preg ='/<style>.*?<\/style>/si';
-                    $new_content = preg_replace($preg,'',$new_content);
+                    $content = preg_replace($preg,'',$content);
                     $preg ='/<div id="sidebar" class="opened">.*?<\/div>/si';
-                    //preg_match($preg,$new_content,$match);
-                    $new_content =preg_replace($preg,'',$new_content);
+                    //preg_match($preg,$content,$match);
+                    $content =preg_replace($preg,'',$content);
                     $html='attack-'.$tasks.'.html';
-                    file_put_contents($dir . '/'.$html, $new_content, LOCK_EX);
+                    file_put_contents($dir . '/'.$html, $content, LOCK_EX);
                     //html转换成pdf
                     $pdf='attack-'.$tasks.'.pdf';
                     $exec="cd /home/bluedon/bdscan/bdwebserver/nginx/html/web/report/now; /home/bluedon/bdscan/bdwebserver/nginx/wkhtmltox/bin/wkhtmltopdf ./$html ./$pdf";
                     system($exec);
 
-                }else{
-                    $exec = "cd /home/bluedon/bdscan/bdwebserver/nginx/html/web/report/now; /home/bluedon/bdscan/bdwebserver/nginx/wkhtmltox/bin/wkhtmltoimage --crop-x 50 --crop-y 40 --crop-w 900 --crop-h 300 attack-host-{$tasks}.html {$tasks}-{$date}-1.jpg";
-                   echo $exec;die;
+                }else{ //doc
+                    $type=$_REQUEST['type'];
+                    file_put_contents($dir . "/attack-img-$type-$tasks.php", $imgcontent, LOCK_EX);
+                    $exec="ln -s $dir/attack-img-$type-$tasks.php /home/bluedon/bdscan/bdwebserver/nginx/html/views/bbgl/attack-img-$type-$tasks.php";
+                    //echo $exec;die;
                     exec($exec);
-                    $new_content = str_replace('{$download_type}','pdf',$content);
-                    $preg ='/<style>.*?<\/style>/si';
-                    $new_content = preg_replace($preg,'',$new_content);
-                    $preg ='/<div id="sidebar" class="opened">.*?<\/div>/si';
-                    //preg_match($preg,$new_content,$match);
-                    $new_content =preg_replace($preg,'',$new_content);
 
-                    file_put_contents($dir . '/attack-'.$tasks. ".doc", $new_content, LOCK_EX);
+                  //生成图片
+                    $exec = "cd /nginx/html/report/now; /nginx/wkhtmltox/bin/wkhtmltoimage --crop-x 50 --crop-y 5 --crop-w 800 --crop-h 300 ".\Yii::$app->request->getHostInfo()."/bbgl/htmltoimg?img=attack-img-$type-$tasks.php  $dir/{$tasks}-{$date}-1.jpg";
+                    exec($exec);
+                    $exec = "cd /nginx/html/report/now; /nginx/wkhtmltox/bin/wkhtmltoimage --crop-x 50 --crop-y 300 --crop-w 800 --crop-h 300 ".\Yii::$app->request->getHostInfo()."/bbgl/htmltoimg?img=attack-img-$type-$tasks.php  $dir/{$tasks}-{$date}-2.jpg";
+                    exec($exec);
+                    $exec = "cd /nginx/html/report/now; /nginx/wkhtmltox/bin/wkhtmltoimage --crop-x 50 --crop-y 600 --crop-w 800 --crop-h 300 ".\Yii::$app->request->getHostInfo()."/bbgl/htmltoimg?img=attack-img-$type-$tasks.php  $dir/{$tasks}-{$date}-3.jpg";
+                    exec($exec);
+                    $docCon = str_replace('{image1}',\Yii::$app->request->hostInfo."/report/now/$bbname-$type-doc-$date/{$tasks}-{$date}-1.jpg",$docCon);
+                    $docCon = str_replace('{image2}',\Yii::$app->request->hostInfo."/report/now/$bbname-$type-doc-$date/{$tasks}-{$date}-2.jpg",$docCon);
+                    $docCon = str_replace('{image3}',\Yii::$app->request->hostInfo."/report/now/$bbname-$type-doc-$date/{$tasks}-{$date}-3.jpg",$docCon);
+                    $docCon = str_replace('{image_sg}',\Yii::$app->request->hostInfo."/report/now/$bbname-$type-doc-$date/7.png",$docCon);
+                    //var_dump($docCon);die;
+                    file_put_contents($dir . "/attack-doc-{$tasks}.doc", $docCon, LOCK_EX);
+
                 }
                 $db->query("INSERT INTO " . getTable('reportsmanage') . " (`name`,`type`,`desc`,`time`,`path`,`timetype`,`format`) VALUES ('$name','1','$desc','$timestamp','$path','1','$rt')");
             }
@@ -774,6 +866,28 @@ select a.vul_name,a.vul_id,b.category from $tablevul a LEFT JOIN bd_host_vul_lib
 
                 $data['down'] = "<a href=\"/report/now/" . $bbname .'-pdf'. ".zip\" id=\"downAll\" target=\"_self\"" . "><span>" . Yii::t('app', '下载') . "{$name}</span></a>";
             }else{
+                $exec="cd /home/bluedon/bdscan/bdwebserver/nginx/html/web/report/now; mkdir $bbname-$type-doc-$date;cp ./*.doc ./*.jpg ./*.js ./*.css ../7.png /home/bluedon/bdscan/bdwebserver/nginx/html/web/report/now/$bbname-$type-doc-$date";
+                exec($exec);
+                //$exec = "cd /home/bluedon/bdscan/bdwebserver/nginx/html/web/report/now; zip -q -r -j ./" ."$bbname-doc.zip ./attack*.doc ./*.jpg ../common.js ../common.css ../jquery-1.9.1.min.js ../bluechar.js";
+                //echo $exec;die;
+                //exec($exec);
+                $mom = $bbname . $theTime;
+                foreach ($taskss as $v){
+                    unlink($dir . '/attack-'.$v . ".html");
+                }
+                unlink(REPORT_DIR . "./now/common.css");
+                unlink(REPORT_DIR . "./now/common.js");
+                unlink(REPORT_DIR . "./now/jquery-1.9.1.min.js");
+                unlink(REPORT_DIR . "./now/bluechar.js");
+                foreach ($taskss as $tasks){
+                    unlink(REPORT_DIR . "./now/{$tasks}-{$date}-1.jpg");
+                    unlink(REPORT_DIR . "./now/{$tasks}-{$date}-2.jpg");
+                    unlink(REPORT_DIR . "./now/{$tasks}-{$date}-3.jpg");
+                    unlink(REPORT_DIR . "./now/attack-doc-$tasks.doc");
+                    unlink(REPORT_DIR . "./now/attack-img-$type-$tasks.php");
+                    unlink("/home/bluedon/bdscan/bdwebserver/nginx/html/views/bbgl/attack-img-$type-$tasks.php");
+                    $data['down'] = "<a href=\"/report/now/" . "$bbname-$type-doc-$date/attack-doc-$tasks.doc\" id=\"downAll\" target=\"_self\"" . "><span>下载{$name}</span></a>";
+                }
 
             }
             $data['success'] = true;
@@ -1009,6 +1123,96 @@ select a.vul_name,a.vul_id,b.category from $tablevul a LEFT JOIN bd_host_vul_lib
             return $html;
         }
     }
+//    function gridview_web($table,$category,$type='html'){
+//        global $db;
+//        $vul_level = array( 'H'=>'高风险', 'M'=>'中风险', 'L'=>'低风险' ,'I'=>'信息');
+//        $risk_css = array( 'H'=>'high', 'M'=>'medium', 'L'=>'low' ,'I'=>'low');
+//        $rcccolor = array( 'H'=>'#d2322d', 'M'=>'#d58512', 'L'=>'#3276b1', 'I'=>'#3276b1');
+//        $html = $whtml = '';
+//        if($category=='level'){ //按等级
+//            $index=4;
+//            $hflist=[
+//                ['id'=>1,'desc'=>'高危','level'=>'H'],
+//                ['id'=>2,'desc'=>'中危','level'=>'M'],
+//                ['id'=>3,'desc'=>'低危','level'=>'L'],
+//            ];
+//        }elseif($category=='ip'){ //按ip
+//            $index=5;
+//            $hflist=[
+//                ['id'=>1,'desc'=>'按ip'],
+//            ];
+//        }else{  //按类型
+//            $hflist = $db->fetch_all("SELECT id,description as `desc` FROM bd_web_family WHERE parent_id='0' ORDER BY id ASC");
+//            $index=3;
+//        }
+//        //    var_dump($hflist);die;
+//        foreach($hflist as $h=>$f){
+//            $html.='<div name="hostname" class="y-report-ui-comp-section"  ><div id="t'.$index.'_'.($h+1).'" class="y-report-ui-element-title-level-3 '.$classTemp.'">'.$index.'.'.($h+1).' '.$f['desc'].'</div>';
+//            $whtml.='<p style="vertical-align:middle;line-height:30px;text-indent:2.5em;height:30px;font-size:16px;width:100%;font-weight:bold;'.$styleTemp.'">'.$index.'.'.($h+1).' '.$f['desc'].'</p>';
+//            if($category=='level'){
+//                $sql ="select a.*,count(1) as urlsum from $table a LEFT JOIN bd_web_vul_lib b  on a.vul_id = b.vul_id WHERE a.level='{$f['level']}' GROUP BY a.vul_id";
+//                $myrows = $db->fetch_all($sql);
+//            }elseif($category=='ip'){
+//                $sql ="select a.*,count(1) as urlsum from $table a LEFT JOIN bd_web_vul_lib b  on a.vul_id = b.vul_id  GROUP BY a.vul_id";
+//                $myrows = $db->fetch_all($sql);
+//            }else{  //类型
+//                $sql ="select a.*,b.module_id as category,count(1) as urlsum from $table a LEFT JOIN bd_web_vul_lib b  on a.vul_id = b.vul_id WHERE b.module_id = {$f['id']} GROUP BY a.vul_id";
+//                //echo $sql;die;
+//                $myrows = '';
+//            }
+//
+//            if(empty($myrows)){
+//                $html.='<p class="y-report-ui-element-content">本次扫描没有发现该风险。</p>';
+//                $whtml.='<p style="line-height:20px;text-indent:4em;width:100%">本次扫描没有发现该风险。</p>';
+//            }else{
+//                //$html.='<p class="y-report-ui-element-content">本次扫描共发现该风险<span class="y-report-ui-text-normal-b"> '.$v['ipnum'].' </span>个。</p>';
+//                $html.='<div><table cellpadding="0" class="y-report-ui-comp-data-grid" special="objectType#expandableGrid" cellspacing="0"><tbody><tr><th width="10%" class="y-report-ui-comp-data-grid-th">风险评级</th><th width="70%" class="y-report-ui-comp-data-grid-th y-report-ui-comp-data-grid-td-text-align-left">风险名称</th><th width="10%" class="y-report-ui-comp-data-grid-th">影响主机数</th><th width="10%" class="y-report-ui-comp-data-grid-th">更多信息</th></tr>';
+//
+//                //$whtml.='<p style="line-height:20px;text-indent:4em;width:100%">本次扫描共发现该风险<span style="color:#000000;font-weight:bold"> '.($cums + $hums + $mums + $lums + $iums).' </span>个。</p>';
+//
+//                $whtml.= '<table cellpadding="0" style="font-size:12px;width:100%;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px" cellspacing="0"><tbody>';
+//
+//                foreach($myrows as $k=>$v){
+//                    $jieb = $vul_level["{$v['level']}"];
+//                    $rcss = $risk_css["{$v['level']}"];
+//                    $rcor = $rcccolor["{$v['level']}"];
+//                    $html .= '<tr><td colspan="4"><span id="recordweb-show"><table cellpadding="0" class="y-report-ui-comp-data-grid" special="objectType#expandableGrid" cellspacing="0"><tbody>';
+//                    $html .= '<tr class="y-report-ui-comp-data-grid-tr-' . ($k % 2) . '"><td class="y-report-ui-text-level-' . $rcss . '-b" id="webfxjb">' . $jieb . '</td><td class="y-report-ui-comp-data-grid-td-text-align-left" id="webfxname">' . $v['vul_name'] . '</td><td id="weburlnum">' . $v['urlsum'] . '</td><td special="openDetail" class="y-report-ui-element-more-info-link">展开详情</td></tr>';
+//                    $whtml .= '<tr><td colspan="2" style=" border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px"><div><div><div style="background-color:#91C5F6; vertical-align:middle; height:20px; line-height: 20px; width: 100%"> [ <span style="color:' . $rcor . '">' . $jieb . '</span> ] ' . $v['vul_name'] . '</div><div style="clear:both"></div></div>';
+//                    $whtml .= '<div><div><div style="position:relative;">';
+//                    $whtml .= '<table cellpadding="0" style="font-size:12px;width:100%;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px" cellspacing="0"><tbody>';
+//                    $whtml .= '<tr><td style="width:140px; padding:3px; border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">影响URL数</td><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">' . $v['urlsum'] . '</td></tr>';
+//
+//                    $html .= '<tr style="display:none"><td colspan="4" style="opacity:0;-ms-filter:\'progid:DXImageTransform.Microsoft.Alpha(Opacity=0)\';filter:alpha(opacity=0);-webkit-opacity:0;-moz-opacity:0;-khtml-opacity:0"><div class="y-report-ui-object-expandable-grid-detail-panel"><div class="y-report-ui-object-expandable-grid-detail-panel-header-frame"><div class="y-report-ui-object-expandable-grid-detail-panel-header-title"> [ <span class="y-report-ui-text-level-' . $rcss . '-b">' . $jieb . '</span> ] ' . $v['vul_name'] . '</div><div class="y-report-ui-object-expandable-grid-detail-panel-header-close" special="closeDetail">关闭</div><div style="clear:both"></div></div><div class="y-report-ui-object-expandable-grid-detail-panel-content-frame"><div class="y-report-ui-object-tab-panel-frame" special="objectType#tabPanel"><div style="position:relative;" class="y-report-ui-object-tab-panel-header-frame"><div style="float:left;" class="y-report-ui-object-host-vuln-list-tab-header y-report-ui-object-tab-panel-header-button-toggled">URL列表（共' . $v['urlsum'] . '项）</div><div style="float:left;" class="y-report-ui-object-host-vuln-list-tab-header y-report-ui-object-tab-panel-header-button">风险描述</div><div style="float:left;" class="y-report-ui-object-host-vuln-list-tab-header y-report-ui-object-tab-panel-header-button">解决方案</div><div style="clear:both"></div></div><div class="y-report-ui-object-tab-panel-content-frame"><div style="float:left" class="y-report-ui-object-tab-panel-content-element"><div class="y-report-ui-object-accordion-list-frame" special="objectType#accordionList">';
+//                    $whtml .= '<tr><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">URL列表（共' . $v['urlsum'] . '项）</td><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">';
+//                    $urllist = $db->fetch_all("SELECT url FROM $table WHERE vul_id='{$v['vul_id']}'");
+//                    foreach ($urllist as $l => $u) {
+//                        $html .= '<div class="y-report-ui-object-accordion-list-item-frame" id="web_urllist"><div class="y-report-ui-object-accordion-list-item-header">' . $u['url'] . '</div></div>';
+//                        $whtml .= $u['url'] . '<br />';
+//                    }
+//                    $whtml .= '</td></tr>';
+//                    $whtml .= '<tr><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">风险描述</td><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">' . $v['description'] . '</td></tr>';
+//                    $whtml .= '<tr><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">解决方案</td><td style="padding:3px;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px">' . $v['solution'] . '</td></tr>';
+//                    $whtml .= '</tbody></table>';
+//                    $whtml .= '</div></div></div>';
+//                    $whtml .= '</td></tr>';
+//
+//                    $html .= '</div></div><div style="float:left;display:none" class="y-report-ui-object-tab-panel-content-element"><div class="y-report-ui-object-tab-panel-content-element-text-container" id="web_fxms">' . $v['description'] . '</div></div><div style="float:left;display:none" class="y-report-ui-object-tab-panel-content-element"><div class="y-report-ui-object-tab-panel-content-element-text-container" id="web_jjfa">' . $v['solution'] . '</div></div></div></div></div></div></td></tr>';
+//                    $html .= '</tbody></table></span></td></tr>';
+//                }
+//                $html.='</tbody></table></div>';
+//                $whtml.='</tbody></table>';
+//            }
+//
+//            $html.='</div>';
+//        }
+//        # echo $html;die;
+//        if($type=='pdf' || $type=='word'){
+//            return $whtml;
+//        }else{
+//            return $html;
+//        }
+//    }
 
     //生成列表
     function gridview($tablevul,$category=1,$type='html'){
@@ -1045,9 +1249,10 @@ select a.vul_name,a.vul_id,b.category from $tablevul a LEFT JOIN bd_host_vul_lib
                    $hflist = $db->fetch_all("SELECT id,vul_name as `desc` FROM bd_weakpwd_vul_lib  ORDER BY id ASC");
                    $index=3;
                }
+
                foreach($hflist as $h=>$f) {
                    $html .= '<div name="hostname" class="y-report-ui-comp-section"  ><div id="t' . $index . '_' . ($h + 1) . '" class="y-report-ui-element-title-level-3 ' . $classTemp . '">' . $index . '.' . ($h + 1) . ' ' . $f['desc'] . '</div>';
-                   $whtml .= '<p style="vertical-align:middle;line-height:30px;text-indent:2.5em;height:30px;font-size:16px;width:100%;font-weight:bold;' . $styleTemp . '">' . $hostIndex . '.' . ($h + 1) . ' ' . $f['desc'] . '</p>';
+                   $whtml .= '<p style="vertical-align:middle;line-height:30px;text-indent:2.5em;height:30px;font-size:16px;width:100%;font-weight:bold;' . $styleTemp . '">' . $index . '.' . ($h + 1) . ' ' . $f['desc'] . '</p>';
                    if ($category == 'level') {
                        $sql = "select a.*,count(1) as urlsum from $tablevul a LEFT JOIN bd_weakpwd_vul_lib b  on a.vul_id = b.vul_id WHERE a.level='{$f['level']}' GROUP BY a.vul_id";
                        $myrows = $db->fetch_all($sql);
@@ -1074,8 +1279,8 @@ select a.vul_name,a.vul_id,b.category from $tablevul a LEFT JOIN bd_host_vul_lib
                        $whtml .= '<table cellpadding="0" style="' . $styleTemp . ';font-size:12px;width:100%;border-style:solid;border-color:#6296D3;table-layout:fixed;border-width:1px" cellspacing="0"><tbody><tr><td width="20%" style="height:25px;color:#FFF;background-color:#6296D3;font-weight:bold;padding:2px">IP</td><td width="30%" style="height:25px;color:#FFF;background-color:#6296D3;font-weight:bold;padding:2px">' . Yii::t('app', '用户名') . '</td><td width="30%" style="height:25px;color:#FFF;background-color:#6296D3;font-weight:bold;padding:2px">' . Yii::t('app', '密码') . '</td><td width="20%" style="height:25px;color:#FFF;background-color:#6296D3;font-weight:bold;padding:2px">' . Yii::t('app', '弱密码类型') . '</td></tr>';
                        $data = $db->fetch_all("select * from $tablevul");
                        foreach ($data as $m => $n) {
-                           $html .= '<span id="record-show"><tr class="y-report-ui-comp-data-grid-tr-' . ($m % 2) . '"><td class="y-report-ui-comp-data-grid-td-text-align-left" id="rmm-ip">' . '<a href="' . $n['ip'] . '.html" target="_blank">' . $n['ip'] . '</a>' . '</td><td class="y-report-ui-comp-data-grid-td-text-align-left" id="rmm-user">' . $n['username'] . '</td><td id="rmm-password">' . $n['password'] . '</td><td class="y-report-ui-comp-data-grid-td-text-align-left" id="rmm-type">' . $n['type'] . '</td></tr>';
-                           $whtml .= '<tr style="height:25px;text-align:center;background-color:' . $kcolor[($m % 2)] . '"><td>' . $n['ip'] . '</td><td style="padding-right:1em !important;padding-left:1em !important;text-align:left">' . $n['username'] . '</td><td>' . $n['password'] . '</td><td>' . $n['type'] . '</td></tr></span>';
+                           $html .= '<span id="record-show"><tr class="y-report-ui-comp-data-grid-tr-' . ($m % 2) . '"><td class="y-report-ui-comp-data-grid-td-text-align-left" id="rmm-ip">' . '<a href="' . $n['ip'] . '.html" target="_blank">' . $n['ip'] . '</a>' . '</td><td class="y-report-ui-comp-data-grid-td-text-align-left" id="rmm-user">' . $n['username'] . '</td><td id="rmm-password">' . $n['password'] . '</td><td class="y-report-ui-comp-data-grid-td-text-align-left" id="rmm-type">' . $n['vul_name'] . '</td></tr>';
+                           $whtml .= '<tr style="height:25px;text-align:center;background-color:' . $kcolor[($m % 2)] . '"><td>' . $n['ip'] . '</td><td style="padding-right:1em !important;padding-left:1em !important;text-align:left">' . $n['username'] . '</td><td>' . $n['password'] . '</td><td>' . $n['vul_name'] . '</td></tr></span>';
                        }
                        $html .= '</tbody></table></div>';
                        $whtml .= '</tbody></table>';
@@ -1110,7 +1315,7 @@ select a.vul_name,a.vul_id,b.category from $tablevul a LEFT JOIN bd_host_vul_lib
            //    var_dump($hflist);die;
                foreach($hflist as $h=>$f){
                    $html.='<div name="hostname" class="y-report-ui-comp-section"  ><div id="t'.$index.'_'.($h+1).'" class="y-report-ui-element-title-level-3 '.$classTemp.'">'.$index.'.'.($h+1).' '.$f['desc'].'</div>';
-                   $whtml.='<p style="vertical-align:middle;line-height:30px;text-indent:2.5em;height:30px;font-size:16px;width:100%;font-weight:bold;'.$styleTemp.'">'.$hostIndex.'.'.($h+1).' '.$f['desc'].'</p>';
+                   $whtml.='<p style="vertical-align:middle;line-height:30px;text-indent:2.5em;height:30px;font-size:16px;width:100%;font-weight:bold;'.$styleTemp.'">'.$index.'.'.($h+1).' '.$f['desc'].'</p>';
                    if($category=='level'){
                        $sql ="select a.*,count(1) as urlsum from $tablevul a LEFT JOIN bd_web_vul_lib b  on a.vul_id = b.vul_id WHERE a.level='{$f['level']}' GROUP BY a.vul_id";
                        $myrows = $db->fetch_all($sql);
@@ -1220,7 +1425,7 @@ select a.vul_name,a.vul_id,b.category from $tablevul a LEFT JOIN bd_host_vul_lib
 
                 foreach($hflist as $h=>$f){
                     $html.='<div name="hostname" class="y-report-ui-comp-section"  ><div id="t'.$index.'_'.($h+1).'" class="y-report-ui-element-title-level-3 '.$classTemp.'">'.$index.'.'.($h+1).' '.$f['desc'].'</div>';
-                    $whtml.='<p style="vertical-align:middle;line-height:30px;text-indent:2.5em;height:30px;font-size:16px;width:100%;font-weight:bold;'.$styleTemp.'">'.$hostIndex.'.'.($h+1).' '.$f['desc'].'</p>';
+                    $whtml.='<p style="vertical-align:middle;line-height:30px;text-indent:2.5em;height:30px;font-size:16px;width:100%;font-weight:bold;'.$styleTemp.'">'.$index.'.'.($h+1).' '.$f['desc'].'</p>';
 
                     if($category=='level'){
                         if(stripos($tablevul, 'web') > 0){
@@ -1457,6 +1662,93 @@ select a.vul_name,a.vul_id,b.category from $tablevul a LEFT JOIN bd_host_vul_lib
         }
 
         return $mht->GetFile();
+    }
+
+    function pdf2png($PDF,$Path){
+        if(!extension_loaded('imagick')){
+            return false;
+        }
+        if(!file_exists($PDF)){
+            return false;
+        }
+        $IM = new \Imagick();
+        $IM->setResolution(120,120);
+        $IM->setCompressionQuality(100);
+        $IM->readImage($PDF);
+        foreach ($IM as $Key => $Var){
+            $Var->setImageFormat('png');
+            $Filename = $Path.'/'.md5($Key.time()).'.png';
+            if($Var->writeImage($Filename) == true){
+                $Return[] = $Filename;
+            }
+        }
+        return $Return;
+    }
+//    function pdf2png($pdf,$path1,$page=-1)
+//    {
+//        if(!extension_loaded('imagick'))
+//        {
+//            return 4;
+//        }
+//        if(!file_exists($pdf))
+//        {
+//            return 5;
+//        }
+//        $im = new \Imagick();
+//        $im->setResolution(120,120); //设置分辨率
+//        $im->setCompressionQuality(100);//设置图片压缩的质量
+//        if($page==-1)  {
+//            $ss =   $im->readImage($pdf);
+//
+//        }
+//        else{
+//            $im->readImage($pdf."[".$page."]");//从文件名读取图像
+//            return 7;
+//        }
+//        $im->setImageFormat('jpg'); //为图片设置指定的格式
+//        $filename1 = $path1."/". md5(time()).'.jpg';
+//        $dd = $im->writeImage($filename1);
+//        // return '阻住';
+//        if($dd == true)//把图片写入指定的文件
+//        {
+//            // return 'yes';
+//            $return = $filename1;
+//        } else{
+//            return '失败';
+//        }
+//        return $return;
+//    }
+
+    function cword($data,$fileName='')
+    {
+        if(empty($data)) return '';
+        $data = str_replace("<html>",'<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">',$data);
+        $dir  = "/home/bluedon/bdscan/bdwebserver/nginx/html/web/report/now/";
+//var_dump($data);die;
+        if(!file_exists($dir)) mkdir($dir,777,true);
+
+        if(empty($fileName))
+        {
+            $fileName=$dir.date('His').'.doc';
+        }
+        else
+        {
+            $fileName =$dir.$fileName.'.doc';
+        }
+        $writefile = fopen($fileName,'wb') or die("创建文件失败"); //wb以二进制写入
+        fwrite($writefile,$data);
+        fclose($writefile);
+        return $fileName;
+    }
+
+    public function actionHtmltoimg(){
+//        require_once "/home/bluedon/bdscan/bdwebserver/nginx/html/web/report/jquery-1.9.1.min.js";
+//        require_once "/home/bluedon/bdscan/bdwebserver/nginx/html/web/report/bluechar.js";
+//        require_once "/home/bluedon/bdscan/bdwebserver/nginx/html/web/report/common.js";
+//        require_once "/home/bluedon/bdscan/bdwebserver/nginx/html/web/report/common.css";
+
+        return $this->renderPartial($_GET['img']);
+       // require_once "/home/bluedon/bdscan/bdwebserver/nginx/html/web/report/now/".$_GET['img'];
     }
 }
 

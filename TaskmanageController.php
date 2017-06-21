@@ -979,6 +979,7 @@ select uuid from bd_web_history");
                     }
 
                 }elseif($vv[1]==Yii::t('app', '主机')){
+                }elseif($vv[1]=='host'){
                     Yii::$app->db->createCommand("delete from bd_host_task_manage where uuid='$vv[0]'")->execute();
                     if(in_array("bd_host_result_$vv[2]",$this->getAllTables())){
                         Yii::$app->db->createCommand("drop table bd_host_result_$vv[2]")->execute();
@@ -3025,7 +3026,7 @@ select uuid from bd_web_history");
             }
         }else{
             $db_jx= new client_db();
-            $standData = $db_jx->fetch_all("select * from t_standard where id = 49 or id = 80","db_jx");
+            $standData = $db_jx->fetch_all("select * from t_standard where id = 97 or id = 98","db_jx");
             if($uuid){
                 $row_task = $db_jx->fetch_first("select * from t_task where uuid= '$uuid' order by id desc ","db_jx");
                 $row_item = $db_jx->fetch_first("select * from t_task_item where task_id=".$row_task['id'],"db_jx");

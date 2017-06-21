@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controllers;
+use app\components\client_db;
 class Jxhc_reportController extends BaseController
 {
 
@@ -182,12 +183,13 @@ function actionExpreport()
         index();
         exit;
     }
-    require_once DIR_ROOT."../controllers/WkHtmlToPdf.php";
-    $pdf = new WkHtmlToPdf();
+    //require_once DIR_ROOT."../controllers/WkHtmlToPdf.php";
+    $pdf = new \app\components\WkHtmlToPdf();
+    //var_dump($pdf);
     //请求路径
     //$sUrl = Yii::app()->request->hostInfo.$this->createUrl('Taskreport/Index',array('ex'=>1,'task_id'=>$hPost->task_id));
-    $sUrl = SITE_ROOT_URL."/jxhc_repor/index?ex=1?task_id=".intval($hPost['task_id'])."&result_extend=1";
-
+    $sUrl = SITE_ROOT."/jxhc_report/index?ex=1&task_id=".intval($hPost['task_id'])."&result_extend=1";
+    //var_dump($sUrl);
     $pdf->addCover($sUrl);
     $tarname = $hPost['task_name'].date("Y-m-d",time()).'-'.time().'.zip';
     $pdfpath = $hPost['task_name'].date("Y-m-d",time()).'-'.time().'.pdf';
@@ -205,6 +207,7 @@ function actionExpreport()
             $success = true;
             $aJson['path'] = '/tmp/'.$tarname;
             $aJson['report_type'] = 'pdf';
+            downloadFile($tarname,'/tmp/'.$tarname);
         }
         //$pdf->send($pdfpath);
     }elseif($hPost['report_type']=='html'){
@@ -217,6 +220,8 @@ function actionExpreport()
             shellResult($sCmd);
             $aJson['path'] = '/tmp/'.$tarname;
             $aJson['report_type'] = 'html';
+
+            downloadFile($tarname,'/tmp/'.$tarname);
         }else{
             $aJson['msg'] = Yii::t('app', '导出失败'). '！';
         }

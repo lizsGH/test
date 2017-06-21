@@ -376,17 +376,9 @@ class UserController extends BaseController
     function actionUpdatepasswd(){
         global $act,$db;
         $aData = array();
-        $pswstrategy = file_get_contents(DIR_ROOT . "../config/data/system/pswstrategy.config");
+        $pswstrategy = file_get_contents(DIR_ROOT . "data/system/pswstrategy.config");
         $aData['pswstrategy'] = unserialize($pswstrategy);
         template2($act.'/updatepasswd', $aData);
-    }
-
-    function actionUpdateloginpasswd(){
-        global $act,$db;
-        $aData = array();
-        $pswstrategy = file_get_contents(DIR_ROOT . "config/data/system/pswstrategy.config");
-        $aData['pswstrategy'] = unserialize($pswstrategy);
-        template2($act.'/updateloginpasswd', $aData);
     }
 
     function actionChangepass(){
@@ -399,8 +391,10 @@ class UserController extends BaseController
             $oldpwd = trim($sPost['sPasswordOld']);
             $newpwd = trim($sPost['sPasswordnNew']);
             $sql ="select * from ".getTable('user')." where id = ".$userid;
-            $res = $db->fetch_first($sql);
-            $pwdold = md5(md5($oldpwd).$name);
+            //echo $sql;die;
+            $res = $db->fetch_first($sql);//var_dump($res);die;
+            $oldpwd =md5($oldpwd);
+            $pwdold = md5(md5($oldpwd).$name);//var_dump($pwdold);die;
             if($newpwd == 'Bluedon2100'){
                 $ajson['success'] = false;
                 $ajson['msg'] = Yii::t('app', "不允许使用初始密码！");
@@ -449,6 +443,7 @@ class UserController extends BaseController
                             }
                         }
                     }
+                    $newpwd =md5($newpwd);
                     $pwdnew =  md5(md5($newpwd).$name);
                     $upsql = "UPDATE ".getTable('user')." set password = '".$pwdnew."',update_pwd_time='".time()."' where id =".$userid;
                     if($db->query($upsql)){

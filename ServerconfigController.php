@@ -15,6 +15,14 @@ class ServerconfigController extends BaseController
      */
     function actionIndex()
     {
+        $sFlg = 'ppp';
+//    $sFlg = 'bnet';
+        exec("/sbin/ifconfig -a | grep " . $sFlg, $aData);
+        $aJson = array();
+        foreach ($aData as $k => $v) {
+            $aJson[$sFlg . $k] = getInterForceData($sFlg . $k);
+        }
+       # var_dump($aJson);die;
         global $db, $act;
         $aData = array();
         $userconf = $db->fetch_first("SELECT * FROM " . getTable('userconfig') . " WHERE iId=1");
@@ -30,6 +38,7 @@ class ServerconfigController extends BaseController
         $sql = "select * from bd_sys_scanset where iId =1";
         $scanset = $db->fetch_first($sql);
         $aData['scanset'] = $scanset;
+        $aData['pp'] = $aJson['ppp0'];
         template2($act . '/index', $aData);
     }
 
@@ -141,7 +150,12 @@ class ServerconfigController extends BaseController
             exit;
         }
     }
+    /**
+     * @pptp路由设置
+     */
+    function actionPptprouteSetting(){
 
+    }
     /**
      * @ SYSLOG配置
      */
@@ -277,7 +291,76 @@ class ServerconfigController extends BaseController
             $status = Yii::t('app', '已断开');
         }else if($vpnStatus == 1){
             $status = Yii::t('app', '已连接') . '! &nbsp;&nbsp; ' . Yii::t('app', 'ip地址') . '：'.$pptp['lIp'];
+            $sFlg = 'ppp';
+            exec("/sbin/ifconfig -a | grep " . $sFlg, $aData);
+            $aJson = array();
+            foreach ($aData as $k => $v) {
+                $aJson[$sFlg . $k] = getInterForceData($sFlg . $k);
+            }
+            $status = '已连接!　　ip地址：'.$pptp['lIp'];
         }
-        echo $status;
+        $json = json_encode(['status'=>$status,'pptp_route'=>$aJson]);
+        echo $json;
+    }
+
+    function actionUpdatenetport()
+    {
+        global $db, $act, $show;
+        $aPost = $_POST;
+
+        if (!filter_ip($aPost['ipaddress'])) {
+            $success = false;
+            $msg = "ipv4地址格式错误";
+            $data['success'] = $success;
+            $data['msg'] = $msg;
+            echo json_encode($data);
+            exit;
+        }
+        if (!filter_ip($aPost['mask'])) {
+            $success = false;
+            $msg = "掩码格式错误";
+            $data['success'] = $success;
+            $data['msg'] = $msg;
+            echo json_encode($data);
+            exit;
+        }
+        $sFlg = 'ppp';
+        exec("/sbin/ifconfig -a | grep " . $sFlg, $aData);
+        $aJson = array();
+        foreach ($aData as $k => $v) {
+            $aJson[$sFlg . $k] = getInterForceData($sFlg . $k);
+        }
+        $aPost['oldnetname'] = filterStr($aJson['ppp0']['ipaddress']);
+        $aPost['oldipv6address'] = filterStr($aJson['oldipv6address']);
+        $aPost['oldipv6prefix'] = filterStr($aJson['oldipv6prefix']);
+
+
+        $aJson = array();
+        if (1) {
+            //$updatesql = "update ".getTable('netport')." set ipaddress ='" . $aPost['ipaddress'] . "', subnetmask = '" . $aPost['subnetmask'] . "', ipv6address = '" . $aPost['ipv6address'] . "', ipv6prefix = '" . $aPost['ipv6prefix'] . "', status ='" . $aPost['status'] . "' where netname = '" . $aPost['netname'] . "'";
+            if (1) {
+                $this->setifcigeth($aPost['netname'],$aPost['ipaddress'],$aPost['subnetmask']);
+                $shell = "/sbin/ifconfig " . $aPost['netname'] . " " . $aPost['ipaddress'] . " netmask " . $aPost['subnetmask'];
+                shellResult($shell);
+
+
+                if ($aPost['status'] == 'UP') {
+                    $stShell = "/sbin/ifconfig " . $aPost['netname'] . " up";
+                    shellResult($stShell);
+                } else {
+                    $stShell = "/sbin/ifconfig " . $aPost['netname'] . " down";
+                    shellResult($stShell);
+                }
+
+                $aJson['success'] = true;
+                // $aJson['msg'] = '更新成功！';
+                $hdata['sDes'] = '网口更新';
+                $hdata['sRs'] = '成功';
+                $hdata['sAct'] = $act . '/' . $show;
+                saveOperationLog($hdata);
+            }
+        }
+        echo json_encode($aJson);
+        exit;
     }
 }
